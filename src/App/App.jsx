@@ -1,13 +1,12 @@
-import React from "react"
-import Button from "react-bootstrap/Button"
+import Home from "../Home";
+import React from "react";
 
 function App() {
-    return (
-        <div>
-            <p>Hello world!</p>
-            <Button variant="primary">Button</Button>
-        </div>
-    );
+  return (
+    <div>
+      <Home />
+    </div>
+  );
 }
 
-export default App
+export default App;
