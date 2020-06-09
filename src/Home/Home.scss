@@ -1,0 +1,25 @@
+.main-container {
+  margin: 20px 0;
+}
+
+.main-header {
+  padding: 0 18px 10px;
+}
+
+.bookmark-group {
+  margin-bottom: 20px;
+}
+
+.bookmark-image {
+  width: 16px;
+  margin-right: 10px;
+}
+
+// shared
+.vertical-center {
+  vertical-align: middle;
+}
+
+.child-cursor-pointer * {
+  cursor: pointer;
+}
