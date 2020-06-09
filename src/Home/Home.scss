@@ -1,0 +1,21 @@
+.main-container {
+  margin: 20px 0;
+}
+
+.main-header {
+  padding: 0 0 10px 10px;
+}
+
+.bookmark-group {
+  margin-bottom: 20px;
+}
+
+.bookmark-icon {
+  width: 16px;
+  margin-right: 10px;
+}
+
+// shared
+.child-cursor-pointer * {
+  cursor: pointer;
+}

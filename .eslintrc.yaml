@@ -1,0 +1,14 @@
+extends:
+  - react-app
+  # eslint-plugin-import
+  - plugin:import/errors
+  - plugin:import/warnings
+  # eslint-config-prettier
+  - prettier
+rules:
+  # error when import not order
+  import/order:
+    - error
+  # turn off unresolved import
+  import/no-unresolved:
+    - off
