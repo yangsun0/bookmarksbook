@@ -11,17 +11,17 @@ function BookMarkGroup() {
             src="https://www.google.com/favicon.ico"
             alt="Google icon"
             tooltip="Google icon"
-            className="bookmark-image"
+            className="bookmark-icon"
           />
-          <span className="vertical-center">Google</span>
+          <span className="align-middle">Google</span>
         </ListGroup.Item>
         <ListGroup.Item action href="https://mail.google.com">
           <img
             src="https://mail.google.com/favicon.ico"
             alt="Gmail icon"
-            className="bookmark-image"
+            className="bookmark-icon"
           />
-          <span className="vertical-center">Gmail</span>
+          <span className="align-middle">Gmail</span>
         </ListGroup.Item>
       </ListGroup>
     </Card>

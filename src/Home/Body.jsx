@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import BookMarkGroup from "./BookmarkGroup";
 import Header from "./Header";
+import EditBookmarkGroup from "./EditBookmarkGroup";
 
 function Body() {
   return (
@@ -17,6 +18,12 @@ function Body() {
           <BookMarkGroup />
           <BookMarkGroup />
         </Col>
+      </Row>
+      <Row>
+        <Col sm>
+          <EditBookmarkGroup />
+        </Col>
+        <Col sm></Col>
       </Row>
     </Container>
   );

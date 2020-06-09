@@ -8,20 +8,24 @@ function Header() {
       <Col>
         <Form>
           <Form.Check
-            type="checkbox"
-            id="openInNew"
-            label="Open link in new window"
+            type="switch"
+            id="openInNew2"
             inline
-            className="vertical-center child-cursor-pointer"
-          />
+            className="align-middle child-cursor-pointer"
+          >
+            <Form.Check.Input />
+            <Form.Check.Label>
+              <span className="d-none d-sm-block">Open in new tab</span>
+            </Form.Check.Label>
+          </Form.Check>
           <FiExternalLink />
         </Form>
       </Col>
-      <Col md="auto" className="d-sm-none d-none d-md-block">
-        <Button variant="outline-dark" className="hidden-sm hidden-xs">
+      <Col xs="auto">
+        <Button variant="outline-dark" size="sm" className="mr-1">
           Edit
-        </Button>{" "}
-        <Button variant="outline-dark" className="hidden-sm hidden-xs">
+        </Button>
+        <Button variant="outline-dark" size="sm">
           New
         </Button>
       </Col>

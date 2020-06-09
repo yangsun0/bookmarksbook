@@ -2,14 +2,18 @@ import React from "react";
 import Navigation from "./Navigation";
 import Body from "./Body";
 import "./Home.scss";
-import NewBookMarkModal from "./NewBookMarkModal";
+import EditBookmarkModal from "./EditBookmarkModal";
+import EditGroupModal from "./EditGroupModal";
+import ConfirmModal from "./ConfirmModal";
 
 function Home() {
   return (
     <>
       <Navigation />
       <Body />
-      <NewBookMarkModal show={true} />
+      <EditBookmarkModal />
+      <EditGroupModal />
+      <ConfirmModal />
     </>
   );
 }

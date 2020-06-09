@@ -3,23 +3,19 @@
 }
 
 .main-header {
-  padding: 0 18px 10px;
+  padding: 0 0 10px 10px;
 }
 
 .bookmark-group {
   margin-bottom: 20px;
 }
 
-.bookmark-image {
+.bookmark-icon {
   width: 16px;
   margin-right: 10px;
 }
 
 // shared
-.vertical-center {
-  vertical-align: middle;
-}
-
 .child-cursor-pointer * {
   cursor: pointer;
 }

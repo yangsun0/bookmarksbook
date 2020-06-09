@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 
-function NewBookMarkModal() {
+function EditBookmarkModal() {
   return (
     <Modal.Dialog centered size="lg" backdrop="static">
       <Modal.Header closeButton>
@@ -10,7 +10,7 @@ function NewBookMarkModal() {
       <Modal.Body>
         <Form>
           <Form.Group as={Row}>
-            <Form.Label column sm={1}>
+            <Form.Label column md={2} lg={1}>
               Name
             </Form.Label>
             <Col>
@@ -18,7 +18,7 @@ function NewBookMarkModal() {
             </Col>
           </Form.Group>
           <Form.Group as={Row}>
-            <Form.Label column sm={1}>
+            <Form.Label column md={2} lg={1}>
               URL
             </Form.Label>
             <Col>
@@ -26,11 +26,17 @@ function NewBookMarkModal() {
             </Col>
           </Form.Group>
           <Form.Group as={Row}>
-            <Form.Label column sm={1}>
+            <Form.Label column md={2} lg={1}>
               Group
             </Form.Label>
             <Col>
-              <Form.Control type="text" placeholder="Enter the group" />
+              <Form.Control as="select">
+                <option>Favorite</option>
+                <option>Read later</option>
+              </Form.Control>
+            </Col>
+            <Col xs="auto">
+              <Button variant="link">New</Button>
             </Col>
           </Form.Group>
         </Form>
@@ -43,4 +49,4 @@ function NewBookMarkModal() {
   );
 }
 
-export default NewBookMarkModal;
+export default EditBookmarkModal;
