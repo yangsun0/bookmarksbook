@@ -5,7 +5,8 @@
   "editor.formatOnSave": true,
   // auto fix lint issue when save
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": true,
+    "source.organizeImports": true
   },
   "cSpell.words": ["browserslist"]
 }
