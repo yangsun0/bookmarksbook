@@ -1,11 +1,11 @@
 import React from "react";
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 
-function EditBookmarkModal() {
+function BookmarkModal({ show, onClose }) {
   return (
-    <Modal.Dialog centered size="lg" backdrop="static">
+    <Modal centered size="lg" backdrop="static" show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>New bookmark</Modal.Title>
+        <Modal.Title>Bookmark</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -42,11 +42,13 @@ function EditBookmarkModal() {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary">Close</Button>
-        <Button variant="primary">New</Button>
+        <Button variant="secondary" onClick={onClose}>
+          Close
+        </Button>
+        <Button variant="primary">Done</Button>
       </Modal.Footer>
-    </Modal.Dialog>
+    </Modal>
   );
 }
 
-export default EditBookmarkModal;
+export default BookmarkModal;

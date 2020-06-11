@@ -1,19 +1,31 @@
-import React from "react";
-import Navigation from "./Navigation";
+import React, { useState } from "react";
+import { useRouteMatch } from "react-router-dom";
+import { Container } from "react-bootstrap";
 import Body from "./Body";
+import Header from "./Header";
 import "./Home.scss";
-import EditBookmarkModal from "./EditBookmarkModal";
-import EditGroupModal from "./EditGroupModal";
-import ConfirmModal from "./ConfirmModal";
+import BookmarkModal from "./BookmarkModal";
 
-function Home() {
+function Home(props) {
+  const match = useRouteMatch({ path: "/", exact: true });
+  const [showNewBookmarkModal, setShowNewBookmarkModal] = useState(false);
+  const closeModal = () => {
+    setShowNewBookmarkModal(false);
+  };
+
+  const openModal = () => {
+    setShowNewBookmarkModal(true);
+  };
+
+  if (!match) return null;
+
   return (
     <>
-      <Navigation />
-      <Body />
-      <EditBookmarkModal />
-      <EditGroupModal />
-      <ConfirmModal />
+      <Container className="main-container">
+        <Header onNew={openModal} />
+        <Body groups={props.groups} />
+      </Container>
+      <BookmarkModal show={showNewBookmarkModal} onClose={closeModal} />
     </>
   );
 }
