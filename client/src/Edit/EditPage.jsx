@@ -1,13 +1,10 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import { useRouteMatch } from "react-router-dom";
-import Header from "./Header";
+import { withRoute } from "../Utils/Route";
 import Body from "./Body";
+import Header from "./Header";
 
-function Edit(props) {
-  let match = useRouteMatch({ path: "/edit", exact: true });
-  if (!match) return null;
-
+function EditPage(props) {
   return (
     <Container className="main-container">
       <Header />
@@ -16,4 +13,6 @@ function Edit(props) {
   );
 }
 
-export default Edit;
+const EditPageWithRoute = withRoute(EditPage, "/edit");
+
+export default EditPageWithRoute;
