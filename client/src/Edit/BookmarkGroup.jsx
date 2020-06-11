@@ -1,21 +1,32 @@
 import React from "react";
-import { Card, ListGroup, Button, Row, Col } from "react-bootstrap";
+import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 
-function EditBookmarkGroup({ name, bookmarkList }) {
+function BookmarkGroup({
+  name,
+  bookmarkList,
+  onGroupEdit,
+  onBookmarkEdit,
+  onDelete,
+}) {
   const items = bookmarkList.map((bookmark) => (
-    <ListGroup.Item action href={bookmark.url} key={bookmark.id}>
+    <ListGroup.Item key={bookmark.id}>
       <Row>
         <Col>
           <img src={bookmark.iconUrl} alt="icon" className="bookmark-icon" />
           <span className="align-middle">{bookmark.name}</span>
         </Col>
         <Col xs="auto">
-          <Button variant="link" size="sm">
+          <Button variant="link" size="sm" onClick={onBookmarkEdit}>
             Edit
           </Button>
-          <Button variant="link" size="sm">
+          <Button variant="link" size="sm" onClick={onDelete}>
             Delete
           </Button>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <span className="small">{bookmark.url}</span>
         </Col>
       </Row>
     </ListGroup.Item>
@@ -27,10 +38,10 @@ function EditBookmarkGroup({ name, bookmarkList }) {
         <Row>
           <Col>{name}</Col>
           <Col xs="auto">
-            <Button variant="link" size="sm">
+            <Button variant="link" size="sm" onClick={onGroupEdit}>
               Edit
             </Button>
-            <Button variant="link" size="sm">
+            <Button variant="link" size="sm" onClick={onDelete}>
               Delete
             </Button>
           </Col>
@@ -41,4 +52,4 @@ function EditBookmarkGroup({ name, bookmarkList }) {
   );
 }
 
-export default EditBookmarkGroup;
+export default BookmarkGroup;

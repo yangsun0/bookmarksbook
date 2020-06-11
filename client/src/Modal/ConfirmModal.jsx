@@ -1,9 +1,9 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 
-function ConfirmModal() {
+function ConfirmModal({ show, onClose }) {
   return (
-    <Modal.Dialog>
+    <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>
         <Modal.Title>Confirm</Modal.Title>
       </Modal.Header>
@@ -11,10 +11,12 @@ function ConfirmModal() {
         <p>Do you want to delete the bookmark?</p>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary">No</Button>
+        <Button variant="secondary" onClick={onClose}>
+          No
+        </Button>
         <Button variant="primary">Delete</Button>
       </Modal.Footer>
-    </Modal.Dialog>
+    </Modal>
   );
 }
 

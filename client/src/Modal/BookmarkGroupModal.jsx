@@ -1,11 +1,11 @@
 import React from "react";
-import { Modal, Form, Row, Col, Button } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 
-function EditGroupModal() {
+function BookmarkGroupModal({ show, onClose }) {
   return (
-    <Modal.Dialog centered size="lg">
+    <Modal centered size="lg" show={show} onHide={onClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Edit bookmark group</Modal.Title>
+        <Modal.Title>Bookmark group</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -44,11 +44,13 @@ function EditGroupModal() {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary">Close</Button>
+        <Button variant="secondary" onClick={onClose}>
+          Close
+        </Button>
         <Button variant="primary">Save</Button>
       </Modal.Footer>
-    </Modal.Dialog>
+    </Modal>
   );
 }
 
-export default EditGroupModal;
+export default BookmarkGroupModal;

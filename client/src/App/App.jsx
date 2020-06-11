@@ -1,12 +1,13 @@
 import React from "react";
-import Home from "../Home";
 import Edit from "../Edit";
+import Home from "../Home";
 import Navigation from "./Navigation";
 
 function App() {
   let data = {
     groups: [
       {
+        id: 1,
         name: "Favorite",
         column: 1,
         bookmarkList: [
@@ -17,7 +18,7 @@ function App() {
             iconUrl: "https://www.google.com/favicon.ico",
           },
           {
-            id: 1,
+            id: 2,
             name: "Google",
             url: "https://www.google.com",
             iconUrl: "https://www.google.com/favicon.ico",
@@ -25,6 +26,7 @@ function App() {
         ],
       },
       {
+        id: 2,
         name: "Favorite",
         column: 2,
         bookmarkList: [
@@ -35,7 +37,7 @@ function App() {
             iconUrl: "https://www.google.com/favicon.ico",
           },
           {
-            id: 1,
+            id: 2,
             name: "Google",
             url: "https://www.google.com",
             iconUrl: "https://www.google.com/favicon.ico",
