@@ -1,8 +1,9 @@
 import React from "react";
 import { Form, Button, Col, Row } from "react-bootstrap";
 import { FiExternalLink } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
-function Header() {
+function Header({ onNew }) {
   return (
     <Row className="main-header">
       <Col>
@@ -22,10 +23,16 @@ function Header() {
         </Form>
       </Col>
       <Col xs="auto">
-        <Button variant="outline-dark" size="sm" className="mr-1">
+        <Button
+          variant="outline-secondary"
+          size="sm"
+          className="mr-2"
+          as={Link}
+          to="/edit"
+        >
           Edit
         </Button>
-        <Button variant="outline-dark" size="sm">
+        <Button variant="outline-secondary" size="sm" onClick={onNew}>
           New
         </Button>
       </Col>
