@@ -1,14 +1,17 @@
 import React from "react";
 import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
+import type { ButtonClickHandler, Group } from "../App/Types";
 
-function BookmarkGroup({
-  name,
-  bookmarkList,
-  onGroupEdit,
-  onBookmarkEdit,
-  onDelete,
-}) {
-  const items = bookmarkList.map((bookmark) => (
+type Props = {
+  group: Group,
+  onGroupEdit: ButtonClickHandler,
+  onBookmarkEdit: ButtonClickHandler,
+  onDelete: ButtonClickHandler,
+};
+
+function BookmarkGroup(props: Props) {
+  const { group, onGroupEdit, onBookmarkEdit, onDelete } = props;
+  const items = group.bookmarkList.map((bookmark) => (
     <ListGroup.Item key={bookmark.id}>
       <Row>
         <Col>
@@ -36,7 +39,7 @@ function BookmarkGroup({
     <Card className="bookmark-group">
       <Card.Header>
         <Row>
-          <Col>{name}</Col>
+          <Col>{group.name}</Col>
           <Col xs="auto">
             <Button variant="link" size="sm" onClick={onGroupEdit}>
               Edit

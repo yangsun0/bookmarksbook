@@ -11,18 +11,20 @@
 // opt-in, read https://bit.ly/CRA-PWA
 
 const isLocalhost = Boolean(
-  window.location.hostname === 'localhost' ||
+  window.location.hostname === "localhost" ||
     // [::1] is the IPv6 localhost address.
-    window.location.hostname === '[::1]' ||
+    window.location.hostname === "[::1]" ||
     // 127.0.0.0/8 are considered localhost for IPv4.
     window.location.hostname.match(
       /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
     )
 );
 
+//$FlowFixMe
 export function register(config) {
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
     // The URL constructor is available in all browsers that support SW.
+    //$FlowFixMe
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
       // Our service worker won't work if PUBLIC_URL is on a different origin
@@ -31,7 +33,8 @@ export function register(config) {
       return;
     }
 
-    window.addEventListener('load', () => {
+    window.addEventListener("load", () => {
+      //$FlowFixMe
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
       if (isLocalhost) {
@@ -40,10 +43,11 @@ export function register(config) {
 
         // Add some additional logging to localhost, pointing developers to the
         // service worker/PWA documentation.
+        //$FlowFixMe
         navigator.serviceWorker.ready.then(() => {
           console.log(
-            'This web app is being served cache-first by a service ' +
-              'worker. To learn more, visit https://bit.ly/CRA-PWA'
+            "This web app is being served cache-first by a service " +
+              "worker. To learn more, visit https://bit.ly/CRA-PWA"
           );
         });
       } else {
@@ -55,23 +59,27 @@ export function register(config) {
 }
 
 function registerValidSW(swUrl, config) {
+  //$FlowFixMe
   navigator.serviceWorker
+    //$FlowFixMe
     .register(swUrl)
-    .then(registration => {
+    .then((registration) => {
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         if (installingWorker == null) {
           return;
         }
+        //$FlowFixMe
         installingWorker.onstatechange = () => {
-          if (installingWorker.state === 'installed') {
+          if (installingWorker.state === "installed") {
+            //$FlowFixMe
             if (navigator.serviceWorker.controller) {
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
               console.log(
-                'New content is available and will be used when all ' +
-                  'tabs for this page are closed. See https://bit.ly/CRA-PWA.'
+                "New content is available and will be used when all " +
+                  "tabs for this page are closed. See https://bit.ly/CRA-PWA."
               );
 
               // Execute callback
@@ -82,7 +90,7 @@ function registerValidSW(swUrl, config) {
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
-              console.log('Content is cached for offline use.');
+              console.log("Content is cached for offline use.");
 
               // Execute callback
               if (config && config.onSuccess) {
@@ -93,25 +101,26 @@ function registerValidSW(swUrl, config) {
         };
       };
     })
-    .catch(error => {
-      console.error('Error during service worker registration:', error);
+    .catch((error) => {
+      console.error("Error during service worker registration:", error);
     });
 }
 
 function checkValidServiceWorker(swUrl, config) {
   // Check if the service worker can be found. If it can't reload the page.
   fetch(swUrl, {
-    headers: { 'Service-Worker': 'script' },
+    headers: { "Service-Worker": "script" },
   })
-    .then(response => {
+    .then((response) => {
       // Ensure service worker exists, and that we really are getting a JS file.
-      const contentType = response.headers.get('content-type');
+      const contentType = response.headers.get("content-type");
       if (
         response.status === 404 ||
-        (contentType != null && contentType.indexOf('javascript') === -1)
+        (contentType != null && contentType.indexOf("javascript") === -1)
       ) {
         // No service worker found. Probably a different app. Reload the page.
-        navigator.serviceWorker.ready.then(registration => {
+        //$FlowFixMe
+        navigator.serviceWorker.ready.then((registration) => {
           registration.unregister().then(() => {
             window.location.reload();
           });
@@ -123,18 +132,19 @@ function checkValidServiceWorker(swUrl, config) {
     })
     .catch(() => {
       console.log(
-        'No internet connection found. App is running in offline mode.'
+        "No internet connection found. App is running in offline mode."
       );
     });
 }
-
+//$FlowFixMe
 export function unregister() {
-  if ('serviceWorker' in navigator) {
+  if ("serviceWorker" in navigator) {
+    //$FlowFixMe
     navigator.serviceWorker.ready
-      .then(registration => {
+      .then((registration) => {
         registration.unregister();
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error.message);
       });
   }

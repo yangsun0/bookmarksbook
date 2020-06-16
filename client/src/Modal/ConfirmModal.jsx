@@ -1,7 +1,13 @@
 import React from "react";
 import { Button, Modal } from "react-bootstrap";
+import type { ButtonClickHandler } from "../App/Types";
 
-function ConfirmModal({ show, onClose }) {
+type Props = {
+  show: boolean,
+  onClose: ButtonClickHandler,
+};
+function ConfirmModal(props: Props) {
+  const { show, onClose } = props;
   return (
     <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton>

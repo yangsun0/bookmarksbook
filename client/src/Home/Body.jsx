@@ -1,10 +1,16 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
+import type { Group } from "../App/Types";
 import BookMarkGroup from "./BookmarkGroup";
 
-function Body({ groups }) {
+type Props = {
+  groups: Group[],
+};
+
+function Body(props: Props) {
+  const { groups } = props;
   const createGroup = (group) => {
-    return <BookMarkGroup {...group} />;
+    return <BookMarkGroup group={group} />;
   };
   const leftGroups = groups
     .filter((group) => group.column === 1)

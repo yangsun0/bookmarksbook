@@ -1,7 +1,14 @@
 import React from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import type { ButtonClickHandler } from "../App/Types";
 
-function BookmarkGroupModal({ show, onClose }) {
+type Props = {
+  show: boolean,
+  onClose: ButtonClickHandler,
+};
+
+function BookmarkGroupModal(props: Props) {
+  const { show, onClose } = props;
   return (
     <Modal centered size="lg" show={show} onHide={onClose}>
       <Modal.Header closeButton>
