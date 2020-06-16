@@ -1,11 +1,15 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import { withRoute } from "../Utils/Route";
+import type { Group } from "../App/Types";
 import Body from "./Body";
 import Header from "./Header";
 import "./Home.scss";
 
-function HomePage(props) {
+type Props = {
+  groups: Group[],
+};
+
+function HomePage(props: Props) {
   return (
     <Container className="main-container">
       <Header />
@@ -14,6 +18,4 @@ function HomePage(props) {
   );
 }
 
-const HomePageWithRoute = withRoute(HomePage, "/");
-
-export default HomePageWithRoute;
+export default HomePage;

@@ -1,10 +1,12 @@
 import React from "react";
-import Edit from "../Edit";
-import Home from "../Home";
+import { Route, Switch } from "react-router-dom";
+import EditPage from "../Edit";
+import HomePage from "../Home";
 import Navigation from "./Navigation";
+import type { AppData } from "./Types";
 
 function App() {
-  let data = {
+  let data: AppData = {
     groups: [
       {
         id: 1,
@@ -46,11 +48,18 @@ function App() {
       },
     ],
   };
+
   return (
     <>
       <Navigation />
-      <Home groups={data.groups} />
-      <Edit groups={data.groups} />
+      <Switch>
+        <Route path="/edit">
+          <EditPage groups={data.groups} />
+        </Route>
+        <Route path="/">
+          <HomePage groups={data.groups} />
+        </Route>
+      </Switch>
     </>
   );
 }
