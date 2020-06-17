@@ -10,7 +10,7 @@ type Props = {
 
 function EditPage(props: Props) {
   return (
-    <Container className="main-container">
+    <Container>
       <Header />
       <Body groups={props.groups} />
     </Container>

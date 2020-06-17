@@ -3,7 +3,6 @@ import { Container } from "react-bootstrap";
 import type { Group } from "../App/Types";
 import Body from "./Body";
 import Header from "./Header";
-import "./Home.scss";
 
 type Props = {
   groups: Group[],
@@ -11,7 +10,7 @@ type Props = {
 
 function HomePage(props: Props) {
   return (
-    <Container className="main-container">
+    <Container>
       <Header />
       <Body groups={props.groups} />
     </Container>
