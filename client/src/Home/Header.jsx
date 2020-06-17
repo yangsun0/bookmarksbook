@@ -16,7 +16,7 @@ function Header() {
 
   return (
     <>
-      <Row className="main-header">
+      <Row className="py-2">
         <Col>
           <Form>
             <Form.Check

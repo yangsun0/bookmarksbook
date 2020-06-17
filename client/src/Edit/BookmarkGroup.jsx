@@ -15,7 +15,11 @@ function BookmarkGroup(props: Props) {
     <ListGroup.Item key={bookmark.id}>
       <Row>
         <Col>
-          <img src={bookmark.iconUrl} alt="icon" className="bookmark-icon" />
+          <img
+            src={bookmark.iconUrl}
+            alt="icon"
+            className="bookmark-icon mr-2"
+          />
           <span className="align-middle">{bookmark.name}</span>
         </Col>
         <Col xs="auto">
@@ -29,14 +33,14 @@ function BookmarkGroup(props: Props) {
       </Row>
       <Row>
         <Col>
-          <span className="small">{bookmark.url}</span>
+          <span className="small text-secondary">{bookmark.url}</span>
         </Col>
       </Row>
     </ListGroup.Item>
   ));
 
   return (
-    <Card className="bookmark-group">
+    <Card className="mb-3">
       <Card.Header>
         <Row>
           <Col>{group.name}</Col>
