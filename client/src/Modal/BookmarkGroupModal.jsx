@@ -10,7 +10,13 @@ type Props = {
 function BookmarkGroupModal(props: Props) {
   const { show, onClose } = props;
   return (
-    <Modal centered size="lg" show={show} onHide={onClose}>
+    <Modal
+      centered
+      size="lg"
+      show={show}
+      onHide={onClose}
+      aria-label="bookmark group modal"
+    >
       <Modal.Header closeButton>
         <Modal.Title>Bookmark group</Modal.Title>
       </Modal.Header>

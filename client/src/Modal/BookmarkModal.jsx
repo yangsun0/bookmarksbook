@@ -9,7 +9,14 @@ type Props = {
 function BookmarkModal(props: Props) {
   const { show, onClose } = props;
   return (
-    <Modal centered size="lg" backdrop="static" show={show} onHide={onClose}>
+    <Modal
+      centered
+      size="lg"
+      backdrop="static"
+      show={show}
+      onHide={onClose}
+      aria-label="bookmark modal"
+    >
       <Modal.Header closeButton>
         <Modal.Title>Bookmark</Modal.Title>
       </Modal.Header>

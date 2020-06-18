@@ -12,7 +12,7 @@ type Props = {
 function BookmarkGroup(props: Props) {
   const { group, onGroupEdit, onBookmarkEdit, onDelete } = props;
   const items = group.bookmarkList.map((bookmark) => (
-    <ListGroup.Item key={bookmark.id}>
+    <ListGroup.Item key={bookmark.id} aria-label="bookmark">
       <Row>
         <Col>
           <img
@@ -40,7 +40,7 @@ function BookmarkGroup(props: Props) {
   ));
 
   return (
-    <Card className="mb-3">
+    <Card className="mb-3" aria-label="bookmark group">
       <Card.Header>
         <Row>
           <Col>{group.name}</Col>

@@ -60,7 +60,7 @@ function Body(props: Props) {
 
   return (
     <>
-      <Row>
+      <Row aria-label="bookmark groups">
         <Col sm>{leftGroups}</Col>
         <Col sm>{rightGroups}</Col>
       </Row>
