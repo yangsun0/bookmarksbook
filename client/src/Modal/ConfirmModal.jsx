@@ -9,7 +9,7 @@ type Props = {
 function ConfirmModal(props: Props) {
   const { show, onClose } = props;
   return (
-    <Modal show={show} onHide={onClose}>
+    <Modal show={show} onHide={onClose} aria-label="confirm modal">
       <Modal.Header closeButton>
         <Modal.Title>Confirm</Modal.Title>
       </Modal.Header>

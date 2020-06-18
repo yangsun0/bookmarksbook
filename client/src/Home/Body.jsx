@@ -10,7 +10,7 @@ type Props = {
 function Body(props: Props) {
   const { groups } = props;
   const createGroup = (group) => {
-    return <BookMarkGroup group={group} />;
+    return <BookMarkGroup group={group} key={group.id} />;
   };
   const leftGroups = groups
     .filter((group) => group.column === 1)
@@ -20,7 +20,7 @@ function Body(props: Props) {
     .map(createGroup);
 
   return (
-    <Row>
+    <Row role="region" aria-label="bookmark groups">
       <Col sm>{leftGroups}</Col>
       <Col sm>{rightGroups}</Col>
     </Row>
