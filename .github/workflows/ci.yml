@@ -1,0 +1,32 @@
+# The Continuous integration (CI) workflow automates the building and testing.
+# Workflow syntax: https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
+name: Continuous integration (CI)
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  # This job will do a clean install of node dependencies, build the source code and run tests.
+  build_client:
+    name: Build client
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: Install dependency
+      run: npm ci
+      working-directory: ./client
+    - name: Build
+      run: npm run build --if-present
+      working-directory: ./client
+    - name: Test
+      run: npm test --passWithNoTests
+      working-directory: ./client
