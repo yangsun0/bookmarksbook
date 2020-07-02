@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { FiExternalLink } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import type { Bookmark } from "../App/Types";
 import BookmarkModal from "../Modal/BookmarkModal";
 
 function Header() {
@@ -12,6 +13,10 @@ function Header() {
 
   const openModal = () => {
     setShowBookmarkModal(true);
+  };
+
+  const handleSubmit = (bookmark: Bookmark) => {
+    alert(JSON.stringify(bookmark, null, 2));
   };
 
   return (
@@ -48,7 +53,11 @@ function Header() {
           </Button>
         </Col>
       </Row>
-      <BookmarkModal show={showBookmarkModal} onClose={closeModal} />
+      <BookmarkModal
+        show={showBookmarkModal}
+        onClose={closeModal}
+        onSubmit={handleSubmit}
+      />
     </>
   );
 }

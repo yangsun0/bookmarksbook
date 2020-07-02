@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import type { Group } from "../App/Types";
+import type { Bookmark, Group } from "../App/Types";
 import BookmarkGroupModal from "../Modal/BookmarkGroupModal";
 import BookmarkModal from "../Modal/BookmarkModal";
 import ConfirmModal from "../Modal/ConfirmModal";
@@ -14,6 +14,8 @@ function Body(props: Props) {
   const [showGroupModal, setShowGroupModal] = useState(false);
   const [showBookmarkModal, setShowBookmarkModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const initial: Bookmark = {};
+  const [bookmark, setBookmark] = useState(initial);
 
   const openGroupModal = () => {
     setShowGroupModal(true);
@@ -23,7 +25,8 @@ function Body(props: Props) {
     setShowGroupModal(false);
   };
 
-  const openBookmarkModal = () => {
+  const openBookmarkModal = (bookmark: Bookmark) => {
+    setBookmark(bookmark);
     setShowBookmarkModal(true);
   };
 
@@ -65,7 +68,11 @@ function Body(props: Props) {
         <Col sm>{rightGroups}</Col>
       </Row>
       <BookmarkGroupModal show={showGroupModal} onClose={closeGroupModal} />
-      <BookmarkModal show={showBookmarkModal} onClose={closeBookmarkModal} />
+      <BookmarkModal
+        show={showBookmarkModal}
+        onClose={closeBookmarkModal}
+        data={bookmark}
+      />
       <ConfirmModal show={showConfirmModal} onClose={closeConfirmModal} />
     </>
   );

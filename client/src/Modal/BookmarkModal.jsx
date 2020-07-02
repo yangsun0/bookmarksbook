@@ -1,13 +1,26 @@
 import React from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import type { ButtonClickHandler } from "../App/Types";
+import { Modal } from "react-bootstrap";
+import type {
+  Bookmark,
+  ButtonClickHandler,
+  SaveBookmarkHandler,
+} from "../App/Types";
+import BookmarkForm from "./BookmarkForm";
 
 type Props = {
   show: boolean,
   onClose: ButtonClickHandler,
+  onSubmit?: SaveBookmarkHandler,
+  data?: Bookmark,
 };
+
 function BookmarkModal(props: Props) {
-  const { show, onClose } = props;
+  const { show, onClose, onSubmit, data } = props;
+  const handleSubmit = (bookmark) => {
+    if (onSubmit) {
+      onSubmit(bookmark);
+    }
+  };
   return (
     <Modal
       centered
@@ -17,49 +30,7 @@ function BookmarkModal(props: Props) {
       onHide={onClose}
       aria-label="bookmark modal"
     >
-      <Modal.Header closeButton>
-        <Modal.Title>Bookmark</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group as={Row}>
-            <Form.Label column md={2} lg={1}>
-              Name
-            </Form.Label>
-            <Col>
-              <Form.Control type="text" placeholder="Enter the bookmark name" />
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row}>
-            <Form.Label column md={2} lg={1}>
-              URL
-            </Form.Label>
-            <Col>
-              <Form.Control type="text" placeholder="Enter the URL" />
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row}>
-            <Form.Label column md={2} lg={1}>
-              Group
-            </Form.Label>
-            <Col>
-              <Form.Control as="select">
-                <option>Favorite</option>
-                <option>Read later</option>
-              </Form.Control>
-            </Col>
-            <Col xs="auto">
-              <Button variant="link">New</Button>
-            </Col>
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
-          Close
-        </Button>
-        <Button variant="primary">Done</Button>
-      </Modal.Footer>
+      <BookmarkForm onClose={onClose} onSubmit={handleSubmit} data={data} />
     </Modal>
   );
 }

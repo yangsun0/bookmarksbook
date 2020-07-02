@@ -8,8 +8,8 @@ export type Bookmark = {
 export type Group = {
   id: number,
   name: string,
-  column: 1 | 2,
-  bookmarkList: Bookmark[],
+  column: number,
+  bookmarkList?: Bookmark[],
 };
 
 export type AppData = {
@@ -17,3 +17,14 @@ export type AppData = {
 };
 
 export type ButtonClickHandler = () => void;
+
+export type SaveBookmarkHandler = (bookmark: Bookmark) => void;
+
+export type SaveGroupHandler = (group: Group) => void;
+
+export type Option = {
+  value: string | number,
+  label: string,
+};
+
+export type Options = Option[];

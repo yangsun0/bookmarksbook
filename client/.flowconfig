@@ -3,6 +3,7 @@
 .*/build/.*
 .*/*.test.js
 .*/src/setupTests.js
+.*/coverage/.*
 
 [include]
 
