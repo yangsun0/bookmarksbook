@@ -1,4 +1,4 @@
-import type { AppData } from "./Types";
+import type { AppData } from "../Common/Types";
 
 export function getSampleData(): AppData {
   const data: AppData = {

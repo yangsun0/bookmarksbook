@@ -4,7 +4,7 @@ import type {
   Bookmark,
   ButtonClickHandler,
   SaveBookmarkHandler,
-} from "../App/Types";
+} from "../Common/Types";
 import BookmarkForm from "./BookmarkForm";
 
 type Props = {

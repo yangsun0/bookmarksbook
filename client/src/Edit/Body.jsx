@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import type { Bookmark, Group } from "../App/Types";
+import type { Bookmark, Group } from "../Common/Types";
 import BookmarkGroupModal from "../Modal/BookmarkGroupModal";
 import BookmarkModal from "../Modal/BookmarkModal";
 import ConfirmModal from "../Modal/ConfirmModal";

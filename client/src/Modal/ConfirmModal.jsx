@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Modal } from "react-bootstrap";
-import type { ButtonClickHandler } from "../App/Types";
+import type { ButtonClickHandler } from "../Common/Types";
 
 type Props = {
   show: boolean,

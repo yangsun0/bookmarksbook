@@ -8,7 +8,7 @@ import type {
   ButtonClickHandler,
   Options,
   SaveBookmarkHandler,
-} from "../App/Types";
+} from "../Common/Types";
 import Dropdown from "./Dropdown";
 import Textbox from "./Textbox";
 

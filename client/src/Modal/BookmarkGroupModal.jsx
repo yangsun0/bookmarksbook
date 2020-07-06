@@ -1,6 +1,10 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
-import type { ButtonClickHandler, Group, SaveGroupHandler } from "../App/Types";
+import type {
+  ButtonClickHandler,
+  Group,
+  SaveGroupHandler,
+} from "../Common/Types";
 import BookmarkGroupForm from "./BookmarkGroupForm";
 
 type Props = {

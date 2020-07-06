@@ -5,7 +5,7 @@ import type {
   Group,
   SaveBookmarkHandler,
   SaveGroupHandler,
-} from "../App/Types";
+} from "../Common/Types";
 
 type Props = {
   group: Group,

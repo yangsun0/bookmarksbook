@@ -1,7 +1,7 @@
 import { useField } from "formik";
 import * as React from "react";
 import { Form } from "react-bootstrap";
-import type { Options } from "../App/Types";
+import type { Options } from "../Common/Types";
 import ControlLayout from "./ControlLayout";
 
 type Props = {

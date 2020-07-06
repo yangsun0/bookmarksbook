@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import type { AppData } from "../Common/Types";
 import EditPage from "../Edit";
 import HomePage from "../Home";
-import type { AppData } from "./Types";
 
 type Props = {
   data: AppData,

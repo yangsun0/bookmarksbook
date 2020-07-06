@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { FiExternalLink } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import type { Bookmark } from "../App/Types";
+import type { Bookmark } from "../Common/Types";
 import BookmarkModal from "../Modal/BookmarkModal";
 
 function Header() {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import type { Group } from "../App/Types";
+import type { Group } from "../Common/Types";
 import BookMarkGroup from "./BookmarkGroup";
 
 type Props = {

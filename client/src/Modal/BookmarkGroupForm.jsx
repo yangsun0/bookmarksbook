@@ -8,7 +8,7 @@ import type {
   Group,
   Options,
   SaveGroupHandler,
-} from "../App/Types";
+} from "../Common/Types";
 import Checkbox from "./Checkbox";
 import Dropdown from "./Dropdown";
 import Textbox from "./Textbox";
