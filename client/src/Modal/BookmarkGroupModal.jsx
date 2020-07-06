@@ -1,22 +1,18 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
-import type { ButtonClickHandler, SaveGroupHandler } from "../App/Types";
+import type { ButtonClickHandler, Group, SaveGroupHandler } from "../App/Types";
 import BookmarkGroupForm from "./BookmarkGroupForm";
 
 type Props = {
   show: boolean,
   onClose: ButtonClickHandler,
-  onSubmit?: SaveGroupHandler,
+  onSave: SaveGroupHandler,
+  data?: Group,
 };
 
 function BookmarkGroupModal(props: Props) {
-  const { show, onClose, onSubmit } = props;
-  const handleSubmit = (group) => {
-    alert(JSON.stringify(group, null, 2));
-    if (onSubmit) {
-      onSubmit(group);
-    }
-  };
+  const { show, onClose, onSave, data } = props;
+
   return (
     <Modal
       centered
@@ -28,7 +24,8 @@ function BookmarkGroupModal(props: Props) {
       <BookmarkGroupForm
         onClose={onClose}
         show={show}
-        onSubmit={handleSubmit}
+        onSubmit={onSave}
+        data={data}
       />
     </Modal>
   );

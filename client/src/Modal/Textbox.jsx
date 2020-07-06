@@ -15,7 +15,7 @@ function Textbox(props: Props) {
   const [field, meta] = useField(props.name);
 
   return (
-    <ControlLayout name={name} label={label} meta={meta}>
+    <ControlLayout name={name} label={label}>
       <Form.Control
         {...field}
         type={type}

@@ -1,4 +1,4 @@
-import * as Formik from "formik";
+import { useField } from "formik";
 import * as React from "react";
 import { Col, Form, Row } from "react-bootstrap";
 
@@ -6,12 +6,13 @@ type Props = {
   children: React.Node,
   name: string,
   label: string,
-  meta: Formik.FieldMetaProps<any>,
   extra?: React.Node,
 };
 
 function ControlLayout(props: Props) {
-  const { name, label, meta, children, extra } = props;
+  const { name, label, children, extra } = props;
+  const [, meta] = useField(props.name);
+
   return (
     <Form.Group as={Row} controlId={name}>
       <Form.Label column md={2} lg={1}>

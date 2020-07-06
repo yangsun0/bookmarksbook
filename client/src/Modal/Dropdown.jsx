@@ -1,6 +1,6 @@
 import { useField } from "formik";
-import React from "react";
-import { Button, Form } from "react-bootstrap";
+import * as React from "react";
+import { Form } from "react-bootstrap";
 import type { Options } from "../App/Types";
 import ControlLayout from "./ControlLayout";
 
@@ -8,22 +8,29 @@ type Props = {
   name: string,
   label: string,
   options: Options,
+  extra?: React.Node,
 };
 
 function Dropdown(props: Props) {
-  const { name, options, label } = props;
-  const [field, meta] = useField(props.name);
+  const { name, options, label, extra } = props;
+  //$FlowFixMe
+  const [field, meta, helpers] = useField(props.name);
+  const handleChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
+    if (typeof meta.initialValue == "number") {
+      helpers.setValue(parseInt(event.currentTarget.value));
+    } else {
+      helpers.setValue(event.currentTarget.value);
+    }
+  };
 
   return (
-    <ControlLayout
-      name={name}
-      label={label}
-      meta={meta}
-      extra={<Button variant="link">New</Button>}
-    >
+    <ControlLayout name={name} label={label} extra={extra}>
       <Form.Control
         as="select"
-        {...field}
+        name={name}
+        value={field.value}
+        onChange={handleChange}
+        onBlur={field.onBlur}
         isInvalid={meta.touched && meta.error}
       >
         {options.map((option) => (

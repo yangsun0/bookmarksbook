@@ -1,15 +1,16 @@
 export type Bookmark = {
-  id: number,
+  id: string,
   name: string,
   url: string,
   iconUrl: string,
+  order: number,
 };
 
 export type Group = {
-  id: number,
+  id: string,
   name: string,
   column: number,
-  bookmarkList?: Bookmark[],
+  bookmarkList: Bookmark[],
 };
 
 export type AppData = {

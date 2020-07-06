@@ -10,17 +10,13 @@ import BookmarkForm from "./BookmarkForm";
 type Props = {
   show: boolean,
   onClose: ButtonClickHandler,
-  onSubmit?: SaveBookmarkHandler,
+  onSave: SaveBookmarkHandler,
   data?: Bookmark,
 };
 
 function BookmarkModal(props: Props) {
-  const { show, onClose, onSubmit, data } = props;
-  const handleSubmit = (bookmark) => {
-    if (onSubmit) {
-      onSubmit(bookmark);
-    }
-  };
+  const { show, onClose, onSave, data } = props;
+
   return (
     <Modal
       centered
@@ -30,7 +26,7 @@ function BookmarkModal(props: Props) {
       onHide={onClose}
       aria-label="bookmark modal"
     >
-      <BookmarkForm onClose={onClose} onSubmit={handleSubmit} data={data} />
+      <BookmarkForm onClose={onClose} onSubmit={onSave} data={data} />
     </Modal>
   );
 }

@@ -13,21 +13,20 @@ type Props = {
 
 function Checkbox(props: Props) {
   const { name, type, label, options } = props;
-  const [, meta] = useField(props.name);
-
-  const checkboxes = options.map((option) => (
-    <CheckboxOption
-      key={option.value}
-      name={name}
-      type={type}
-      label={option.label}
-      value={option.value}
-    />
-  ));
 
   return (
-    <ControlLayout name={name} label={label} meta={meta}>
-      <div className="d-flex h-100">{checkboxes}</div>
+    <ControlLayout name={name} label={label}>
+      <div className="d-flex h-100">
+        {options.map((option) => (
+          <CheckboxOption
+            key={option.value}
+            name={name}
+            type={type}
+            label={option.label}
+            value={option.value}
+          />
+        ))}
+      </div>
     </ControlLayout>
   );
 }
@@ -47,15 +46,19 @@ function CheckboxOption(props: CheckboxOptionProps) {
     value: value,
     type: type,
   });
+
+  const handleChange = () => helpers.setValue(value);
+
   return (
     <Form.Check
       inline
-      onChange={() => helpers.setValue(value)}
+      name={name}
       type={type}
       label={label}
       id={name + value}
       value={value}
       checked={field.checked}
+      onChange={handleChange}
       isInvalid={meta.touched && meta.error}
     />
   );

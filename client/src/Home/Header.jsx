@@ -15,7 +15,7 @@ function Header() {
     setShowBookmarkModal(true);
   };
 
-  const handleSubmit = (bookmark: Bookmark) => {
+  const saveBookmark = (bookmark: Bookmark) => {
     alert(JSON.stringify(bookmark, null, 2));
   };
 
@@ -56,7 +56,7 @@ function Header() {
       <BookmarkModal
         show={showBookmarkModal}
         onClose={closeModal}
-        onSubmit={handleSubmit}
+        onSave={saveBookmark}
       />
     </>
   );

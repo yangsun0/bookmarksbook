@@ -16,8 +16,11 @@ function Body(props: Props) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const initial: Bookmark = {};
   const [bookmark, setBookmark] = useState(initial);
+  const initial2: Group = {};
+  const [group, setGroup] = useState(initial2);
 
-  const openGroupModal = () => {
+  const openGroupModal = (group: Group) => {
+    setGroup(group);
     setShowGroupModal(true);
   };
 
@@ -41,7 +44,13 @@ function Body(props: Props) {
   const closeConfirmModal = () => {
     setShowConfirmModal(false);
   };
+  const saveBookmark = (bookmark: Bookmark) => {
+    alert(JSON.stringify(bookmark, null, 2));
+  };
 
+  const saveGroup = (group: Group) => {
+    alert(JSON.stringify(group, null, 2));
+  };
   const createGroup = (group) => {
     return (
       <BookmarkGroup
@@ -67,10 +76,16 @@ function Body(props: Props) {
         <Col sm>{leftGroups}</Col>
         <Col sm>{rightGroups}</Col>
       </Row>
-      <BookmarkGroupModal show={showGroupModal} onClose={closeGroupModal} />
+      <BookmarkGroupModal
+        show={showGroupModal}
+        onClose={closeGroupModal}
+        onSave={saveGroup}
+        data={group}
+      />
       <BookmarkModal
         show={showBookmarkModal}
         onClose={closeBookmarkModal}
+        onSave={saveBookmark}
         data={bookmark}
       />
       <ConfirmModal show={showConfirmModal} onClose={closeConfirmModal} />

@@ -4,50 +4,49 @@ import type {
   ButtonClickHandler,
   Group,
   SaveBookmarkHandler,
+  SaveGroupHandler,
 } from "../App/Types";
 
 type Props = {
   group: Group,
-  onGroupEdit: ButtonClickHandler,
+  onGroupEdit: SaveGroupHandler,
   onBookmarkEdit: SaveBookmarkHandler,
   onDelete: ButtonClickHandler,
 };
 
 function BookmarkGroup(props: Props) {
   const { group, onGroupEdit, onBookmarkEdit, onDelete } = props;
-  const items = !group.bookmarkList
-    ? []
-    : group.bookmarkList.map((bookmark) => (
-        <ListGroup.Item key={bookmark.id} aria-label="bookmark">
-          <Row>
-            <Col>
-              <img
-                src={bookmark.iconUrl}
-                alt="icon"
-                className="bookmark-icon mr-2"
-              />
-              <span className="align-middle">{bookmark.name}</span>
-            </Col>
-            <Col xs="auto">
-              <Button
-                variant="link"
-                size="sm"
-                onClick={() => onBookmarkEdit(bookmark)}
-              >
-                Edit
-              </Button>
-              <Button variant="link" size="sm" onClick={onDelete}>
-                Delete
-              </Button>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <span className="small text-secondary">{bookmark.url}</span>
-            </Col>
-          </Row>
-        </ListGroup.Item>
-      ));
+  const items = group.bookmarkList.map((bookmark) => (
+    <ListGroup.Item key={bookmark.id} aria-label="bookmark">
+      <Row>
+        <Col>
+          <img
+            src={bookmark.iconUrl}
+            alt="icon"
+            className="bookmark-icon mr-2"
+          />
+          <span className="align-middle">{bookmark.name}</span>
+        </Col>
+        <Col xs="auto">
+          <Button
+            variant="link"
+            size="sm"
+            onClick={() => onBookmarkEdit(bookmark)}
+          >
+            Edit
+          </Button>
+          <Button variant="link" size="sm" onClick={onDelete}>
+            Delete
+          </Button>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <span className="small text-secondary">{bookmark.url}</span>
+        </Col>
+      </Row>
+    </ListGroup.Item>
+  ));
 
   return (
     <Card className="mb-3" aria-label="bookmark group">
@@ -55,7 +54,7 @@ function BookmarkGroup(props: Props) {
         <Row>
           <Col>{group.name}</Col>
           <Col xs="auto">
-            <Button variant="link" size="sm" onClick={onGroupEdit}>
+            <Button variant="link" size="sm" onClick={() => onGroupEdit(group)}>
               Edit
             </Button>
             <Button variant="link" size="sm" onClick={onDelete}>
