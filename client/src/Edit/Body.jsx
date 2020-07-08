@@ -72,7 +72,7 @@ function Body(props: Props) {
 
   return (
     <>
-      <Row aria-label="bookmark groups">
+      <Row role="region" aria-label="bookmark groups">
         <Col sm>{leftGroups}</Col>
         <Col sm>{rightGroups}</Col>
       </Row>

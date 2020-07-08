@@ -86,7 +86,7 @@ function BookmarkForm(props: Props) {
           onReset={formik.handleReset}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Bookmark</Modal.Title>
+            <Modal.Title id="bookmark-modal-title">Bookmark</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Textbox

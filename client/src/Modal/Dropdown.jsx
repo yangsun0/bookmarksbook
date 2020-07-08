@@ -32,6 +32,7 @@ function Dropdown(props: Props) {
         onChange={handleChange}
         onBlur={field.onBlur}
         isInvalid={meta.touched && meta.error}
+        aria-label={label}
       >
         {options.map((option) => (
           <option key={option.value} value={option.value}>

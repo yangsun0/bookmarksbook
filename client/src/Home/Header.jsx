@@ -21,7 +21,7 @@ function Header() {
 
   return (
     <>
-      <Row className="py-2" role="region" aria-label="toolbar">
+      <Row className="py-2" role="toolbar">
         <Col>
           <Form>
             <Form.Check

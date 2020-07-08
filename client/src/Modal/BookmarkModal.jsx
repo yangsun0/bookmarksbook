@@ -24,7 +24,7 @@ function BookmarkModal(props: Props) {
       backdrop="static"
       show={show}
       onHide={onClose}
-      aria-label="bookmark modal"
+      aria-labelledby="bookmark-modal-title"
     >
       <BookmarkForm onClose={onClose} onSubmit={onSave} data={data} />
     </Modal>

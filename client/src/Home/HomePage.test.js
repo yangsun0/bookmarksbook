@@ -11,52 +11,55 @@ test("renders home page", () => {
       <HomePage groups={[]} />
     </MemoryRouter>
   );
-  expect(screen.getByLabelText("toolbar")).toBeInTheDocument();
-  expect(screen.getByLabelText("bookmark groups")).toBeInTheDocument();
+  expect(screen.getByRole("toolbar")).toBeInTheDocument();
+  expect(
+    screen.getByRole("region", { name: "bookmark groups" })
+  ).toBeInTheDocument();
 });
 
-function generateGroup(id = 1) {
+function generateGroup(id = "1") {
   return {
     id: id,
     name: "group name",
     column: 1,
     bookmarkList: [
       {
-        id: 1,
+        id: "1",
         name: "bookmark 1 name",
-        url: "bookmark 1 url",
-        iconUrl: "bookmark icon url",
+        url: "http://bookmar1.com",
+        iconUrl: "http://bookmar1.com/favicon",
       },
       {
-        id: 2,
+        id: "2",
         name: "bookmark 2 name",
-        url: "bookmark 2 url",
-        iconUrl: "bookmark 2 icon url",
+        url: "http://bookmar2.com",
+        iconUrl: "http://bookmar2.com/favicon",
       },
     ],
   };
 }
 
 test("renders bookmark groups", () => {
-  const groups = [generateGroup(), generateGroup(2)];
+  const groups = [generateGroup(), generateGroup("2")];
   render(<Body groups={groups} />);
-  expect(screen.getAllByLabelText("bookmark group")).toHaveLength(
-    groups.length
-  );
+  expect(
+    screen.getAllByRole("region", { name: "bookmark group" })
+  ).toHaveLength(groups.length);
 });
 
 test("renders single bookmark group", () => {
   const group = generateGroup();
   render(<BookmarkGroup group={group} />);
-  expect(screen.getByText(group.name)).toBeInTheDocument();
-  expect(screen.getAllByLabelText("bookmark")).toHaveLength(
-    group.bookmarkList.length
-  );
+  expect(screen.getByRole("heading", { name: group.name })).toBeInTheDocument();
   expect(screen.getAllByRole("link")).toHaveLength(group.bookmarkList.length);
   expect(screen.getAllByRole("img")).toHaveLength(group.bookmarkList.length);
-  group.bookmarkList.forEach((bookmark) => {
-    expect(screen.getByText(bookmark.name)).toBeInTheDocument();
-  });
+  const links = group.bookmarkList.map((b) =>
+    expect.objectContaining({
+      href: b.url + "/",
+      text: b.name,
+    })
+  );
+  expect(screen.getAllByRole("link")).toEqual(expect.arrayContaining(links));
 });
 
 test("clicks new button to show bookmark modal", () => {
@@ -65,7 +68,7 @@ test("clicks new button to show bookmark modal", () => {
       <HomePage groups={[]} />
     </MemoryRouter>
   );
-  expect(screen.queryByLabelText("bookmark modal")).toBeNull();
+  expect(screen.queryByRole("dialog")).toBeNull();
   fireEvent.click(screen.getByText("New"));
-  expect(screen.getByLabelText("bookmark modal")).toBeInTheDocument();
+  expect(screen.getByRole("dialog", { name: "Bookmark" })).toBeInTheDocument();
 });

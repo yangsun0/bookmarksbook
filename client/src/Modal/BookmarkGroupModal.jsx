@@ -23,7 +23,7 @@ function BookmarkGroupModal(props: Props) {
       size="lg"
       show={show}
       onHide={onClose}
-      aria-label="bookmark group modal"
+      aria-labelledby="group-modal-title"
     >
       <BookmarkGroupForm
         onClose={onClose}

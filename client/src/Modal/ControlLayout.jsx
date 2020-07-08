@@ -20,7 +20,11 @@ function ControlLayout(props: Props) {
       </Form.Label>
       <Col>
         {children}
-        <Form.Control.Feedback type="invalid">
+        <Form.Control.Feedback
+          type="invalid"
+          role="alert"
+          aria-labelledby={name}
+        >
           {meta.error}
         </Form.Control.Feedback>
       </Col>

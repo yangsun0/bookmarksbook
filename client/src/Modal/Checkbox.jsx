@@ -59,6 +59,7 @@ function CheckboxOption(props: CheckboxOptionProps) {
       value={value}
       checked={field.checked}
       onChange={handleChange}
+      aria-label={label}
       isInvalid={meta.touched && meta.error}
     />
   );

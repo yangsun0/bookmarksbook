@@ -76,7 +76,7 @@ function BookmarkGroupForm(props: Props) {
       {(formik) => (
         <Form noValidate onSubmit={formik.handleSubmit}>
           <Modal.Header closeButton>
-            <Modal.Title>Bookmark</Modal.Title>
+            <Modal.Title id="group-modal-title">Group</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Textbox
