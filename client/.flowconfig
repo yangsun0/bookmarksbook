@@ -1,0 +1,19 @@
+[ignore]
+.*/node_modules/.*
+.*/build/.*
+.*/*.test.js
+.*/src/setupTests.js
+.*/coverage/.*
+
+[include]
+
+[libs]
+flow-typed
+
+[lints]
+
+[options]
+all=true
+module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/flow/CSSFlowStub.js.flow'
+
+[strict]

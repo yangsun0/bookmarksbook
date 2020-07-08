@@ -1,31 +1,28 @@
 import React from "react";
 import { Card, ListGroup } from "react-bootstrap";
+import type { Bookmark, Group } from "../Common/Types";
 
-function BookMarkGroup() {
+type Props = {
+  group: Group,
+};
+
+function BookmarkGroup(props: Props) {
+  const { group } = props;
+  const items = group.bookmarkList.map((bookmark: Bookmark) => (
+    <ListGroup.Item action href={bookmark.url} key={bookmark.id}>
+      <img src={bookmark.iconUrl} alt="icon" className="bookmark-icon mr-2" />
+      <span className="align-middle">{bookmark.name}</span>
+    </ListGroup.Item>
+  ));
+
   return (
-    <Card className="bookmark-group">
-      <Card.Header>Favorite</Card.Header>
-      <ListGroup>
-        <ListGroup.Item action href="https://www.google.com" target="_blank">
-          <img
-            src="https://www.google.com/favicon.ico"
-            alt="Google icon"
-            tooltip="Google icon"
-            className="bookmark-icon"
-          />
-          <span className="align-middle">Google</span>
-        </ListGroup.Item>
-        <ListGroup.Item action href="https://mail.google.com">
-          <img
-            src="https://mail.google.com/favicon.ico"
-            alt="Gmail icon"
-            className="bookmark-icon"
-          />
-          <span className="align-middle">Gmail</span>
-        </ListGroup.Item>
-      </ListGroup>
+    <Card className="mb-3" role="region" aria-label="bookmark group">
+      <Card.Header role="heading" aria-level="2">
+        {group.name}
+      </Card.Header>
+      <ListGroup>{items}</ListGroup>
     </Card>
   );
 }
 
-export default BookMarkGroup;
+export default BookmarkGroup;

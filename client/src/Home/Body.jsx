@@ -1,31 +1,29 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
+import type { Group } from "../Common/Types";
 import BookMarkGroup from "./BookmarkGroup";
-import Header from "./Header";
-import EditBookmarkGroup from "./EditBookmarkGroup";
 
-function Body() {
+type Props = {
+  groups: Group[],
+};
+
+function Body(props: Props) {
+  const { groups } = props;
+  const createGroup = (group) => {
+    return <BookMarkGroup group={group} key={group.id} />;
+  };
+  const leftGroups = groups
+    .filter((group) => group.column === 1)
+    .map(createGroup);
+  const rightGroups = groups
+    .filter((group) => group.column === 2)
+    .map(createGroup);
+
   return (
-    <Container className="main-container">
-      <Header />
-      <Row>
-        <Col sm>
-          <BookMarkGroup />
-          <BookMarkGroup />
-          <BookMarkGroup />
-        </Col>
-        <Col sm>
-          <BookMarkGroup />
-          <BookMarkGroup />
-        </Col>
-      </Row>
-      <Row>
-        <Col sm>
-          <EditBookmarkGroup />
-        </Col>
-        <Col sm></Col>
-      </Row>
-    </Container>
+    <Row role="region" aria-label="bookmark groups">
+      <Col sm>{leftGroups}</Col>
+      <Col sm>{rightGroups}</Col>
+    </Row>
   );
 }
 

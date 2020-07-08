@@ -3,9 +3,13 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   // auto format when save
   "editor.formatOnSave": true,
-  // auto fix lint issue when save
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    // auto fix lint issue when save
+    "source.fixAll.eslint": true,
+    // auto orgniaze imports when save
+    "source.organizeImports": true
   },
+  // disable typescript validation to enable flow
+  "javascript.validate.enable": false,
   "cSpell.words": ["browserslist"]
 }

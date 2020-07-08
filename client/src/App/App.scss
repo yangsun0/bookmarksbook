@@ -1,0 +1,21 @@
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.main {
+  flex-grow: 1;
+}
+
+.bg-gray-1 {
+  background-color: #f5f5f5;
+}
+
+.bookmark-icon {
+  width: 16px;
+}
+
+.child-cursor-pointer * {
+  cursor: pointer;
+}

@@ -7,18 +7,23 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.5.0",
+    "formik": "^2.1.4",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-icons": "^3.10.0",
-    "react-scripts": "3.4.1"
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "yup": "^0.29.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "flow-typed": "flow-typed",
+    "flow-typed-install": "flow-typed install --ignoreDeps dev"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -37,7 +42,8 @@
   },
   "devDependencies": {
     "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-import": "^2.20.2",
+    "flow-bin": "^0.126.1",
+    "flow-typed": "^3.1.0",
     "prettier": "2.0.5"
   }
 }
