@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { FiExternalLink } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import type { Bookmark } from "../Common/Types";
 import BookmarkModal from "../Modal/BookmarkModal";
 
 function Header() {
+  const { t } = useTranslation();
   const [showBookmarkModal, setShowBookmarkModal] = useState(false);
   const closeModal = () => {
     setShowBookmarkModal(false);
@@ -32,7 +34,7 @@ function Header() {
             >
               <Form.Check.Input />
               <Form.Check.Label>
-                <span className="d-none d-sm-block">Open in new tab</span>
+                <span className="d-none d-sm-block">{t("button.newTab")}</span>
               </Form.Check.Label>
             </Form.Check>
             <FiExternalLink />
@@ -46,10 +48,10 @@ function Header() {
             as={Link}
             to="/edit"
           >
-            Edit
+            {t("button.edit")}
           </Button>
           <Button variant="outline-secondary" size="sm" onClick={openModal}>
-            New
+            {t("button.new")}
           </Button>
         </Col>
       </Row>

@@ -1,6 +1,7 @@
 import { Formik } from "formik";
 import * as React from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import type { ObjectSchema } from "yup/lib/object";
 import type {
@@ -44,6 +45,7 @@ type Props = {
 
 function BookmarkForm(props: Props) {
   const { onClose, onSubmit, data } = props;
+  const { t } = useTranslation();
   // need to set all the field of initialValues to make submit validation work
   let initialValues: BookmarkFormValues = {
     name: "",
@@ -86,35 +88,41 @@ function BookmarkForm(props: Props) {
           onReset={formik.handleReset}
         >
           <Modal.Header closeButton>
-            <Modal.Title id="bookmark-modal-title">Bookmark</Modal.Title>
+            <Modal.Title id="bookmark-modal-title">
+              {t("dialog.bookmark")}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Textbox
               name="name"
               type="text"
-              label="Name"
-              placeholder="Enter the bookmark name"
+              label={t("form.name")}
+              placeholder={t("form.nameTextbox")}
             />
             <Textbox
               name="url"
               type="text"
-              label="URL"
-              placeholder="Enter the URL"
+              label={t("form.url")}
+              placeholder={t("form.urlTextbox")}
             />
             <Dropdown
               name="group"
-              label="Group"
+              label={t("form.group")}
               options={options}
-              extra={<Button variant="link">New</Button>}
+              extra={<Button variant="link">{t("button.new")}</Button>}
             />
-            <Dropdown name="order" label="Order" options={orderOptions} />
+            <Dropdown
+              name="order"
+              label={t("form.order")}
+              options={orderOptions}
+            />
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={onClose}>
-              Close
+              {t("button.close")}
             </Button>
             <Button variant="primary" type="submit">
-              Save
+              {t("button.save")}
             </Button>
           </Modal.Footer>
         </Form>

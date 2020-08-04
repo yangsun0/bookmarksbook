@@ -1,6 +1,7 @@
 import { Formik } from "formik";
 import React from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import type { ObjectSchema } from "yup/lib/object";
 import type {
@@ -43,6 +44,7 @@ const orderOptions: Options = [
 
 function BookmarkGroupForm(props: Props) {
   const { onClose, onSubmit, data } = props;
+  const { t } = useTranslation();
   const initialValues: BookmarkGroupFormValues = {
     name: "",
     column: 1,
@@ -76,29 +78,35 @@ function BookmarkGroupForm(props: Props) {
       {(formik) => (
         <Form noValidate onSubmit={formik.handleSubmit}>
           <Modal.Header closeButton>
-            <Modal.Title id="group-modal-title">Group</Modal.Title>
+            <Modal.Title id="group-modal-title">
+              {t("dialog.group")}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Textbox
               name="name"
               type="text"
-              label="Name"
-              placeholder="Enter the bookmark group name"
+              label={t("form.name")}
+              placeholder={t("form.groupTextbox")}
             />
             <Checkbox
               name="column"
               type="radio"
-              label="Column"
+              label={t("form.column")}
               options={columnOptions}
             />
-            <Dropdown name="order" label="Order" options={orderOptions} />
+            <Dropdown
+              name="order"
+              label={t("form.order")}
+              options={orderOptions}
+            />
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={onClose}>
-              Close
+              {t("button.close")}
             </Button>
             <Button variant="primary" type="submit">
-              Save
+              {t("button.save")}
             </Button>
           </Modal.Footer>
         </Form>

@@ -1,14 +1,13 @@
 import React from "react";
 import { Container, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 function Footer() {
+  const { t } = useTranslation();
   return (
     <footer className="bg-gray-1 py-2">
       <Container>
-        <Row className="text-muted small">
-          <span className="mr-2">&copy; 2020 Copyright:</span>
-          <span>Bookmark - LcodeJ</span>
-        </Row>
+        <Row className="text-muted small">{t("app.copyright")}</Row>
       </Container>
     </footer>
   );

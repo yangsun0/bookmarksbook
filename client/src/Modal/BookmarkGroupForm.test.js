@@ -2,6 +2,10 @@ import { fireEvent, render, screen, wait } from "@testing-library/react";
 import React from "react";
 import BookmarkGroupForm from "./BookmarkGroupForm";
 
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({ t: (key) => key }),
+}));
+
 test("submit valid group", async () => {
   const onClose = jest.fn();
   const onSubmit = jest.fn();
@@ -13,10 +17,10 @@ test("submit valid group", async () => {
     bookmarkList: [],
   };
   render(<BookmarkGroupForm onClose={onClose} onSubmit={onSubmit} />);
-  expect(screen.getByRole("alert", { name: "Name" })).toBeEmpty();
+  expect(screen.getByRole("alert", { name: "form.name" })).toBeEmpty();
 
   await wait(() => {
-    fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "form.name" }), {
       target: { value: group.name },
     });
   });
@@ -24,12 +28,12 @@ test("submit valid group", async () => {
     fireEvent.click(screen.getByRole("radio", { name: "right" }));
   });
   await wait(() => {
-    fireEvent.change(screen.getByRole("combobox", { name: "Order" }), {
+    fireEvent.change(screen.getByRole("combobox", { name: "form.order" }), {
       target: { value: group.order },
     });
   });
   await wait(() => {
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "button.save" }));
   });
 
   expect(onSubmit).toHaveBeenCalledWith(group);
@@ -40,9 +44,9 @@ test("submit invalid group", async () => {
   const onSubmit = jest.fn();
   render(<BookmarkGroupForm onClose={onClose} onSubmit={onSubmit} />);
 
-  const nameTextbox = screen.getByRole("textbox", { name: "Name" });
-  const nameError = screen.getByRole("alert", { name: "Name" });
-  const saveButton = screen.getByRole("button", { name: "Save" });
+  const nameTextbox = screen.getByRole("textbox", { name: "form.name" });
+  const nameError = screen.getByRole("alert", { name: "form.name" });
+  const saveButton = screen.getByRole("button", { name: "button.save" });
 
   expect(nameError).toBeEmpty();
 
@@ -84,7 +88,9 @@ test("edit group", () => {
   render(
     <BookmarkGroupForm onClose={onClose} onSubmit={onSubmit} data={group} />
   );
-  expect(screen.getByRole("textbox", { name: "Name" }).value).toBe(group.name);
+  expect(screen.getByRole("textbox", { name: "form.name" }).value).toBe(
+    group.name
+  );
   expect(
     screen
       .getAllByRole("radio")

@@ -1,0 +1,39 @@
+{
+  "app": {
+    "brand": "Bookmark",
+    "copyright": "@ 2020 Copyright: Bookmark - LcodeJ"
+  },
+  "menu": {
+    "default": "Default",
+    "new": "New Profile",
+    "signIn": "Sign-In"
+  },
+  "button": {
+    "newTab": "Open in new tab",
+    "new": "New",
+    "edit": "Edit",
+    "back": "< Back",
+    "newGroup": "New Group",
+    "newBookmark": "New Bookmark",
+    "delete": "Delete",
+    "close": "Close",
+    "save": "Save",
+    "no": "No"
+  },
+  "dialog": {
+    "bookmark": "Bookmark",
+    "group": "Group",
+    "confirm": "Confirm",
+    "confirmMessage": "Do you want to delete the bookmark?"
+  },
+  "form": {
+    "name": "Name",
+    "url": "URL",
+    "group": "Group",
+    "order": "Order",
+    "column": "Column",
+    "nameTextbox": "Enter the bookmark name",
+    "urlTextbox": "Enter the URL",
+    "groupTextbox": "Enter the bookmark group name"
+  }
+}

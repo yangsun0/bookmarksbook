@@ -5,6 +5,10 @@ import Body from "./Body";
 import BookmarkGroup from "./BookmarkGroup";
 import EditPage from "./EditPage";
 
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({ t: (key) => key }),
+}));
+
 test("renders edit page", () => {
   render(
     <MemoryRouter>
@@ -65,9 +69,11 @@ test("clicks edit button to show bookmark modal", () => {
       <Body groups={groups} />
     </MemoryRouter>
   );
-  expect(screen.queryByRole("dialog", { name: "Bookmark" })).toBeNull();
-  fireEvent.click(screen.queryAllByRole("button", { name: "Edit" })[1]);
-  expect(screen.getByRole("dialog", { name: "Bookmark" })).toBeInTheDocument();
+  expect(screen.queryByRole("dialog", { name: "dialog.bookmark" })).toBeNull();
+  fireEvent.click(screen.queryAllByRole("button", { name: "button.edit" })[1]);
+  expect(
+    screen.getByRole("dialog", { name: "dialog.bookmark" })
+  ).toBeInTheDocument();
 });
 
 test("clicks edit button to show group modal", () => {
@@ -78,9 +84,11 @@ test("clicks edit button to show group modal", () => {
     </MemoryRouter>
   );
 
-  expect(screen.queryByRole("dialog", { name: "Group" })).toBeNull();
-  fireEvent.click(screen.queryAllByRole("button", { name: "Edit" })[0]);
-  expect(screen.getByRole("dialog", { name: "Group" })).toBeInTheDocument();
+  expect(screen.queryByRole("dialog", { name: "dialog.group" })).toBeNull();
+  fireEvent.click(screen.queryAllByRole("button", { name: "button.edit" })[0]);
+  expect(
+    screen.getByRole("dialog", { name: "dialog.group" })
+  ).toBeInTheDocument();
 });
 
 test("clicks delete button to show confirm modal", () => {
@@ -90,7 +98,11 @@ test("clicks delete button to show confirm modal", () => {
       <Body groups={groups} />
     </MemoryRouter>
   );
-  expect(screen.queryByRole("dialog", { name: "Confirm" })).toBeNull();
-  fireEvent.click(screen.queryAllByRole("button", { name: "Delete" })[0]);
-  expect(screen.getByRole("dialog", { name: "Confirm" })).toBeInTheDocument();
+  expect(screen.queryByRole("dialog", { name: "dialog.confirm" })).toBeNull();
+  fireEvent.click(
+    screen.queryAllByRole("button", { name: "button.delete" })[0]
+  );
+  expect(
+    screen.getByRole("dialog", { name: "dialog.confirm" })
+  ).toBeInTheDocument();
 });
