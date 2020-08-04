@@ -1,0 +1,11 @@
+{
+  "app": {
+    "brand": "Bookmark",
+    "copyright": "@ 2020 Copyright: Bookmark - LcodeJ"
+  },
+  "menu": {
+    "default": "Default",
+    "new": "New Profile",
+    "signIn": "Sign-In"
+  }
+}

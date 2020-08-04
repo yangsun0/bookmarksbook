@@ -5,6 +5,10 @@ import { Router } from "react-router";
 import { MemoryRouter } from "react-router-dom";
 import App from "./App";
 
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({ t: (key) => key }),
+}));
+
 test("renders App", () => {
   render(
     <MemoryRouter>
