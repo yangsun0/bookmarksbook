@@ -11,5 +11,8 @@
   },
   // disable typescript validation to enable flow
   "javascript.validate.enable": false,
-  "cSpell.words": ["browserslist"]
+  "cSpell.words": [
+    "browserslist",
+    "languagedetector"
+  ]
 }
