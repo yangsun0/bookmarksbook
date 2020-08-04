@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import type {
   ButtonClickHandler,
   Group,
@@ -16,6 +17,8 @@ type Props = {
 
 function BookmarkGroup(props: Props) {
   const { group, onGroupEdit, onBookmarkEdit, onDelete } = props;
+  const { t } = useTranslation();
+
   const items = group.bookmarkList.map((bookmark) => (
     <ListGroup.Item key={bookmark.id}>
       <Row>
@@ -33,10 +36,10 @@ function BookmarkGroup(props: Props) {
             size="sm"
             onClick={() => onBookmarkEdit(bookmark)}
           >
-            Edit
+            {t("button.edit")}
           </Button>
           <Button variant="link" size="sm" onClick={onDelete}>
-            Delete
+            {t("button.delete")}
           </Button>
         </Col>
       </Row>
@@ -57,10 +60,10 @@ function BookmarkGroup(props: Props) {
           </Col>
           <Col xs="auto">
             <Button variant="link" size="sm" onClick={() => onGroupEdit(group)}>
-              Edit
+              {t("button.edit")}
             </Button>
             <Button variant="link" size="sm" onClick={onDelete}>
-              Delete
+              {t("button.delete")}
             </Button>
           </Col>
         </Row>

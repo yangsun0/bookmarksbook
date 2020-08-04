@@ -5,6 +5,10 @@ import Body from "./Body";
 import BookmarkGroup from "./BookmarkGroup";
 import HomePage from "./HomePage";
 
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({ t: (key) => key }),
+}));
+
 test("renders home page", () => {
   render(
     <MemoryRouter>
@@ -69,6 +73,8 @@ test("clicks new button to show bookmark modal", () => {
     </MemoryRouter>
   );
   expect(screen.queryByRole("dialog")).toBeNull();
-  fireEvent.click(screen.getByText("New"));
-  expect(screen.getByRole("dialog", { name: "Bookmark" })).toBeInTheDocument();
+  fireEvent.click(screen.getByText("button.new"));
+  expect(
+    screen.getByRole("dialog", { name: "dialog.bookmark" })
+  ).toBeInTheDocument();
 });

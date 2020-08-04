@@ -2,6 +2,10 @@ import { fireEvent, render, screen, wait } from "@testing-library/react";
 import React from "react";
 import BookmarkForm from "./BookmarkForm";
 
+jest.mock("react-i18next", () => ({
+  useTranslation: () => ({ t: (key) => key }),
+}));
+
 test("submit valid bookmark", async () => {
   const onClose = jest.fn();
   const onSubmit = jest.fn();
@@ -14,31 +18,31 @@ test("submit valid bookmark", async () => {
     url: "https://www.example.com",
   };
   render(<BookmarkForm onClose={onClose} onSubmit={onSubmit} />);
-  expect(screen.getByRole("alert", { name: "Name" })).toBeEmpty();
-  expect(screen.getByRole("alert", { name: "URL" })).toBeEmpty();
+  expect(screen.getByRole("alert", { name: "form.name" })).toBeEmpty();
+  expect(screen.getByRole("alert", { name: "form.url" })).toBeEmpty();
 
   await wait(() => {
-    fireEvent.change(screen.getByRole("textbox", { name: "Name" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "form.name" }), {
       target: { value: bookmark.name },
     });
   });
   await wait(() => {
-    fireEvent.change(screen.getByRole("textbox", { name: "URL" }), {
+    fireEvent.change(screen.getByRole("textbox", { name: "form.url" }), {
       target: { value: bookmark.url },
     });
   });
   await wait(() => {
-    fireEvent.change(screen.getByRole("combobox", { name: "Order" }), {
+    fireEvent.change(screen.getByRole("combobox", { name: "form.order" }), {
       target: { value: bookmark.order },
     });
   });
   await wait(() => {
-    fireEvent.change(screen.getByRole("combobox", { name: "Group" }), {
+    fireEvent.change(screen.getByRole("combobox", { name: "form.group" }), {
       target: { value: bookmark.group },
     });
   });
   await wait(() => {
-    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    fireEvent.click(screen.getByRole("button", { name: "button.save" }));
   });
   expect(onSubmit).toHaveBeenCalledWith(bookmark);
 });
@@ -49,11 +53,11 @@ test("submit invalid bookmark", async () => {
 
   render(<BookmarkForm onClose={onClose} onSubmit={onSubmit} />);
 
-  const nameTextbox = screen.getByRole("textbox", { name: "Name" });
-  const nameError = screen.getByRole("alert", { name: "Name" });
-  const urlTextbox = screen.getByRole("textbox", { name: "URL" });
-  const urlError = screen.getByRole("alert", { name: "URL" });
-  const saveButton = screen.getByRole("button", { name: "Save" });
+  const nameTextbox = screen.getByRole("textbox", { name: "form.name" });
+  const nameError = screen.getByRole("alert", { name: "form.name" });
+  const urlTextbox = screen.getByRole("textbox", { name: "form.url" });
+  const urlError = screen.getByRole("alert", { name: "form.url" });
+  const saveButton = screen.getByRole("button", { name: "button.save" });
 
   expect(nameError).toBeEmpty();
   expect(urlError).toBeEmpty();
@@ -113,10 +117,12 @@ test("edit bookmark", () => {
   render(
     <BookmarkForm onClose={onClose} onSubmit={onSubmit} data={bookmark} />
   );
-  expect(screen.getByRole("textbox", { name: "Name" }).value).toBe(
+  expect(screen.getByRole("textbox", { name: "form.name" }).value).toBe(
     bookmark.name
   );
-  expect(screen.getByRole("textbox", { name: "URL" }).value).toBe(bookmark.url);
+  expect(screen.getByRole("textbox", { name: "form.url" }).value).toBe(
+    bookmark.url
+  );
   expect(
     screen.getByRole("option", { name: "Favorite" }).selected
   ).toBeTruthy();

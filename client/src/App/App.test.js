@@ -28,6 +28,6 @@ test("clicks edit button to navigate to edit page", () => {
     </Router>
   );
   expect(history.location.pathname).toBe("/");
-  fireEvent.click(screen.getByRole("link", { name: "Edit" }));
+  fireEvent.click(screen.getByRole("link", { name: "button.edit" }));
   expect(history.location.pathname).toBe("/edit");
 });
