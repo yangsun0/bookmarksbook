@@ -1,8 +1,7 @@
 import { fireEvent, render, screen, wait } from "@testing-library/react";
 import React from "react";
 import sampleData from "../FakeData/data.json";
-import { AppStore, Bookmark, Group } from "../Store/AppStore";
-import StoreContext from "../Store/StoreContext";
+import { AppStore, Bookmark, Group, StoreContext } from "../Store";
 import BookmarkGroupForm from "./BookmarkGroupForm";
 
 jest.mock("react-i18next", () => ({

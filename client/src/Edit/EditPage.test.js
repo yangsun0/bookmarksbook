@@ -2,8 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import sampleData from "../FakeData/data.json";
-import { AppStore, Bookmark, Group } from "../Store/AppStore";
-import StoreContext from "../Store/StoreContext";
+import { AppStore, Bookmark, Group, StoreContext } from "../Store";
 import EditPage from "./EditPage";
 
 jest.mock("react-i18next", () => ({
