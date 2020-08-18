@@ -1,7 +1,3 @@
 extends:
   - react-app
   - prettier
-rules:
-  no-use-before-define:
-    - off
-    - classes: false

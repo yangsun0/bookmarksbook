@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, ListGroup } from "react-bootstrap";
-import type { Bookmark, Group } from "../Store/AppStore";
+import type { Bookmark, Group } from "../Store";
 
 type Props = {
   group: Group,

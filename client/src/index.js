@@ -6,8 +6,7 @@ import App from "./App";
 import "./i18n";
 import "./index.scss";
 import * as serviceWorker from "./serviceWorker";
-import { AppStore } from "./Store/AppStore";
-import StoreContext from "./Store/StoreContext";
+import { AppStore, StoreContext } from "./Store";
 
 mobx.configure({ enforceActions: "observed" });
 const root = document.getElementById("root");

@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import type { Group } from "../Store/AppStore";
+import type { Group } from "../Store";
 import useStore from "../Store/useStore";
 
 type Props = {

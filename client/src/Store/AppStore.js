@@ -1,84 +1,9 @@
 import { action, computed, decorate, observable, runInAction } from "mobx";
 import "mobx-react-lite/batchingForReactDom";
 import BookmarkService from "../Service/BookmarkService";
-import type {
-  BookmarkData,
-  BookmarkGroupsData,
-  GroupData,
-} from "../Service/BookmarkService";
-
-export class Bookmark {
-  id: string;
-  name: string;
-  url: string;
-  iconUrl: string;
-  order: number;
-  groupId: string;
-  store: AppStore;
-
-  constructor(bookmark: BookmarkData, store: AppStore) {
-    this.id = bookmark.id;
-    this.name = bookmark.name;
-    this.url = bookmark.url;
-    this.iconUrl = bookmark.iconUrl;
-    this.groupId = bookmark.groupId;
-    this.order = bookmark.order;
-    this.store = store;
-  }
-
-  get group(): Group | null {
-    return this.store.groups.find((group) => group.id === this.groupId) ?? null;
-  }
-
-  toData(): BookmarkData {
-    return {
-      id: this.id,
-      name: this.name,
-      url: this.url,
-      iconUrl: this.iconUrl,
-      groupId: this.groupId,
-      order: this.order,
-    };
-  }
-}
-
-decorate(Bookmark, {
-  id: observable,
-  name: observable,
-  url: observable,
-  iconUrl: observable,
-  order: observable,
-  group: computed,
-});
-
-export class Group {
-  id: string;
-  name: string;
-  column: number;
-  order: number;
-  store: AppStore;
-
-  constructor(group: GroupData, store: AppStore) {
-    this.id = group.id;
-    this.name = group.name;
-    this.column = group.column;
-    this.order = group.order;
-    this.store = store;
-  }
-
-  get bookmarks(): Array<Bookmark> {
-    return this.store.bookmarks.filter(
-      (bookmark) => bookmark.groupId === this.id
-    );
-  }
-}
-
-decorate(Group, {
-  id: observable,
-  name: observable,
-  column: observable,
-  bookmarks: computed,
-});
+import type { BookmarkGroupsData } from "../Service/BookmarkService";
+import Bookmark from "./Bookmark";
+import Group from "./Group";
 
 const statusValues = {
   none: "none",
@@ -88,12 +13,7 @@ const statusValues = {
 
 type Status = $Keys<typeof statusValues>;
 
-export type Option = {
-  label: string,
-  value: string,
-};
-
-export class AppStore {
+class AppStore {
   bookmarkService: BookmarkService = new BookmarkService();
   groups: Array<Group> = [];
   bookmarks: Array<Bookmark> = [];
@@ -219,3 +139,5 @@ decorate(AppStore, {
   openConfirmModal: action,
   closeConfirmModal: action,
 });
+
+export default AppStore;

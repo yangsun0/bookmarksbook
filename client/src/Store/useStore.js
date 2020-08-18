@@ -1,5 +1,5 @@
 import React from "react";
-import { AppStore } from "./AppStore";
+import AppStore from "./AppStore";
 import StoreContext from "./StoreContext";
 
 function useStore(): AppStore {
