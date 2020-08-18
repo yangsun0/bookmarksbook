@@ -1,3 +1,4 @@
+import * as mobx from "mobx";
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
@@ -5,14 +6,21 @@ import App from "./App";
 import "./i18n";
 import "./index.scss";
 import * as serviceWorker from "./serviceWorker";
+import { AppStore } from "./Store/AppStore";
+import StoreContext from "./Store/StoreContext";
 
+mobx.configure({ enforceActions: "observed" });
 const root = document.getElementById("root");
+const appStore = new AppStore();
+
 if (root != null) {
   ReactDOM.render(
     <React.StrictMode>
       <BrowserRouter>
         <Suspense fallback="Loading">
-          <App />
+          <StoreContext.Provider value={appStore}>
+            <App />
+          </StoreContext.Provider>
         </Suspense>
       </BrowserRouter>
     </React.StrictMode>,

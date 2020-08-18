@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, ListGroup } from "react-bootstrap";
-import type { Bookmark, Group } from "../Common/Types";
+import type { Bookmark, Group } from "../Store/AppStore";
 
 type Props = {
   group: Group,
@@ -8,7 +8,7 @@ type Props = {
 
 function BookmarkGroup(props: Props) {
   const { group } = props;
-  const items = group.bookmarkList.map((bookmark: Bookmark) => (
+  const items = group.bookmarks.map((bookmark: Bookmark) => (
     <ListGroup.Item action href={bookmark.url} key={bookmark.id}>
       <img src={bookmark.iconUrl} alt="icon" className="bookmark-icon mr-2" />
       <span className="align-middle">{bookmark.name}</span>

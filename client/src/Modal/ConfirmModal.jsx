@@ -1,17 +1,22 @@
+import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Button, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import type { ButtonClickHandler } from "../Common/Types";
+import useStore from "../Store/useStore";
 
-type Props = {
-  show: boolean,
-  onClose: ButtonClickHandler,
-};
-function ConfirmModal(props: Props) {
-  const { show, onClose } = props;
+function ConfirmModal() {
   const { t } = useTranslation();
-  return (
-    <Modal show={show} onHide={onClose} aria-labelledby="confirm-modal-title">
+  const store = useStore();
+  const close = () => {
+    store.closeConfirmModal();
+  };
+
+  return useObserver(() => (
+    <Modal
+      show={store.isConfirmModalShown}
+      onHide={close}
+      aria-labelledby="confirm-modal-title"
+    >
       <Modal.Header closeButton>
         <Modal.Title id="confirm-modal-title">
           {t("dialog.confirm")}
@@ -21,13 +26,13 @@ function ConfirmModal(props: Props) {
         <p>{t("dialog.confirmMessage")}</p>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onClose}>
+        <Button variant="secondary" onClick={close}>
           {t("button.no")}
         </Button>
         <Button variant="primary">{t("button.delete")}</Button>
       </Modal.Footer>
     </Modal>
-  );
+  ));
 }
 
 export default ConfirmModal;

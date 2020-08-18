@@ -1,24 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { FiExternalLink } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import type { Bookmark } from "../Common/Types";
-import BookmarkModal from "../Modal/BookmarkModal";
+import useStore from "../Store/useStore";
 
 function Header() {
   const { t } = useTranslation();
-  const [showBookmarkModal, setShowBookmarkModal] = useState(false);
-  const closeModal = () => {
-    setShowBookmarkModal(false);
-  };
+  const store = useStore();
 
-  const openModal = () => {
-    setShowBookmarkModal(true);
-  };
-
-  const saveBookmark = (bookmark: Bookmark) => {
-    alert(JSON.stringify(bookmark, null, 2));
+  const openBookmarkModal = (event: SyntheticEvent<HTMLButtonElement>) => {
+    store.openBookmarkModal();
   };
 
   return (
@@ -50,16 +42,15 @@ function Header() {
           >
             {t("button.edit")}
           </Button>
-          <Button variant="outline-secondary" size="sm" onClick={openModal}>
+          <Button
+            variant="outline-secondary"
+            size="sm"
+            onClick={openBookmarkModal}
+          >
             {t("button.new")}
           </Button>
         </Col>
       </Row>
-      <BookmarkModal
-        show={showBookmarkModal}
-        onClose={closeModal}
-        onSave={saveBookmark}
-      />
     </>
   );
 }

@@ -1,5 +1,6 @@
 [ignore]
 .*/node_modules/.*
+!.*/node_modules/mobx/.*
 .*/build/.*
 .*/*.test.js
 .*/src/setupTests.js

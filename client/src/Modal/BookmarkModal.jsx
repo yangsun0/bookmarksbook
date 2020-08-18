@@ -1,34 +1,28 @@
+import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Modal } from "react-bootstrap";
-import type {
-  Bookmark,
-  ButtonClickHandler,
-  SaveBookmarkHandler,
-} from "../Common/Types";
+import useStore from "../Store/useStore";
 import BookmarkForm from "./BookmarkForm";
 
-type Props = {
-  show: boolean,
-  onClose: ButtonClickHandler,
-  onSave: SaveBookmarkHandler,
-  data?: Bookmark,
-};
+function BookmarkModal() {
+  const store = useStore();
 
-function BookmarkModal(props: Props) {
-  const { show, onClose, onSave, data } = props;
+  const closeModal = () => {
+    store.closeBookmarkModal();
+  };
 
-  return (
+  return useObserver(() => (
     <Modal
       centered
       size="lg"
       backdrop="static"
-      show={show}
-      onHide={onClose}
+      show={store.isBookmarkModalShown}
+      onHide={closeModal}
       aria-labelledby="bookmark-modal-title"
     >
-      <BookmarkForm onClose={onClose} onSubmit={onSave} data={data} />
+      <BookmarkForm onClose={closeModal} />
     </Modal>
-  );
+  ));
 }
 
 export default BookmarkModal;

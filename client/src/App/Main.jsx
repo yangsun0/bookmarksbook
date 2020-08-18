@@ -1,23 +1,17 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import type { AppData } from "../Common/Types";
 import EditPage from "../Edit";
 import HomePage from "../Home";
 
-type Props = {
-  data: AppData,
-};
-
-function Main(props: Props) {
-  const { data } = props;
+function Main() {
   return (
     <main className="main">
       <Switch>
         <Route path="/edit">
-          <EditPage groups={data.groups} />
+          <EditPage />
         </Route>
         <Route path="/">
-          <HomePage groups={data.groups} />
+          <HomePage />
         </Route>
       </Switch>
     </main>

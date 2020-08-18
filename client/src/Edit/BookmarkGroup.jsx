@@ -1,25 +1,31 @@
 import React from "react";
 import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import type {
-  ButtonClickHandler,
-  Group,
-  SaveBookmarkHandler,
-  SaveGroupHandler,
-} from "../Common/Types";
+import type { Group } from "../Store/AppStore";
+import useStore from "../Store/useStore";
 
 type Props = {
   group: Group,
-  onGroupEdit: SaveGroupHandler,
-  onBookmarkEdit: SaveBookmarkHandler,
-  onDelete: ButtonClickHandler,
 };
 
 function BookmarkGroup(props: Props) {
-  const { group, onGroupEdit, onBookmarkEdit, onDelete } = props;
+  const { group } = props;
   const { t } = useTranslation();
+  const store = useStore();
 
-  const items = group.bookmarkList.map((bookmark) => (
+  const openBookmarkModal = (event: SyntheticEvent<HTMLButtonElement>) => {
+    store.openBookmarkModal(event.currentTarget.dataset.id);
+  };
+
+  const openGroupModal = (event: SyntheticEvent<HTMLButtonElement>) => {
+    store.openGroupModal(event.currentTarget.dataset.id);
+  };
+
+  const openConfirmModal = () => {
+    store.openConfirmModal();
+  };
+
+  const items = group.bookmarks.map((bookmark) => (
     <ListGroup.Item key={bookmark.id}>
       <Row>
         <Col>
@@ -34,11 +40,12 @@ function BookmarkGroup(props: Props) {
           <Button
             variant="link"
             size="sm"
-            onClick={() => onBookmarkEdit(bookmark)}
+            onClick={openBookmarkModal}
+            data-id={bookmark.id}
           >
             {t("button.edit")}
           </Button>
-          <Button variant="link" size="sm" onClick={onDelete}>
+          <Button variant="link" size="sm" onClick={openConfirmModal}>
             {t("button.delete")}
           </Button>
         </Col>
@@ -59,10 +66,15 @@ function BookmarkGroup(props: Props) {
             {group.name}
           </Col>
           <Col xs="auto">
-            <Button variant="link" size="sm" onClick={() => onGroupEdit(group)}>
+            <Button
+              variant="link"
+              size="sm"
+              onClick={openGroupModal}
+              data-id={group.id}
+            >
               {t("button.edit")}
             </Button>
-            <Button variant="link" size="sm" onClick={onDelete}>
+            <Button variant="link" size="sm" onClick={openConfirmModal}>
               {t("button.delete")}
             </Button>
           </Col>
