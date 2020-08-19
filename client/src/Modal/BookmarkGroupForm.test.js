@@ -13,7 +13,7 @@ let testContext = {};
 beforeEach(() => {
   const storeContext = setupStoreContext();
   testContext.store = storeContext.store;
-  testContext.saveBookmark = storeContext.saveBookmark;
+  testContext.saveGroup = storeContext.saveGroup;
   const onClose = jest.fn();
   testContext.onClose = onClose;
 });
@@ -27,7 +27,7 @@ test("new group with correct input", async () => {
 
   const group = {
     id: "",
-    name: "bookmark name",
+    name: "group name",
     column: 2,
     order: 2,
   };

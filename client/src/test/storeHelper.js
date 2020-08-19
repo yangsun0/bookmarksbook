@@ -17,6 +17,9 @@ function setupStoreContext() {
   const saveBookmarkMock = jest.fn();
   AppStore.prototype.saveBookmark = saveBookmarkMock;
   testContext.saveBookmark = saveBookmarkMock;
+  const saveGroup = jest.fn();
+  AppStore.prototype.saveGroup = saveGroup;
+  testContext.saveGroup = saveGroup;
   return testContext;
 }
 
