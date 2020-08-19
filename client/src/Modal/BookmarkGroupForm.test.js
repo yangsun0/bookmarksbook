@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, wait } from "@testing-library/react";
 import React from "react";
-import sampleData from "../FakeData/data.json";
-import { AppStore, Bookmark, Group, StoreContext } from "../Store";
+import { StoreContext } from "../Store";
+import { setupStoreContext } from "../test/storeHelper";
 import BookmarkGroupForm from "./BookmarkGroupForm";
 
 jest.mock("react-i18next", () => ({
@@ -11,16 +11,9 @@ jest.mock("react-i18next", () => ({
 let testContext = {};
 
 beforeEach(() => {
-  const bookmarkGroupData = sampleData.bookmarkGroups;
-  const appStore = new AppStore();
-  appStore.groups = bookmarkGroupData.groups.map(
-    (group) => new Group(group, appStore)
-  );
-  appStore.bookmarks = bookmarkGroupData.bookmarks.map(
-    (bookmark) => new Bookmark(bookmark, appStore)
-  );
-  appStore.currentGroupId = "";
-  testContext.store = appStore;
+  const storeContext = setupStoreContext();
+  testContext.store = storeContext.store;
+  testContext.saveBookmark = storeContext.saveBookmark;
   const onClose = jest.fn();
   testContext.onClose = onClose;
 });

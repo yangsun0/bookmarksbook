@@ -1,28 +1,12 @@
 import axios from "axios";
 import type { Axios } from "axios";
 
-export type BookmarkData = {
-  id: string,
-  name: string,
-  url: string,
-  iconUrl: string,
-  groupId: string,
-  order: number,
+const paths = {
+  bookmarks: "/bookmarks",
+  groups: "/groups",
 };
 
-export type GroupData = {
-  id: string,
-  name: string,
-  column: number,
-  order: number,
-};
-
-export type BookmarkGroupsData = {
-  bookmarks: Array<BookmarkData>,
-  groups: Array<GroupData>,
-};
-
-export default class BookmarkService {
+class BookmarkService {
   client: Axios;
 
   constructor() {
@@ -31,12 +15,35 @@ export default class BookmarkService {
     });
   }
 
-  async getBookmarkGroups(): Promise<BookmarkGroupsData> {
-    const response = await this.client.get("/bookmarkGroups");
+  async getBookmarks(): Promise<Array<Object>> {
+    const response = await this.client.get(paths.bookmarks);
     return response.data;
   }
 
-  updateBookmark(bookmarkData: BookmarkData) {}
+  async getGroups(): Promise<Array<Object>> {
+    const response = await this.client.get(paths.groups);
+    return response.data;
+  }
 
-  newBookmark(bookmarkData: BookmarkData) {}
+  getItemPath(path: string, id: string): string {
+    return path + "/" + id;
+  }
+
+  async updateBookmark(id: string, data: Object) {
+    await this.client.put(this.getItemPath(paths.bookmarks, id), data);
+  }
+
+  async newBookmark(data: Object) {
+    await this.client.post(paths.bookmarks, data);
+  }
+
+  async updateGroup(id: string, data: Object) {
+    await this.client.put(this.getItemPath(paths.groups, id), data);
+  }
+
+  async newGroup(data: Object) {
+    await this.client.post(paths.groups, data);
+  }
 }
+
+export default BookmarkService;

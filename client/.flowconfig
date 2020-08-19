@@ -5,6 +5,7 @@
 .*/*.test.js
 .*/src/setupTests.js
 .*/coverage/.*
+.*/test/.*
 
 [include]
 

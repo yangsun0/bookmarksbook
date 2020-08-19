@@ -8,7 +8,7 @@ function Body() {
   const store = useStore();
 
   useEffect(() => {
-    store.fetchBookmarkGroups();
+    store.fetchData();
   }, [store]);
 
   const createGroup = (group) => {

@@ -1,15 +1,20 @@
+import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import type { Group } from "../Store";
+import type { Bookmark, Group } from "../Store";
 import useStore from "../Store/useStore";
 
 type Props = {
   group: Group,
 };
 
-function BookmarkGroup(props: Props) {
-  const { group } = props;
+type BookmarkViewProps = {
+  bookmark: Bookmark,
+};
+
+function BookmarkView(props: BookmarkViewProps) {
+  const { bookmark } = props;
   const { t } = useTranslation();
   const store = useStore();
 
@@ -17,15 +22,11 @@ function BookmarkGroup(props: Props) {
     store.openBookmarkModal(event.currentTarget.dataset.id);
   };
 
-  const openGroupModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    store.openGroupModal(event.currentTarget.dataset.id);
-  };
-
   const openConfirmModal = () => {
     store.openConfirmModal();
   };
 
-  const items = group.bookmarks.map((bookmark) => (
+  return useObserver(() => (
     <ListGroup.Item key={bookmark.id}>
       <Row>
         <Col>
@@ -57,8 +58,21 @@ function BookmarkGroup(props: Props) {
       </Row>
     </ListGroup.Item>
   ));
+}
 
-  return (
+function BookmarkGroup(props: Props) {
+  const { group } = props;
+  const { t } = useTranslation();
+  const store = useStore();
+
+  const openGroupModal = (event: SyntheticEvent<HTMLButtonElement>) => {
+    store.openGroupModal(event.currentTarget.dataset.id);
+  };
+  const openConfirmModal = () => {
+    store.openConfirmModal();
+  };
+
+  return useObserver(() => (
     <Card className="mb-3" role="region" aria-label="bookmark group">
       <Card.Header>
         <Row>
@@ -80,9 +94,13 @@ function BookmarkGroup(props: Props) {
           </Col>
         </Row>
       </Card.Header>
-      <ListGroup>{items}</ListGroup>
+      <ListGroup>
+        {group.bookmarks.map((bookmark) => (
+          <BookmarkView bookmark={bookmark} key={bookmark.id} />
+        ))}
+      </ListGroup>
     </Card>
-  );
+  ));
 }
 
 export default BookmarkGroup;

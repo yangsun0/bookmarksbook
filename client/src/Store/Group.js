@@ -1,27 +1,28 @@
 import { computed, decorate, observable } from "mobx";
-import type { GroupData } from "../Service/BookmarkService";
 import AppStore from "./AppStore";
 import Bookmark from "./Bookmark";
 
-class Group {
-  id: string;
-  name: string;
-  column: number;
-  order: number;
-  store: AppStore;
+type GroupBody = {
+  name: string,
+  column: number,
+  order: number,
+};
 
-  constructor(group: GroupData, store: AppStore) {
-    this.id = group.id;
-    this.name = group.name;
-    this.column = group.column;
-    this.order = group.order;
-    this.store = store;
-  }
+class Group {
+  id: string = "";
+  name: string = "";
+  column: number = 1;
+  order: number = 1;
+  store: AppStore;
 
   get bookmarks(): Array<Bookmark> {
     return this.store.bookmarks.filter(
       (bookmark) => bookmark.groupId === this.id
     );
+  }
+
+  static get props(): string[] {
+    return ["name", "column", "order"];
   }
 }
 
@@ -33,3 +34,4 @@ decorate(Group, {
 });
 
 export default Group;
+export type { GroupBody };

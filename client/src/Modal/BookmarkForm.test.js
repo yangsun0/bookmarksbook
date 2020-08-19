@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, wait } from "@testing-library/react";
 import React from "react";
-import sampleData from "../FakeData/data.json";
-import { AppStore, Bookmark, Group, StoreContext } from "../Store";
+import { StoreContext } from "../Store";
+import { setupStoreContext } from "../test/storeHelper";
 import BookmarkForm from "./BookmarkForm";
 
 jest.mock("react-i18next", () => ({
@@ -11,16 +11,9 @@ jest.mock("react-i18next", () => ({
 let testContext = {};
 
 beforeEach(() => {
-  const bookmarkGroupData = sampleData.bookmarkGroups;
-  const appStore = new AppStore();
-  appStore.groups = bookmarkGroupData.groups.map(
-    (group) => new Group(group, appStore)
-  );
-  appStore.bookmarks = bookmarkGroupData.bookmarks.map(
-    (bookmark) => new Bookmark(bookmark, appStore)
-  );
-  appStore.currentBookmarkId = "";
-  testContext.store = appStore;
+  const storeContext = setupStoreContext();
+  testContext.store = storeContext.store;
+  testContext.saveBookmark = storeContext.saveBookmark;
   const onClose = jest.fn();
   testContext.onClose = onClose;
 });
@@ -34,8 +27,8 @@ test("new bookmark with correct input", async () => {
   const bookmark = {
     name: "example",
     url: "https://example.com",
-    order: 1,
-    group: "1",
+    order: "1",
+    groupId: "1",
   };
   expect(screen.getByRole("alert", { name: "form.name" })).toBeEmpty();
   expect(screen.getByRole("alert", { name: "form.url" })).toBeEmpty();
@@ -57,12 +50,13 @@ test("new bookmark with correct input", async () => {
   });
   await wait(() => {
     fireEvent.change(screen.getByRole("combobox", { name: "form.group" }), {
-      target: { value: bookmark.group },
+      target: { value: bookmark.groupId },
     });
   });
   await wait(() => {
     fireEvent.click(screen.getByRole("button", { name: "button.save" }));
   });
+  expect(testContext.saveBookmark).toHaveBeenCalledTimes(1);
   expect(testContext.onClose).toHaveBeenCalledTimes(1);
 });
 
@@ -85,6 +79,7 @@ test("new bookmark with incorrect input", async () => {
   await wait(() => {
     fireEvent.click(saveButton);
   });
+  expect(testContext.saveBookmark).toHaveBeenCalledTimes(0);
   expect(testContext.onClose).toHaveBeenCalledTimes(0);
   expect(nameError).not.toBeEmpty();
   expect(urlError).not.toBeEmpty();
@@ -120,6 +115,7 @@ test("new bookmark with incorrect input", async () => {
   await wait(() => {
     fireEvent.click(saveButton);
   });
+  expect(testContext.saveBookmark).toHaveBeenCalledTimes(1);
   expect(testContext.onClose).toHaveBeenCalledTimes(1);
 });
 

@@ -9,14 +9,14 @@ import Dropdown from "./Dropdown";
 import type { Option } from "./Dropdown";
 import Textbox from "./Textbox";
 
-export type BookmarkFormValues = {
+type BookmarkFormValues = {
   name: string,
   url: string,
-  group: string,
+  groupId: string,
   order: string,
 };
 
-export type CloseEventHandler = () => void;
+type CloseEventHandler = () => void;
 
 type Props = {
   onClose: CloseEventHandler,
@@ -25,7 +25,7 @@ type Props = {
 const schema: ObjectSchema<BookmarkFormValues> = yup.object({
   name: yup.string().required().max(50),
   url: yup.string().required().url(),
-  group: yup.string().required(),
+  groupId: yup.string().required(),
   order: yup.string().required(),
 });
 
@@ -38,7 +38,7 @@ function BookmarkForm(props: Props) {
   const values: BookmarkFormValues = {
     name: currentBookmark.name,
     url: currentBookmark.url,
-    group: currentBookmark.groupId,
+    groupId: currentBookmark.groupId,
     order: currentBookmark.order.toString(),
   };
 
@@ -56,6 +56,13 @@ function BookmarkForm(props: Props) {
   }
 
   const submit = (values: BookmarkFormValues) => {
+    const bookmark = {
+      name: values.name,
+      url: values.url,
+      groupId: values.groupId,
+      order: parseInt(values.order),
+    };
+    store.saveBookmark(bookmark);
     onClose();
   };
 
@@ -86,7 +93,7 @@ function BookmarkForm(props: Props) {
               placeholder={t("form.urlTextbox")}
             />
             <Dropdown
-              name="group"
+              name="groupId"
               label={t("form.group")}
               options={groupOptions}
               extra={<Button variant="link">{t("button.new")}</Button>}

@@ -1,41 +1,33 @@
 import { computed, decorate, observable } from "mobx";
 import "mobx-react-lite/batchingForReactDom";
-import type { BookmarkData } from "../Service/BookmarkService";
 import AppStore from "./AppStore";
 import Group from "./Group";
 
-class Bookmark {
-  id: string;
-  name: string;
-  url: string;
-  iconUrl: string;
-  order: number;
-  groupId: string;
+type BookmarkBody = {
+  name: string,
+  url: string,
+  groupId: string,
+  order: number,
+};
+
+class Bookmark extends Object {
+  id: string = "";
+  name: string = "";
+  url: string = "";
+  order: number = 1;
+  groupId: string = "";
   store: AppStore;
 
-  constructor(bookmark: BookmarkData, store: AppStore) {
-    this.id = bookmark.id;
-    this.name = bookmark.name;
-    this.url = bookmark.url;
-    this.iconUrl = bookmark.iconUrl;
-    this.groupId = bookmark.groupId;
-    this.order = bookmark.order;
-    this.store = store;
+  get iconUrl(): string {
+    return this.url + "/favicon.ico";
   }
 
   get group(): Group | null {
     return this.store.groups.find((group) => group.id === this.groupId) ?? null;
   }
 
-  toData(): BookmarkData {
-    return {
-      id: this.id,
-      name: this.name,
-      url: this.url,
-      iconUrl: this.iconUrl,
-      groupId: this.groupId,
-      order: this.order,
-    };
+  static get props(): string[] {
+    return ["name", "url", "groupId", "order"];
   }
 }
 
@@ -43,9 +35,10 @@ decorate(Bookmark, {
   id: observable,
   name: observable,
   url: observable,
-  iconUrl: observable,
   order: observable,
+  iconUrl: computed,
   group: computed,
 });
 
 export default Bookmark;
+export type { BookmarkBody };

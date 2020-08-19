@@ -55,6 +55,12 @@ function BookmarkGroupForm(props: Props) {
   }
 
   const submitForm = (values: BookmarkGroupFormValues) => {
+    const group = {
+      name: values.name,
+      column: parseInt(values.column),
+      order: parseInt(values.order),
+    };
+    store.saveGroup(group);
     onClose();
   };
 

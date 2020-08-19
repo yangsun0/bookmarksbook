@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
-import sampleData from "../FakeData/data.json";
-import { AppStore, Bookmark, Group, StoreContext } from "../Store";
+import { StoreContext } from "../Store";
+import { setupStoreContext } from "../test/storeHelper";
 import HomePage from "./HomePage";
 
 jest.mock("react-i18next", () => ({
@@ -10,23 +10,13 @@ jest.mock("react-i18next", () => ({
 }));
 
 let testContext = {};
-
 beforeEach(() => {
-  const bookmarkGroupData = sampleData.bookmarkGroups;
-  const appStore = new AppStore();
-  appStore.groups = bookmarkGroupData.groups.map(
-    (group) => new Group(group, appStore)
-  );
-  appStore.bookmarks = bookmarkGroupData.bookmarks.map(
-    (bookmark) => new Bookmark(bookmark, appStore)
-  );
-  const fetchMock = jest.fn();
-  AppStore.prototype.fetchBookmarkGroups = fetchMock;
-  testContext.store = appStore;
-  testContext.fetchMock = fetchMock;
+  const storeContext = setupStoreContext();
+  testContext.store = storeContext.store;
+  testContext.fetchMock = storeContext.fetchMock;
   render(
     <MemoryRouter>
-      <StoreContext.Provider value={appStore}>
+      <StoreContext.Provider value={testContext.store}>
         <HomePage />
       </StoreContext.Provider>
     </MemoryRouter>
@@ -38,7 +28,7 @@ test("renders home page", () => {
   expect(
     screen.getByRole("region", { name: "bookmark groups" })
   ).toBeInTheDocument();
-  expect(testContext.fetchMock.mock.calls.length).toBeGreaterThan(0);
+  expect(testContext.fetchMock).toHaveBeenCalledTimes(1);
   testContext.store.groups.forEach((group) => {
     expect(
       screen.getByRole("heading", { name: group.name })

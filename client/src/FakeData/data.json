@@ -1,52 +1,46 @@
 {
-  "bookmarkGroups": {
-    "bookmarks": [
-      {
-        "id": "1",
-        "name": "Google",
-        "url": "https://www.google.com",
-        "iconUrl": "https://www.google.com/favicon.ico",
-        "groupId": "1",
-        "order": 1
-      },
-      {
-        "id": "2",
-        "name": "Youtube",
-        "url": "https://www.youtube.com",
-        "iconUrl": "https://www.youtube.com/favicon.ico",
-        "groupId": "1",
-        "order": 2
-      },
-      {
-        "id": "3",
-        "name": "Facebook",
-        "url": "https://www.facebook.com",
-        "iconUrl": "https://www.facebook.com/favicon.ico",
-        "groupId": "2",
-        "order": 1
-      },
-      {
-        "id": "4",
-        "name": "Twitter",
-        "url": "https://www.twitter.com",
-        "iconUrl": "https://www.twitter.com/favicon.ico",
-        "groupId": "2",
-        "order": 2
-      }
-    ],
-    "groups": [
-      {
-        "id": "1",
-        "name": "Favorite",
-        "column": 1,
-        "order": 1
-      },
-      {
-        "id": "2",
-        "name": "Social",
-        "column": 2,
-        "order": 1
-      }
-    ]
-  }
+  "bookmarks": [
+    {
+      "id": "1",
+      "name": "Google 2",
+      "url": "https://www.google.com",
+      "groupId": "1",
+      "order": 1
+    },
+    {
+      "id": "2",
+      "name": "Youtube",
+      "url": "https://www.youtube.com",
+      "groupId": "1",
+      "order": 2
+    },
+    {
+      "id": "3",
+      "name": "Facebook",
+      "url": "https://www.facebook.com",
+      "groupId": "2",
+      "order": 1
+    },
+    {
+      "id": "4",
+      "name": "Twitter",
+      "url": "https://www.twitter.com",
+      "groupId": "2",
+      "order": 2
+    }
+  ],
+  "groups": [
+    {
+      "name": "Favorite",
+      "column": 1,
+      "order": 1,
+      "id": "1"
+    },
+    {
+      "id": "2",
+      "name": "Social",
+      "column": 2,
+      "order": 1
+    }
+  ]
 }
