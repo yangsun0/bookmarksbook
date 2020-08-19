@@ -6,6 +6,7 @@
 .*/src/setupTests.js
 .*/coverage/.*
 .*/test/.*
+.*/config-overrides.js
 
 [include]
 
@@ -17,5 +18,6 @@ flow-typed
 [options]
 all=true
 module.name_mapper.extension='scss' -> '<PROJECT_ROOT>/flow/CSSFlowStub.js.flow'
+esproposal.decorators=ignore
 
 [strict]

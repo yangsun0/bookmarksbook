@@ -25,9 +25,9 @@
     "yup": "^0.29.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "flow-typed": "flow-typed",
     "flow-typed-install": "flow-typed install --ignoreDeps dev"
@@ -48,9 +48,13 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-decorators": "^7.10.5",
+    "customize-cra": "^1.0.0",
     "eslint-config-prettier": "^6.11.0",
     "flow-bin": "^0.126.1",
     "flow-typed": "^3.1.0",
-    "prettier": "2.0.5"
+    "prettier": "2.0.5",
+    "react-app-rewired": "^2.1.6"
   }
 }
