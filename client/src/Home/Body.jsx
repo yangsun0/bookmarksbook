@@ -1,30 +1,26 @@
-import React from "react";
+import { useObserver } from "mobx-react-lite";
+import React, { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
-import type { Group } from "../Common/Types";
+import useStore from "../Store/useStore";
 import BookMarkGroup from "./BookmarkGroup";
 
-type Props = {
-  groups: Group[],
-};
+function Body() {
+  const store = useStore();
 
-function Body(props: Props) {
-  const { groups } = props;
+  useEffect(() => {
+    store.fetchData();
+  }, [store]);
+
   const createGroup = (group) => {
     return <BookMarkGroup group={group} key={group.id} />;
   };
-  const leftGroups = groups
-    .filter((group) => group.column === 1)
-    .map(createGroup);
-  const rightGroups = groups
-    .filter((group) => group.column === 2)
-    .map(createGroup);
 
-  return (
+  return useObserver(() => (
     <Row role="region" aria-label="bookmark groups">
-      <Col sm>{leftGroups}</Col>
-      <Col sm>{rightGroups}</Col>
+      <Col sm>{store.leftGroups.map(createGroup)}</Col>
+      <Col sm>{store.rightGroups.map(createGroup)}</Col>
     </Row>
-  );
+  ));
 }
 
 export default Body;

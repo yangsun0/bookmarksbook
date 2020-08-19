@@ -4,69 +4,64 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import type { ObjectSchema } from "yup/lib/object";
-import type {
-  ButtonClickHandler,
-  Group,
-  Options,
-  SaveGroupHandler,
-} from "../Common/Types";
+import useStore from "../Store/useStore";
 import Checkbox from "./Checkbox";
 import Dropdown from "./Dropdown";
+import type { Option } from "./Dropdown";
 import Textbox from "./Textbox";
 
+type CloseEventHandler = () => void;
+
 type Props = {
-  onClose: ButtonClickHandler,
-  onSubmit: SaveGroupHandler,
-  data?: Group,
+  onClose: CloseEventHandler,
 };
 
 type BookmarkGroupFormValues = {
   name: string,
-  column: number,
-  order: number,
+  column: string,
+  order: string,
 };
 
 const schema: ObjectSchema<BookmarkGroupFormValues> = yup.object({
   name: yup.string().required().max(50),
-  column: yup.number().required(),
-  order: yup.number().required(),
+  column: yup.string().required(),
+  order: yup.string().required(),
 });
 
 const columnOptions = [
-  { value: 1, label: "left" },
-  { value: 2, label: "right" },
-];
-
-const orderOptions: Options = [
-  { value: 1, label: "1" },
-  { value: 2, label: "2" },
+  { value: "1", label: "left" },
+  { value: "2", label: "right" },
 ];
 
 function BookmarkGroupForm(props: Props) {
-  const { onClose, onSubmit, data } = props;
+  const { onClose } = props;
   const { t } = useTranslation();
+  const store = useStore();
+  const currentGroup = store.currentGroup;
   const initialValues: BookmarkGroupFormValues = {
-    name: "",
-    column: 1,
-    order: 1,
+    name: currentGroup.name,
+    column: currentGroup.column.toString(),
+    order: currentGroup.order.toString(),
   };
-  if (data) {
-    initialValues.name = data.name;
-    initialValues.column = data.column;
+
+  const orderOptions: Array<Option> = [];
+  const count =
+    currentGroup.column === 1
+      ? store.leftGroups.length
+      : store.rightGroups.length;
+  for (let i = 0; i < count; i++) {
+    const order = i + 1;
+    orderOptions.push({ label: order.toString(), value: order.toString() });
   }
 
   const submitForm = (values: BookmarkGroupFormValues) => {
-    const group: Group = {
-      id: "",
+    const group = {
       name: values.name,
-      column: values.column,
-      order: values.order,
-      bookmarkList: [],
+      column: parseInt(values.column),
+      order: parseInt(values.order),
     };
-    if (data) {
-      group.id = data.id;
-    }
-    onSubmit(group);
+    store.saveGroup(group);
+    onClose();
   };
 
   return (

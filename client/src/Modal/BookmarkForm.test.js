@@ -1,23 +1,35 @@
 import { fireEvent, render, screen, wait } from "@testing-library/react";
 import React from "react";
+import { StoreContext } from "../Store";
+import { setupStoreContext } from "../test/storeHelper";
 import BookmarkForm from "./BookmarkForm";
 
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (key) => key }),
 }));
 
-test("submit valid bookmark", async () => {
+let testContext = {};
+
+beforeEach(() => {
+  const storeContext = setupStoreContext();
+  testContext.store = storeContext.store;
+  testContext.saveBookmark = storeContext.saveBookmark;
   const onClose = jest.fn();
-  const onSubmit = jest.fn();
+  testContext.onClose = onClose;
+});
+
+test("new bookmark with correct input", async () => {
+  render(
+    <StoreContext.Provider value={testContext.store}>
+      <BookmarkForm onClose={testContext.onClose} />
+    </StoreContext.Provider>
+  );
   const bookmark = {
-    id: "",
-    group: "2",
-    iconUrl: "https://www.example.com/favicon",
-    order: 2,
-    name: "bookmark name",
-    url: "https://www.example.com",
+    name: "example",
+    url: "https://example.com",
+    order: "1",
+    groupId: "1",
   };
-  render(<BookmarkForm onClose={onClose} onSubmit={onSubmit} />);
   expect(screen.getByRole("alert", { name: "form.name" })).toBeEmpty();
   expect(screen.getByRole("alert", { name: "form.url" })).toBeEmpty();
 
@@ -38,20 +50,22 @@ test("submit valid bookmark", async () => {
   });
   await wait(() => {
     fireEvent.change(screen.getByRole("combobox", { name: "form.group" }), {
-      target: { value: bookmark.group },
+      target: { value: bookmark.groupId },
     });
   });
   await wait(() => {
     fireEvent.click(screen.getByRole("button", { name: "button.save" }));
   });
-  expect(onSubmit).toHaveBeenCalledWith(bookmark);
+  expect(testContext.saveBookmark).toHaveBeenCalledTimes(1);
+  expect(testContext.onClose).toHaveBeenCalledTimes(1);
 });
 
-test("submit invalid bookmark", async () => {
-  const onClose = jest.fn();
-  const onSubmit = jest.fn();
-
-  render(<BookmarkForm onClose={onClose} onSubmit={onSubmit} />);
+test("new bookmark with incorrect input", async () => {
+  render(
+    <StoreContext.Provider value={testContext.store}>
+      <BookmarkForm onClose={testContext.onClose} />
+    </StoreContext.Provider>
+  );
 
   const nameTextbox = screen.getByRole("textbox", { name: "form.name" });
   const nameError = screen.getByRole("alert", { name: "form.name" });
@@ -65,7 +79,8 @@ test("submit invalid bookmark", async () => {
   await wait(() => {
     fireEvent.click(saveButton);
   });
-  expect(onSubmit).toHaveBeenCalledTimes(0);
+  expect(testContext.saveBookmark).toHaveBeenCalledTimes(0);
+  expect(testContext.onClose).toHaveBeenCalledTimes(0);
   expect(nameError).not.toBeEmpty();
   expect(urlError).not.toBeEmpty();
 
@@ -100,23 +115,19 @@ test("submit invalid bookmark", async () => {
   await wait(() => {
     fireEvent.click(saveButton);
   });
-  expect(onSubmit).toHaveBeenCalledTimes(1);
+  expect(testContext.saveBookmark).toHaveBeenCalledTimes(1);
+  expect(testContext.onClose).toHaveBeenCalledTimes(1);
 });
 
 test("edit bookmark", () => {
-  const onClose = jest.fn();
-  const onSubmit = jest.fn();
-  const bookmark = {
-    id: "",
-    group: "1",
-    iconUrl: "https://www.example.com/favicon",
-    order: 1,
-    name: "bookmark name",
-    url: "https://www.example.com",
-  };
+  const bookmark = testContext.store.groups[0].bookmarks[0];
+  testContext.store.currentBookmarkId = bookmark.id;
   render(
-    <BookmarkForm onClose={onClose} onSubmit={onSubmit} data={bookmark} />
+    <StoreContext.Provider value={testContext.store}>
+      <BookmarkForm onClose={testContext.onClose} />
+    </StoreContext.Provider>
   );
+
   expect(screen.getByRole("textbox", { name: "form.name" }).value).toBe(
     bookmark.name
   );

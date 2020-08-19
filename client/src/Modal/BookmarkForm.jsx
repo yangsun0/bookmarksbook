@@ -4,83 +4,70 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import type { ObjectSchema } from "yup/lib/object";
-import type {
-  Bookmark,
-  ButtonClickHandler,
-  Options,
-  SaveBookmarkHandler,
-} from "../Common/Types";
+import useStore from "../Store/useStore";
 import Dropdown from "./Dropdown";
+import type { Option } from "./Dropdown";
 import Textbox from "./Textbox";
 
 type BookmarkFormValues = {
   name: string,
   url: string,
-  group: string,
-  order: number,
+  groupId: string,
+  order: string,
+};
+
+type CloseEventHandler = () => void;
+
+type Props = {
+  onClose: CloseEventHandler,
 };
 
 const schema: ObjectSchema<BookmarkFormValues> = yup.object({
   name: yup.string().required().max(50),
   url: yup.string().required().url(),
-  group: yup.string().required(),
-  order: yup.number().required(),
+  groupId: yup.string().required(),
+  order: yup.string().required(),
 });
 
-const options: Options = [
-  { value: "1", label: "Favorite" },
-  { value: "2", label: "Read it later" },
-];
-
-const orderOptions: Options = [
-  { value: 1, label: "1" },
-  { value: 2, label: "2" },
-];
-
-type Props = {
-  onClose: ButtonClickHandler,
-  onSubmit: SaveBookmarkHandler,
-  data?: Bookmark,
-};
-
 function BookmarkForm(props: Props) {
-  const { onClose, onSubmit, data } = props;
+  const { onClose } = props;
   const { t } = useTranslation();
-  // need to set all the field of initialValues to make submit validation work
-  let initialValues: BookmarkFormValues = {
-    name: "",
-    url: "",
-    group: "1",
-    order: 1,
+  const store = useStore();
+
+  const currentBookmark = store.currentBookmark;
+  const values: BookmarkFormValues = {
+    name: currentBookmark.name,
+    url: currentBookmark.url,
+    groupId: currentBookmark.groupId,
+    order: currentBookmark.order.toString(),
   };
-  if (data) {
-    initialValues.name = data.name;
-    initialValues.url = data.url;
+
+  const groupOptions = store.groups.map((group) => {
+    return { label: group.name, value: group.id };
+  });
+
+  const orderOptions: Array<Option> = [];
+  if (currentBookmark.group) {
+    for (let i = 1; i <= currentBookmark.group.bookmarks.length; i++) {
+      orderOptions.push({ label: i.toString(), value: i.toString() });
+    }
+  } else {
+    orderOptions.push({ label: "1", value: "1" });
   }
 
-  const submitForm = (values: BookmarkFormValues) => {
-    const bookmark: Bookmark = {
-      id: "",
+  const submit = (values: BookmarkFormValues) => {
+    const bookmark = {
       name: values.name,
       url: values.url,
-      // TODO: generate icon url
-      iconUrl: values.url + "/favicon",
-      group: values.group,
-      order: values.order,
+      groupId: values.groupId,
+      order: parseInt(values.order),
     };
-    if (data) {
-      bookmark.id = data.id;
-    }
-
-    onSubmit(bookmark);
+    store.saveBookmark(bookmark);
+    onClose();
   };
 
   return (
-    <Formik
-      validationSchema={schema}
-      onSubmit={submitForm}
-      initialValues={initialValues}
-    >
+    <Formik validationSchema={schema} onSubmit={submit} initialValues={values}>
       {(formik) => (
         <Form
           noValidate
@@ -106,9 +93,9 @@ function BookmarkForm(props: Props) {
               placeholder={t("form.urlTextbox")}
             />
             <Dropdown
-              name="group"
+              name="groupId"
               label={t("form.group")}
-              options={options}
+              options={groupOptions}
               extra={<Button variant="link">{t("button.new")}</Button>}
             />
             <Dropdown

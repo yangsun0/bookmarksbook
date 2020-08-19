@@ -1,14 +1,18 @@
 import { useField } from "formik";
 import React from "react";
 import { Form } from "react-bootstrap";
-import type { Options } from "../Common/Types";
 import ControlLayout from "./ControlLayout";
+
+type Option = {
+  value: string,
+  label: string,
+};
 
 type Props = {
   name: string,
   type: "radio" | "checkbox",
   label: string,
-  options: Options,
+  options: Array<Option>,
 };
 
 function Checkbox(props: Props) {

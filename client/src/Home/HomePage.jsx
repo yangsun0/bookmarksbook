@@ -1,19 +1,18 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import type { Group } from "../Common/Types";
+import BookmarkModal from "../Modal/BookmarkModal";
 import Body from "./Body";
 import Header from "./Header";
 
-type Props = {
-  groups: Group[],
-};
-
-function HomePage(props: Props) {
+function HomePage() {
   return (
-    <Container>
-      <Header />
-      <Body groups={props.groups} />
-    </Container>
+    <>
+      <Container>
+        <Header />
+        <Body />
+      </Container>
+      <BookmarkModal />
+    </>
   );
 }
 

@@ -1,22 +1,37 @@
 import { fireEvent, render, screen, wait } from "@testing-library/react";
 import React from "react";
+import { StoreContext } from "../Store";
+import { setupStoreContext } from "../test/storeHelper";
 import BookmarkGroupForm from "./BookmarkGroupForm";
 
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (key) => key }),
 }));
 
-test("submit valid group", async () => {
+let testContext = {};
+
+beforeEach(() => {
+  const storeContext = setupStoreContext();
+  testContext.store = storeContext.store;
+  testContext.saveGroup = storeContext.saveGroup;
   const onClose = jest.fn();
-  const onSubmit = jest.fn();
+  testContext.onClose = onClose;
+});
+
+test("new group with correct input", async () => {
+  render(
+    <StoreContext.Provider value={testContext.store}>
+      <BookmarkGroupForm onClose={testContext.onClose} />
+    </StoreContext.Provider>
+  );
+
   const group = {
     id: "",
-    name: "bookmark name",
+    name: "group name",
     column: 2,
     order: 2,
-    bookmarkList: [],
   };
-  render(<BookmarkGroupForm onClose={onClose} onSubmit={onSubmit} />);
+
   expect(screen.getByRole("alert", { name: "form.name" })).toBeEmpty();
 
   await wait(() => {
@@ -36,13 +51,15 @@ test("submit valid group", async () => {
     fireEvent.click(screen.getByRole("button", { name: "button.save" }));
   });
 
-  expect(onSubmit).toHaveBeenCalledWith(group);
+  expect(testContext.onClose).toHaveBeenCalledTimes(1);
 });
 
-test("submit invalid group", async () => {
-  const onClose = jest.fn();
-  const onSubmit = jest.fn();
-  render(<BookmarkGroupForm onClose={onClose} onSubmit={onSubmit} />);
+test("new group with incorrect input", async () => {
+  render(
+    <StoreContext.Provider value={testContext.store}>
+      <BookmarkGroupForm onClose={testContext.onClose} />
+    </StoreContext.Provider>
+  );
 
   const nameTextbox = screen.getByRole("textbox", { name: "form.name" });
   const nameError = screen.getByRole("alert", { name: "form.name" });
@@ -53,7 +70,7 @@ test("submit invalid group", async () => {
   await wait(() => {
     fireEvent.click(saveButton);
   });
-  expect(onSubmit).toHaveBeenCalledTimes(0);
+  expect(testContext.onClose).toHaveBeenCalledTimes(0);
   expect(nameError).not.toBeEmpty();
 
   await wait(() => {
@@ -73,20 +90,16 @@ test("submit invalid group", async () => {
   await wait(() => {
     fireEvent.click(saveButton);
   });
-  expect(onSubmit).toHaveBeenCalledTimes(1);
+  expect(testContext.onClose).toHaveBeenCalledTimes(1);
 });
 
 test("edit group", () => {
-  const onClose = jest.fn();
-  const onSubmit = jest.fn();
-  const group = {
-    id: "",
-    name: "bookmark name",
-    column: 1,
-    order: 1,
-  };
+  const group = testContext.store.groups[0];
+  testContext.store.currentGroupId = group.id;
   render(
-    <BookmarkGroupForm onClose={onClose} onSubmit={onSubmit} data={group} />
+    <StoreContext.Provider value={testContext.store}>
+      <BookmarkGroupForm onClose={testContext.onClose} />
+    </StoreContext.Provider>
   );
   expect(screen.getByRole("textbox", { name: "form.name" }).value).toBe(
     group.name
