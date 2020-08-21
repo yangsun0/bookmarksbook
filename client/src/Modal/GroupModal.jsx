@@ -1,10 +1,10 @@
 import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Modal } from "react-bootstrap";
+import GroupForm from "../From/GroupForm";
 import useStore from "../Store/useStore";
-import BookmarkGroupForm from "./BookmarkGroupForm";
 
-function BookmarkGroupModal() {
+function GroupModal() {
   const store = useStore().groupFormStore;
   const closeModal = () => {
     store.closeModal();
@@ -18,9 +18,9 @@ function BookmarkGroupModal() {
       onHide={closeModal}
       aria-labelledby="group-modal-title"
     >
-      <BookmarkGroupForm onClose={closeModal} />
+      <GroupForm onClose={closeModal} />
     </Modal>
   ));
 }
 
-export default BookmarkGroupModal;
+export default GroupModal;

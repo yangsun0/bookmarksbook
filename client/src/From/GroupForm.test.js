@@ -2,7 +2,7 @@ import { fireEvent, render, screen, wait } from "@testing-library/react";
 import React from "react";
 import { StoreContext } from "../Store";
 import { setupStoreContext } from "../test/storeHelper";
-import BookmarkGroupForm from "./BookmarkGroupForm";
+import BookmarkGroupForm from "./GroupForm";
 
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({ t: (key) => key }),

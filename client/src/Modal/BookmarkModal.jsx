@@ -1,8 +1,8 @@
 import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Modal } from "react-bootstrap";
+import BookmarkForm from "../From/BookmarkForm";
 import useStore from "../Store/useStore";
-import BookmarkForm from "./BookmarkForm";
 
 function BookmarkModal() {
   const store = useStore().bookmarkFormStore;

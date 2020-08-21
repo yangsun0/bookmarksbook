@@ -6,8 +6,8 @@ import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import type { ObjectSchema } from "yup/lib/object";
 import useStore from "../Store/useStore";
-import Dropdown from "./Dropdown";
-import Textbox from "./Textbox";
+import Dropdown from "./Control/Dropdown";
+import Textbox from "./Control/Textbox";
 
 type BookmarkFormValues = {
   name: string,

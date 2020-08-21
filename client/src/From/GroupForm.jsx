@@ -6,9 +6,9 @@ import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import type { ObjectSchema } from "yup/lib/object";
 import useStore from "../Store/useStore";
-import Checkbox from "./Checkbox";
-import Dropdown from "./Dropdown";
-import Textbox from "./Textbox";
+import Checkbox from "./Control/Checkbox";
+import Dropdown from "./Control/Dropdown";
+import Textbox from "./Control/Textbox";
 
 type CloseEventHandler = () => void;
 
@@ -16,13 +16,13 @@ type Props = {
   onClose: CloseEventHandler,
 };
 
-type BookmarkGroupFormValues = {
+type GroupFormValues = {
   name: string,
   column: string,
   order: string,
 };
 
-const schema: ObjectSchema<BookmarkGroupFormValues> = yup.object({
+const schema: ObjectSchema<GroupFormValues> = yup.object({
   name: yup.string().required().max(50),
   column: yup.string().required(),
   order: yup.string().required(),
@@ -46,12 +46,12 @@ function ColumnChangeListener() {
   return null;
 }
 
-function BookmarkGroupForm(props: Props) {
+function GroupForm(props: Props) {
   const { onClose } = props;
   const { t } = useTranslation();
   const store = useStore().groupFormStore;
   const group = store.group;
-  const initialValues: BookmarkGroupFormValues = {
+  const initialValues: GroupFormValues = {
     name: group.name,
     column: group.column.toString(),
     order: group.order.toString(),
@@ -61,7 +61,7 @@ function BookmarkGroupForm(props: Props) {
     { value: "2", label: t("form.right") },
   ];
 
-  const submitForm = (values: BookmarkGroupFormValues) => {
+  const submitForm = (values: GroupFormValues) => {
     const group = {
       name: values.name,
       column: parseInt(values.column),
@@ -118,4 +118,4 @@ function BookmarkGroupForm(props: Props) {
   ));
 }
 
-export default BookmarkGroupForm;
+export default GroupForm;
