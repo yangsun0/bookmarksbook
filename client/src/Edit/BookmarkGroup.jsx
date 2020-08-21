@@ -19,7 +19,7 @@ function BookmarkView(props: BookmarkViewProps) {
   const store = useStore();
 
   const openBookmarkModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    store.openBookmarkModal(event.currentTarget.dataset.id);
+    store.bookmarkFormStore.openModal(event.currentTarget.dataset.id);
   };
 
   const openConfirmModal = () => {
@@ -66,7 +66,7 @@ function BookmarkGroup(props: Props) {
   const store = useStore();
 
   const openGroupModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    store.openGroupModal(event.currentTarget.dataset.id);
+    store.groupFormStore.openModal(event.currentTarget.dataset.id);
   };
   const openConfirmModal = () => {
     store.openConfirmModal();

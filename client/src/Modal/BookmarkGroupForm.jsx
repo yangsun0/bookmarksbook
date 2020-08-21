@@ -1,5 +1,6 @@
-import { Formik } from "formik";
-import React from "react";
+import { Formik, useFormikContext } from "formik";
+import { useObserver } from "mobx-react-lite";
+import React, { useEffect } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
@@ -7,7 +8,6 @@ import type { ObjectSchema } from "yup/lib/object";
 import useStore from "../Store/useStore";
 import Checkbox from "./Checkbox";
 import Dropdown from "./Dropdown";
-import type { Option } from "./Dropdown";
 import Textbox from "./Textbox";
 
 type CloseEventHandler = () => void;
@@ -28,31 +28,38 @@ const schema: ObjectSchema<BookmarkGroupFormValues> = yup.object({
   order: yup.string().required(),
 });
 
-const columnOptions = [
-  { value: "1", label: "left" },
-  { value: "2", label: "right" },
-];
+function ColumnChangeListener() {
+  const {
+    values: { column },
+    setFieldValue,
+  } = useFormikContext();
+  const store = useStore().groupFormStore;
+
+  useEffect(() => {
+    if (store.changeColumn(column)) {
+      setFieldValue("order", "1");
+    } else {
+      setFieldValue("order", store.group.order.toString());
+    }
+  }, [column, setFieldValue, store]);
+
+  return null;
+}
 
 function BookmarkGroupForm(props: Props) {
   const { onClose } = props;
   const { t } = useTranslation();
-  const store = useStore();
-  const currentGroup = store.currentGroup;
+  const store = useStore().groupFormStore;
+  const group = store.group;
   const initialValues: BookmarkGroupFormValues = {
-    name: currentGroup.name,
-    column: currentGroup.column.toString(),
-    order: currentGroup.order.toString(),
+    name: group.name,
+    column: group.column.toString(),
+    order: group.order.toString(),
   };
-
-  const orderOptions: Array<Option> = [];
-  const count =
-    currentGroup.column === 1
-      ? store.leftGroups.length
-      : store.rightGroups.length;
-  for (let i = 0; i < count; i++) {
-    const order = i + 1;
-    orderOptions.push({ label: order.toString(), value: order.toString() });
-  }
+  const columnOptions = [
+    { value: "1", label: t("form.left") },
+    { value: "2", label: t("form.right") },
+  ];
 
   const submitForm = (values: BookmarkGroupFormValues) => {
     const group = {
@@ -60,11 +67,11 @@ function BookmarkGroupForm(props: Props) {
       column: parseInt(values.column),
       order: parseInt(values.order),
     };
-    store.saveGroup(group);
+    store.save(group);
     onClose();
   };
 
-  return (
+  return useObserver(() => (
     <Formik
       validationSchema={schema}
       onSubmit={submitForm}
@@ -90,10 +97,11 @@ function BookmarkGroupForm(props: Props) {
               label={t("form.column")}
               options={columnOptions}
             />
+            <ColumnChangeListener />
             <Dropdown
               name="order"
               label={t("form.order")}
-              options={orderOptions}
+              options={store.orderOptions}
             />
           </Modal.Body>
           <Modal.Footer>
@@ -107,7 +115,7 @@ function BookmarkGroupForm(props: Props) {
         </Form>
       )}
     </Formik>
-  );
+  ));
 }
 
 export default BookmarkGroupForm;

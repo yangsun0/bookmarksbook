@@ -5,10 +5,10 @@ import useStore from "../Store/useStore";
 import BookmarkForm from "./BookmarkForm";
 
 function BookmarkModal() {
-  const store = useStore();
+  const store = useStore().bookmarkFormStore;
 
   const closeModal = () => {
-    store.closeBookmarkModal();
+    store.closeModal();
   };
 
   return useObserver(() => (
@@ -16,7 +16,7 @@ function BookmarkModal() {
       centered
       size="lg"
       backdrop="static"
-      show={store.isBookmarkModalShown}
+      show={store.isModalShown}
       onHide={closeModal}
       aria-labelledby="bookmark-modal-title"
     >

@@ -41,6 +41,12 @@
       "name": "Social",
       "column": 2,
       "order": 1
+    },
+    {
+      "id": "3",
+      "name": "News",
+      "column": 2,
+      "order": 2
     }
   ]
 }

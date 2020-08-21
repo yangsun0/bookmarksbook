@@ -2,17 +2,17 @@ import { action, computed, observable, runInAction } from "mobx";
 import "mobx-react-lite/batchingForReactDom";
 import BookmarkService from "../Service/BookmarkService";
 import Bookmark from "./Bookmark";
-import type { BookmarkBody } from "./Bookmark";
+import BookmarkFormStore from "./BookmarkFormStore";
 import Group from "./Group";
-import type { GroupBody } from "./Group";
+import GroupFormStore from "./GroupFormStore";
 
-const statusValues = {
+const Status = {
   none: "none",
   done: "done",
   error: "error",
 };
 
-type Status = $Keys<typeof statusValues>;
+type StatusType = $Keys<typeof Status>;
 
 function copyValues(source: Object, target: Object, props: string[]) {
   props.forEach((prop) => (target[prop] = source[prop]));
@@ -20,15 +20,20 @@ function copyValues(source: Object, target: Object, props: string[]) {
 
 class AppStore {
   bookmarkService: BookmarkService = new BookmarkService();
-  dataStatus: Status = statusValues.none;
+  dataStatus: StatusType = Status.none;
+  bookmarkFormStore: BookmarkFormStore = new BookmarkFormStore();
+  groupFormStore: GroupFormStore = new GroupFormStore();
+  defaultGroup: Group = new Group();
 
   @observable groups: Array<Group> = [];
   @observable bookmarks: Array<Bookmark> = [];
-  @observable isBookmarkModalShown: boolean = false;
-  @observable currentBookmarkId: string = "";
-  @observable isGroupModalShown: boolean = false;
-  @observable currentGroupId: string = "";
   @observable isConfirmModalShown: boolean = false;
+
+  constructor() {
+    this.bookmarkFormStore.appStore = this;
+    this.defaultGroup.store = this;
+    this.groupFormStore.appStore = this;
+  }
 
   @computed get leftGroups(): Array<Group> {
     return this.groups.filter((group) => group.column === 1);
@@ -38,30 +43,8 @@ class AppStore {
     return this.groups.filter((group) => group.column === 2);
   }
 
-  @computed get currentBookmark(): Bookmark {
-    let result = this.bookmarks.find((b) => b.id === this.currentBookmarkId);
-    if (!result) {
-      result = new Bookmark();
-      // todo
-      result.groupId = this.groups[0].id;
-      result.store = this;
-    }
-
-    return result;
-  }
-
-  @computed get currentGroup(): Group {
-    let result = this.groups.find((g) => g.id === this.currentGroupId);
-    if (!result) {
-      result = new Group();
-      result.store = this;
-    }
-
-    return result;
-  }
-
   @action async fetchData() {
-    if (this.dataStatus === statusValues.done) {
+    if (this.dataStatus === Status.done) {
       return;
     }
 
@@ -72,28 +55,8 @@ class AppStore {
         this.createBookmark(entity)
       );
       this.groups = groupsEntities.map((entity) => this.createGroup(entity));
-      this.dataStatus = statusValues.done;
+      this.dataStatus = Status.done;
     });
-  }
-
-  @action openBookmarkModal(id?: string) {
-    this.currentBookmarkId = id ? id : "";
-    this.isBookmarkModalShown = true;
-  }
-
-  @action closeBookmarkModal() {
-    this.currentBookmarkId = "";
-    this.isBookmarkModalShown = false;
-  }
-
-  @action openGroupModal(id?: string) {
-    this.currentGroupId = id ? id : "";
-    this.isGroupModalShown = true;
-  }
-
-  @action closeGroupModal() {
-    this.currentGroupId = "";
-    this.isGroupModalShown = false;
   }
 
   @action openConfirmModal() {
@@ -102,30 +65,6 @@ class AppStore {
 
   @action closeConfirmModal() {
     this.isConfirmModalShown = false;
-  }
-
-  @action saveBookmark(newBookmark: BookmarkBody) {
-    const currentBookmark = this.currentBookmark;
-    copyValues(newBookmark, currentBookmark, Bookmark.props);
-    const data = {};
-    copyValues(currentBookmark, data, Bookmark.props);
-    if (this.currentBookmarkId) {
-      this.bookmarkService.updateBookmark(this.currentBookmarkId, data);
-    } else {
-      this.bookmarkService.newBookmark(newBookmark);
-    }
-  }
-
-  @action saveGroup(newGroup: GroupBody) {
-    const currentGroup = this.currentGroup;
-    copyValues(newGroup, currentGroup, Bookmark.props);
-    const data = {};
-    copyValues(currentGroup, data, Group.props);
-    if (this.currentGroupId) {
-      this.bookmarkService.updateGroup(this.currentGroupId, data);
-    } else {
-      this.bookmarkService.newGroup(newGroup);
-    }
   }
 
   createBookmark(data: Object): Bookmark {
@@ -141,6 +80,19 @@ class AppStore {
     group.id = data.id;
     copyValues(data, group, Group.props);
     group.store = this;
+    return group;
+  }
+
+  findGroup(id: string): Group {
+    let group = undefined;
+    if (id) {
+      group = this.groups.find((g) => g.id === id);
+    }
+    if (!group) {
+      console.log("default group");
+      group = this.defaultGroup;
+    }
+
     return group;
   }
 }

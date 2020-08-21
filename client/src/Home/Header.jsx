@@ -10,7 +10,7 @@ function Header() {
   const store = useStore();
 
   const openBookmarkModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    store.openBookmarkModal();
+    store.bookmarkFormStore.openModal();
   };
 
   return (

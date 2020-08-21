@@ -1,4 +1,4 @@
-import { computed, decorate, observable } from "mobx";
+import { computed, observable } from "mobx";
 import AppStore from "./AppStore";
 import Bookmark from "./Bookmark";
 
@@ -10,28 +10,25 @@ type GroupBody = {
 
 class Group {
   id: string = "";
-  name: string = "";
-  column: number = 1;
-  order: number = 1;
+  @observable name: string = "";
+  @observable column: number = 1;
+  @observable order: number = 1;
   store: AppStore;
 
-  get bookmarks(): Array<Bookmark> {
-    return this.store.bookmarks.filter(
-      (bookmark) => bookmark.groupId === this.id
-    );
+  @computed get bookmarks(): Array<Bookmark> {
+    if (this.id) {
+      return this.store.bookmarks.filter(
+        (bookmark) => bookmark.groupId === this.id
+      );
+    } else {
+      return [];
+    }
   }
 
   static get props(): string[] {
     return ["name", "column", "order"];
   }
 }
-
-decorate(Group, {
-  id: observable,
-  name: observable,
-  column: observable,
-  bookmarks: computed,
-});
 
 export default Group;
 export type { GroupBody };

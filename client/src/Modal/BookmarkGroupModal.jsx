@@ -5,16 +5,16 @@ import useStore from "../Store/useStore";
 import BookmarkGroupForm from "./BookmarkGroupForm";
 
 function BookmarkGroupModal() {
-  const store = useStore();
+  const store = useStore().groupFormStore;
   const closeModal = () => {
-    store.closeGroupModal();
+    store.closeModal();
   };
 
   return useObserver(() => (
     <Modal
       centered
       size="lg"
-      show={store.isGroupModalShown}
+      show={store.isModalShown}
       onHide={closeModal}
       aria-labelledby="group-modal-title"
     >
