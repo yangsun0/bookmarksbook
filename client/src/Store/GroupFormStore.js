@@ -1,6 +1,5 @@
 import { action, observable } from "mobx";
 import AppStore from "./AppStore";
-import { copyFrom, toData } from "./copyUtility";
 import Group from "./Group";
 import type { GroupBody } from "./Group";
 
@@ -57,10 +56,8 @@ class GroupFormStore {
   }
 
   @action save(newGroup: GroupBody) {
-    copyFrom(this.group, newGroup);
     if (this.groupId) {
-      const data = toData(this.group);
-      this.appStore.bookmarkService.updateGroup(this.groupId, data);
+      this.appStore.bookmarkService.updateGroup(this.groupId, newGroup);
     } else {
       this.appStore.bookmarkService.newGroup(newGroup);
     }

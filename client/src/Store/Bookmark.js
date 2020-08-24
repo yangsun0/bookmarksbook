@@ -4,17 +4,23 @@ import AppStore from "./AppStore";
 import { preserve } from "./copyUtility";
 import Group from "./Group";
 
-type BookmarkBody = {
-  name: string,
-  url: string,
-  groupId: string,
-  order: number,
-};
+interface IBookmarkBody {
+  name: string;
+  url: string;
+  groupId: string;
+  order: number;
+}
+
+class BookmarkBody implements IBookmarkBody {
+  name: string;
+  url: string;
+  groupId: string;
+  order: number;
+}
 
 class Bookmark {
   id: string = "";
   store: AppStore;
-
   @observable @preserve name: string = "";
   @observable @preserve url: string = "";
   @observable @preserve order: number = 1;
@@ -27,11 +33,8 @@ class Bookmark {
   @computed get group(): Group | null {
     return this.store.groups.find((group) => group.id === this.groupId) ?? null;
   }
-
-  static get props(): string[] {
-    return ["name", "url", "groupId", "order"];
-  }
 }
 
 export default Bookmark;
-export type { BookmarkBody };
+export { BookmarkBody };
+export type { IBookmarkBody };

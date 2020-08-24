@@ -5,24 +5,12 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import type { ObjectSchema } from "yup/lib/object";
-import useStore from "../Store/useStore";
+import type { IBookmarkFormValues } from "../Store/BookmarkFormStore";
+import { useBookmarkFormStore } from "../Store/useStore";
 import Dropdown from "./Control/Dropdown";
 import Textbox from "./Control/Textbox";
 
-type BookmarkFormValues = {
-  name: string,
-  url: string,
-  groupId: string,
-  order: string,
-};
-
-type CloseEventHandler = () => void;
-
-type Props = {
-  onClose: CloseEventHandler,
-};
-
-const schema: ObjectSchema<BookmarkFormValues> = yup.object({
+const bookmarkSchema: ObjectSchema<IBookmarkFormValues> = yup.object({
   name: yup.string().required().max(50),
   url: yup.string().required().url(),
   groupId: yup.string().required(),
@@ -31,53 +19,42 @@ const schema: ObjectSchema<BookmarkFormValues> = yup.object({
 
 function GroupChangeListener() {
   const {
-    values: { groupId },
+    values: { groupId, order },
     setFieldValue,
   } = useFormikContext();
-  const store = useStore().bookmarkFormStore;
+  const store = useBookmarkFormStore();
 
   useEffect(() => {
     store.changeGroup(groupId);
-    if (store.changeGroup(groupId)) {
+    if (store.shouldResetOrder(order)) {
       setFieldValue("order", "1");
-    } else {
-      setFieldValue("order", store.bookmark.order.toString());
     }
-  }, [groupId, setFieldValue, store]);
+  }, [groupId, order, setFieldValue, store]);
   return null;
 }
+
+type CloseEventHandler = () => void;
+
+type Props = {
+  onClose: CloseEventHandler,
+};
 
 function BookmarkForm(props: Props) {
   const { onClose } = props;
   const { t } = useTranslation();
-  const store = useStore().bookmarkFormStore;
+  const store = useBookmarkFormStore();
 
-  const bookmark = store.bookmark;
-  const initialBookmark: BookmarkFormValues = {
-    name: bookmark.name,
-    url: bookmark.url,
-    groupId: bookmark.groupId,
-    order: bookmark.order.toString(),
-  };
+  const initialBookmark = store.toBookmarkFormValues();
+  const groupOptions = store.toGroupOptions();
 
-  const groupOptions = store.appStore.groups.map((group) => {
-    return { label: group.name, value: group.id };
-  });
-
-  const submit = (values: BookmarkFormValues) => {
-    const bookmark = {
-      name: values.name,
-      url: values.url,
-      groupId: values.groupId,
-      order: parseInt(values.order),
-    };
-    store.save(bookmark);
+  const submit = (values: IBookmarkFormValues) => {
+    store.save(values);
     onClose();
   };
 
   return useObserver(() => (
     <Formik
-      validationSchema={schema}
+      validationSchema={bookmarkSchema}
       onSubmit={submit}
       initialValues={initialBookmark}
     >

@@ -1,42 +1,35 @@
 import { action, computed, observable } from "mobx";
+import type { DropDownOption } from "../From/Control/Dropdown";
 import AppStore from "./AppStore";
-import Bookmark from "./Bookmark";
-import type { BookmarkBody } from "./Bookmark";
-import { copyFrom, toData } from "./copyUtility";
+import Bookmark, { BookmarkBody } from "./Bookmark";
+import { formToStore, storeToBody, storeToForm } from "./copyUtility";
 
-type Option = {
-  value: string,
-  label: string,
-};
+interface IBookmarkFormValues {
+  name: string;
+  url: string;
+  groupId: string;
+  order: string;
+}
+
+class BookmarkFormValues implements IBookmarkFormValues {
+  name: string;
+  url: string;
+  groupId: string;
+  order: string;
+}
 
 class BookmarkFormStore {
   appStore: AppStore;
+  bookmarkId: string;
+  bookmark: Bookmark;
+  groupId: string;
 
   @observable isModalShown: boolean = false;
-  @observable bookmarkId: string;
-  @observable groupId: string;
+  @observable orderOptionsCount: number = 1;
 
-  @computed get bookmark(): Bookmark {
-    let result = this.appStore.bookmarks.find((b) => b.id === this.bookmarkId);
-    if (!result) {
-      result = new Bookmark();
-      // todo
-      result.groupId = this.appStore.groups[0].id;
-      result.store = this.appStore;
-    }
-
-    return result;
-  }
-
-  @computed get orderOptions(): Array<Option> {
-    const group = this.appStore.findGroup(this.groupId);
-    let count = group.bookmarks.length;
-    if (this.groupId !== this.bookmark.groupId) {
-      count += 1;
-    }
-
+  @computed get orderOptions(): Array<DropDownOption> {
     const options = [];
-    for (let i = 1; i <= count; i++) {
+    for (let i = 1; i <= this.orderOptionsCount; i++) {
       options.push({
         label: i.toString(),
         value: i.toString(),
@@ -45,26 +38,72 @@ class BookmarkFormStore {
     return options;
   }
 
+  toBookmarkFormValues(): IBookmarkFormValues {
+    const values = new BookmarkFormValues();
+    storeToForm(this.bookmark, values);
+    return values;
+  }
+
+  toGroupOptions(): Array<DropDownOption> {
+    const options = this.appStore.groups.map((group) => {
+      return { label: group.name, value: group.id };
+    });
+    return options;
+  }
+
+  shouldResetOrder(orderString: string) {
+    const order = parseInt(orderString);
+    return order > this.orderOptionsCount;
+  }
+
   @action openModal(id?: string) {
     this.bookmarkId = id ? id : "";
-    this.groupId = this.bookmark.groupId;
+    if (this.bookmarkId) {
+      const result = this.appStore.bookmarks.find(
+        (bookmark) => bookmark.id === this.bookmarkId
+      );
+      if (!result) {
+        throw Error("bookmarkId not found. id: " + this.bookmarkId);
+      }
+
+      this.bookmark = result;
+    } else {
+      this.bookmark = new Bookmark();
+      this.bookmark.groupId = this.appStore.firstGroup.id;
+      this.bookmark.store = this.appStore;
+    }
+
+    this.groupId = "";
+    this.changeGroup(this.bookmark.groupId);
     this.isModalShown = true;
   }
 
   @action closeModal() {
     this.bookmarkId = "";
+    this.groupId = "";
     this.isModalShown = false;
   }
 
   @action changeGroup(groupId: string) {
+    if (groupId === this.groupId) {
+      return;
+    }
+
     this.groupId = groupId;
-    return this.groupId !== this.bookmark.groupId;
+    const group = this.appStore.findGroup(this.groupId);
+    let count = group.bookmarks.length;
+    if (this.groupId !== this.bookmark.groupId) {
+      count += 1;
+    }
+
+    this.orderOptionsCount = count;
   }
 
-  @action save(newBookmark: BookmarkBody) {
-    copyFrom(this.bookmark, newBookmark);
+  @action save(newBookmark: IBookmarkFormValues) {
+    formToStore(newBookmark, this.bookmark);
     if (this.bookmarkId) {
-      const data = toData(this.bookmark);
+      const data = new BookmarkBody();
+      storeToBody(this.bookmark, data);
       this.appStore.bookmarkService.updateBookmark(this.bookmarkId, data);
     } else {
       this.appStore.bookmarkService.newBookmark(newBookmark);
@@ -73,3 +112,5 @@ class BookmarkFormStore {
 }
 
 export default BookmarkFormStore;
+export { BookmarkFormValues };
+export type { IBookmarkFormValues };

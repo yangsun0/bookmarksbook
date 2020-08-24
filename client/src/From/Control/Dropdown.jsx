@@ -3,7 +3,7 @@ import * as React from "react";
 import { Form } from "react-bootstrap";
 import ControlLayout from "./ControlLayout";
 
-export type Option = {
+type DropDownOption = {
   value: string,
   label: string,
 };
@@ -11,7 +11,7 @@ export type Option = {
 type Props = {
   name: string,
   label: string,
-  options: Array<Option>,
+  options: Array<DropDownOption>,
   extra?: React.Node,
 };
 
@@ -38,3 +38,4 @@ function Dropdown(props: Props) {
 }
 
 export default Dropdown;
+export type { DropDownOption };

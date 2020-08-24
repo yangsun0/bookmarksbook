@@ -3,6 +3,7 @@ import "mobx-react-lite/batchingForReactDom";
 import BookmarkService from "../Service/BookmarkService";
 import Bookmark from "./Bookmark";
 import BookmarkFormStore from "./BookmarkFormStore";
+import { entityToStore } from "./copyUtility";
 import Group from "./Group";
 import GroupFormStore from "./GroupFormStore";
 
@@ -43,6 +44,10 @@ class AppStore {
     return this.groups.filter((group) => group.column === 2);
   }
 
+  @computed get firstGroup(): Group {
+    return this.groups[0];
+  }
+
   @action async fetchData() {
     if (this.dataStatus === Status.done) {
       return;
@@ -51,8 +56,8 @@ class AppStore {
     const bookmarkEntities = await this.bookmarkService.getBookmarks();
     const groupsEntities = await this.bookmarkService.getGroups();
     runInAction(() => {
-      this.bookmarks = bookmarkEntities.map((entity) =>
-        this.createBookmark(entity)
+      this.bookmarks = bookmarkEntities.map((data) =>
+        this.createBookmark(data)
       );
       this.groups = groupsEntities.map((entity) => this.createGroup(entity));
       this.dataStatus = Status.done;
@@ -69,8 +74,7 @@ class AppStore {
 
   createBookmark(data: Object): Bookmark {
     const bookmark = new Bookmark();
-    bookmark.id = data.id;
-    copyValues(data, bookmark, Bookmark.props);
+    entityToStore(data, bookmark);
     bookmark.store = this;
     return bookmark;
   }
