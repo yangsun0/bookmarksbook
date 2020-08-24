@@ -1,5 +1,5 @@
 import { action, computed, observable } from "mobx";
-import type { DropDownOption } from "../From/Control/Dropdown";
+import type { DropDownOption } from "../Form/Control/Dropdown";
 import AppStore from "./AppStore";
 import Bookmark, { BookmarkBody } from "./Bookmark";
 import { formToStore, storeToBody, storeToForm } from "./copyUtility";

@@ -1,7 +1,7 @@
 import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Modal } from "react-bootstrap";
-import GroupForm from "../From/GroupForm";
+import GroupForm from "../Form/GroupForm";
 import useStore from "../Store/useStore";
 
 function GroupModal() {
