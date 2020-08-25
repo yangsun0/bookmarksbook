@@ -43,7 +43,7 @@ function storeToForm(source: Object, target: Object) {
 }
 
 function formToStore(source: Object, target: Object) {
-  const preservedProps = getPreservedProps(source);
+  const preservedProps = getPreservedProps(target);
   if (preservedProps) {
     preservedProps.forEach((prop) => {
       if (typeof target[prop] === "number") {

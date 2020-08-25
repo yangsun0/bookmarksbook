@@ -1,7 +1,8 @@
 import { action, computed, observable } from "mobx";
 import type { DropDownOption } from "../Form/Control/Dropdown";
+import BookmarkBody from "../Service/Data/BookmarkBody";
 import AppStore from "./AppStore";
-import Bookmark, { BookmarkBody } from "./Bookmark";
+import Bookmark from "./Bookmark";
 import { formToStore, storeToBody, storeToForm } from "./copyUtility";
 
 interface IBookmarkFormValues {
@@ -99,17 +100,14 @@ class BookmarkFormStore {
     this.orderOptionsCount = count;
   }
 
-  @action save(newBookmark: IBookmarkFormValues) {
-    formToStore(newBookmark, this.bookmark);
+  @action save(bookmarkFormValues: IBookmarkFormValues) {
+    formToStore(bookmarkFormValues, this.bookmark);
     const bookmarkBody = new BookmarkBody();
     storeToBody(this.bookmark, bookmarkBody);
     if (this.bookmarkId) {
-      this.appStore.bookmarkService.updateBookmark(
-        this.bookmarkId,
-        bookmarkBody
-      );
+      this.appStore.bookmarkService.update(this.bookmarkId, bookmarkBody);
     } else {
-      this.appStore.bookmarkService.newBookmark(bookmarkBody);
+      this.appStore.bookmarkService.new(bookmarkBody);
     }
   }
 }

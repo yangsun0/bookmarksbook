@@ -4,20 +4,6 @@ import AppStore from "./AppStore";
 import { preserve } from "./copyUtility";
 import Group from "./Group";
 
-interface IBookmarkBody {
-  name: string;
-  url: string;
-  groupId: string;
-  order: number;
-}
-
-class BookmarkBody implements IBookmarkBody {
-  name: string;
-  url: string;
-  groupId: string;
-  order: number;
-}
-
 class Bookmark {
   id: string = "";
   store: AppStore;
@@ -36,5 +22,3 @@ class Bookmark {
 }
 
 export default Bookmark;
-export { BookmarkBody };
-export type { IBookmarkBody };

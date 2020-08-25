@@ -1,8 +1,9 @@
 import { action, computed, observable } from "mobx";
 import type { DropDownOption } from "../Form/Control/Dropdown";
+import GroupBody from "../Service/Data/GroupBody";
 import AppStore from "./AppStore";
 import { formToStore, storeToBody, storeToForm } from "./copyUtility";
-import Group, { GroupBody } from "./Group";
+import Group from "./Group";
 
 interface IGroupFormValues {
   name: string;
@@ -93,14 +94,14 @@ class GroupFormStore {
     this.orderOptionsCount = count;
   }
 
-  @action save(group: IGroupFormValues) {
-    formToStore(group, this.group);
+  @action save(groupFormValues: IGroupFormValues) {
+    formToStore(groupFormValues, this.group);
     const groupBody = new GroupBody();
     storeToBody(this.group, groupBody);
     if (this.groupId) {
-      this.appStore.bookmarkService.updateGroup(this.groupId, groupBody);
+      this.appStore.bookmarkService.update(this.groupId, groupBody);
     } else {
-      this.appStore.bookmarkService.newGroup(groupBody);
+      this.appStore.bookmarkService.new(groupBody);
     }
   }
 }

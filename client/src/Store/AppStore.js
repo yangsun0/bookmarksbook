@@ -1,6 +1,8 @@
 import { action, computed, observable, runInAction } from "mobx";
 import "mobx-react-lite/batchingForReactDom";
 import BookmarkService from "../Service/BookmarkService";
+import BookmarkBody from "../Service/Data/BookmarkBody";
+import GroupBody from "../Service/Data/GroupBody";
 import Bookmark from "./Bookmark";
 import BookmarkFormStore from "./BookmarkFormStore";
 import { entityToStore } from "./copyUtility";
@@ -49,8 +51,8 @@ class AppStore {
       return;
     }
 
-    const bookmarkEntities = await this.bookmarkService.getBookmarks();
-    const groupsEntities = await this.bookmarkService.getGroups();
+    const bookmarkEntities = await this.bookmarkService.getAll(BookmarkBody);
+    const groupsEntities = await this.bookmarkService.getAll(GroupBody);
     runInAction(() => {
       this.bookmarks = bookmarkEntities.map((data) =>
         this.createBookmark(data)

@@ -1,13 +1,10 @@
 import axios from "axios";
 import type { Axios } from "axios";
-
-const paths = {
-  bookmarks: "/bookmarks",
-  groups: "/groups",
-};
+import PathResolver from "./PathResolver";
 
 class BookmarkService {
   client: Axios;
+  pathResolver: PathResolver = new PathResolver();
 
   constructor() {
     this.client = axios.create({
@@ -15,34 +12,26 @@ class BookmarkService {
     });
   }
 
-  async getBookmarks(): Promise<Array<Object>> {
-    const response = await this.client.get(paths.bookmarks);
+  async new(data: Object): Promise<Object> {
+    const path = this.pathResolver.getCollectionPathByInstance(data);
+    const result = await this.client.post(path, data);
+    return result;
+  }
+
+  async update(id: string, data: Object) {
+    const path = this.pathResolver.getSinglePathByInstance(data, id);
+    await this.client.put(path, data);
+  }
+
+  async delete(classCotr: Function, id: string) {
+    const path = this.pathResolver.getSinglePathByClass(classCotr, id);
+    await this.client.delete(path);
+  }
+
+  async getAll(classCotr: Function): Promise<Array<Object>> {
+    const path = this.pathResolver.getCollectionPathByClass(classCotr);
+    const response = await this.client.get(path);
     return response.data;
-  }
-
-  async getGroups(): Promise<Array<Object>> {
-    const response = await this.client.get(paths.groups);
-    return response.data;
-  }
-
-  getItemPath(path: string, id: string): string {
-    return path + "/" + id;
-  }
-
-  async updateBookmark(id: string, data: Object) {
-    await this.client.put(this.getItemPath(paths.bookmarks, id), data);
-  }
-
-  async newBookmark(data: Object) {
-    await this.client.post(paths.bookmarks, data);
-  }
-
-  async updateGroup(id: string, data: Object) {
-    await this.client.put(this.getItemPath(paths.groups, id), data);
-  }
-
-  async newGroup(data: Object) {
-    await this.client.post(paths.groups, data);
   }
 }
 

@@ -3,12 +3,6 @@ import AppStore from "./AppStore";
 import Bookmark from "./Bookmark";
 import { preserve } from "./copyUtility";
 
-class GroupBody {
-  name: string;
-  column: number;
-  order: number;
-}
-
 class Group {
   id: string = "";
   store: AppStore;
@@ -28,4 +22,3 @@ class Group {
 }
 
 export default Group;
-export { GroupBody };
