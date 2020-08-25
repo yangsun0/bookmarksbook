@@ -19,6 +19,10 @@ class Bookmark {
   @computed get group(): Group | null {
     return this.store.groups.find((group) => group.id === this.groupId) ?? null;
   }
+
+  static compareByOrder(left: Bookmark, right: Bookmark) {
+    return left.order - right.order;
+  }
 }
 
 export default Bookmark;

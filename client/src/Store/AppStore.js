@@ -35,11 +35,15 @@ class AppStore {
   }
 
   @computed get leftGroups(): Array<Group> {
-    return this.groups.filter((group) => group.column === 1);
+    return this.groups
+      .filter((group) => group.column === 1)
+      .sort(Group.compareByOrder);
   }
 
   @computed get rightGroups(): Array<Group> {
-    return this.groups.filter((group) => group.column === 2);
+    return this.groups
+      .filter((group) => group.column === 2)
+      .sort(Group.compareByOrder);
   }
 
   @computed get firstGroup(): Group {
@@ -51,13 +55,11 @@ class AppStore {
       return;
     }
 
-    const bookmarkEntities = await this.bookmarkService.getAll(BookmarkBody);
-    const groupsEntities = await this.bookmarkService.getAll(GroupBody);
+    const bookmarksData = await this.bookmarkService.getAll(BookmarkBody);
+    const groupsData = await this.bookmarkService.getAll(GroupBody);
     runInAction(() => {
-      this.bookmarks = bookmarkEntities.map((data) =>
-        this.createBookmark(data)
-      );
-      this.groups = groupsEntities.map((entity) => this.createGroup(entity));
+      this.bookmarks = bookmarksData.map((data) => this.createBookmark(data));
+      this.groups = groupsData.map((data) => this.createGroup(data));
       this.dataStatus = Status.done;
     });
   }
