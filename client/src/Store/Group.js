@@ -1,19 +1,20 @@
 import { computed, observable } from "mobx";
 import AppStore from "./AppStore";
 import Bookmark from "./Bookmark";
+import { preserve } from "./copyUtility";
 
-type GroupBody = {
-  name: string,
-  column: number,
-  order: number,
-};
+class GroupBody {
+  name: string;
+  column: number;
+  order: number;
+}
 
 class Group {
   id: string = "";
-  @observable name: string = "";
-  @observable column: number = 1;
-  @observable order: number = 1;
   store: AppStore;
+  @observable @preserve name: string = "";
+  @observable @preserve column: number = 1;
+  @observable @preserve order: number = 1;
 
   @computed get bookmarks(): Array<Bookmark> {
     if (this.id) {
@@ -24,11 +25,7 @@ class Group {
       return [];
     }
   }
-
-  static get props(): string[] {
-    return ["name", "column", "order"];
-  }
 }
 
 export default Group;
-export type { GroupBody };
+export { GroupBody };

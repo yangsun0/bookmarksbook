@@ -101,16 +101,18 @@ class BookmarkFormStore {
 
   @action save(newBookmark: IBookmarkFormValues) {
     formToStore(newBookmark, this.bookmark);
+    const bookmarkBody = new BookmarkBody();
+    storeToBody(this.bookmark, bookmarkBody);
     if (this.bookmarkId) {
-      const data = new BookmarkBody();
-      storeToBody(this.bookmark, data);
-      this.appStore.bookmarkService.updateBookmark(this.bookmarkId, data);
+      this.appStore.bookmarkService.updateBookmark(
+        this.bookmarkId,
+        bookmarkBody
+      );
     } else {
-      this.appStore.bookmarkService.newBookmark(newBookmark);
+      this.appStore.bookmarkService.newBookmark(bookmarkBody);
     }
   }
 }
 
 export default BookmarkFormStore;
-export { BookmarkFormValues };
 export type { IBookmarkFormValues };

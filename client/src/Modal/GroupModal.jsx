@@ -2,10 +2,11 @@ import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Modal } from "react-bootstrap";
 import GroupForm from "../Form/GroupForm";
-import useStore from "../Store/useStore";
+import { useGroupFormStore } from "../Store";
 
 function GroupModal() {
-  const store = useStore().groupFormStore;
+  const store = useGroupFormStore();
+
   const closeModal = () => {
     store.closeModal();
   };

@@ -1,17 +1,17 @@
+const propertyName = "preservedProps";
 function preserve(target: any, key: string) {
-  const prototype = Object.getPrototypeOf(target);
-  if (!prototype.preservedProps) {
-    Object.defineProperty(prototype, "preservedProps", {
+  if (!target.preservedProps) {
+    Object.defineProperty(target, propertyName, {
       value: [],
     });
   }
 
-  prototype.preservedProps.push(key);
+  target.preservedProps.push(key);
 }
 
 function getPreservedProps(object: Object) {
-  const prototype = Object.getPrototypeOf(object);
-  return prototype.preservedProps;
+  const preservedProps = object[propertyName];
+  return preservedProps;
 }
 
 function entityToStore(source: Object, target: Object) {

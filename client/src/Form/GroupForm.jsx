@@ -5,10 +5,28 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import type { ObjectSchema } from "yup/lib/object";
-import useStore from "../Store/useStore";
+import { useGroupFormStore } from "../Store";
+import type { IGroupFormValues } from "../Store";
 import Checkbox from "./Control/Checkbox";
 import Dropdown from "./Control/Dropdown";
 import Textbox from "./Control/Textbox";
+
+function ColumnChangeListener() {
+  const {
+    values: { column, order },
+    setFieldValue,
+  } = useFormikContext();
+  const store = useGroupFormStore();
+
+  useEffect(() => {
+    store.changeColumn(column);
+    if (store.shouldResetOrder(order)) {
+      setFieldValue("order", "1");
+    }
+  }, [column, order, setFieldValue, store]);
+
+  return null;
+}
 
 type CloseEventHandler = () => void;
 
@@ -16,69 +34,38 @@ type Props = {
   onClose: CloseEventHandler,
 };
 
-type GroupFormValues = {
-  name: string,
-  column: string,
-  order: string,
-};
-
-const schema: ObjectSchema<GroupFormValues> = yup.object({
-  name: yup.string().required().max(50),
-  column: yup.string().required(),
-  order: yup.string().required(),
-});
-
-function ColumnChangeListener() {
-  const {
-    values: { column },
-    setFieldValue,
-  } = useFormikContext();
-  const store = useStore().groupFormStore;
-
-  useEffect(() => {
-    if (store.changeColumn(column)) {
-      setFieldValue("order", "1");
-    } else {
-      setFieldValue("order", store.group.order.toString());
-    }
-  }, [column, setFieldValue, store]);
-
-  return null;
-}
-
 function GroupForm(props: Props) {
   const { onClose } = props;
   const { t } = useTranslation();
-  const store = useStore().groupFormStore;
-  const group = store.group;
-  const initialValues: GroupFormValues = {
-    name: group.name,
-    column: group.column.toString(),
-    order: group.order.toString(),
-  };
+  const store = useGroupFormStore();
+  const groupSchema: ObjectSchema<IGroupFormValues> = yup.object({
+    name: yup.string().required().max(50),
+    column: yup.string().required(),
+    order: yup.string().required(),
+  });
+  const initialGroup = store.toGroupFormValues();
   const columnOptions = [
     { value: "1", label: t("form.left") },
     { value: "2", label: t("form.right") },
   ];
 
-  const submitForm = (values: GroupFormValues) => {
-    const group = {
-      name: values.name,
-      column: parseInt(values.column),
-      order: parseInt(values.order),
-    };
+  const submit = (group: IGroupFormValues) => {
     store.save(group);
     onClose();
   };
 
   return useObserver(() => (
     <Formik
-      validationSchema={schema}
-      onSubmit={submitForm}
-      initialValues={initialValues}
+      validationSchema={groupSchema}
+      onSubmit={submit}
+      initialValues={initialGroup}
     >
       {(formik) => (
-        <Form noValidate onSubmit={formik.handleSubmit}>
+        <Form
+          noValidate
+          onSubmit={formik.handleSubmit}
+          onReset={formik.handleReset}
+        >
           <Modal.Header closeButton>
             <Modal.Title id="group-modal-title">
               {t("dialog.group")}

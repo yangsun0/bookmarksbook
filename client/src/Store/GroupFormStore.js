@@ -1,80 +1,109 @@
-import { action, observable } from "mobx";
+import { action, computed, observable } from "mobx";
+import type { DropDownOption } from "../Form/Control/Dropdown";
 import AppStore from "./AppStore";
-import Group from "./Group";
-import type { GroupBody } from "./Group";
+import { formToStore, storeToBody, storeToForm } from "./copyUtility";
+import Group, { GroupBody } from "./Group";
 
-type Option = {
-  value: string,
-  label: string,
-};
+interface IGroupFormValues {
+  name: string;
+  column: string;
+  order: string;
+}
+
+class GroupFormValues implements IGroupFormValues {
+  name: string;
+  column: string;
+  order: string;
+}
 
 class GroupFormStore {
   appStore: AppStore;
+  groupId: string;
+  group: Group;
+  column: string;
 
   @observable isModalShown: boolean = false;
-  @observable groupId: string;
-  @observable group: Group;
-  @observable column: string;
-  @observable orderOptions: Array<Option> = [];
+  @observable orderOptionsCount: number = 1;
+
+  @computed get orderOptions(): Array<DropDownOption> {
+    const options = [];
+    for (let i = 1; i <= this.orderOptionsCount; i++) {
+      options.push({
+        label: i.toString(),
+        value: i.toString(),
+      });
+    }
+
+    return options;
+  }
+
+  toGroupFormValues() {
+    const formValues = new GroupFormValues();
+    storeToForm(this.group, formValues);
+    return formValues;
+  }
+
+  shouldResetOrder(orderString: string) {
+    const order = parseInt(orderString);
+    return order > this.orderOptionsCount;
+  }
 
   @action openModal(id?: string) {
     this.groupId = id ? id : "";
-    let group;
     if (this.groupId) {
-      group = this.appStore.groups.find((g) => g.id === this.groupId);
-    }
-    if (!group) {
-      group = new Group();
-      group.store = this.appStore;
+      const result = this.appStore.groups.find(
+        (group) => group.id === this.groupId
+      );
+      if (!result) {
+        throw Error("Group Id not found. groupId: " + this.groupId);
+      }
+
+      this.group = result;
+    } else {
+      this.group = new Group();
+      this.group.store = this.appStore;
     }
 
-    this.group = group;
-    this.changeColumn(group.column.toString());
+    this.column = "";
+    this.changeColumn(this.group.column.toString());
     this.isModalShown = true;
   }
 
   @action closeModal() {
     this.groupId = "";
+    this.group = new Group();
+    this.column = "";
     this.isModalShown = false;
   }
 
   @action changeColumn(column: string) {
+    if (column === this.column) {
+      return;
+    }
+
     this.column = column;
     let count =
       this.column === "1"
         ? this.appStore.leftGroups.length
         : this.appStore.rightGroups.length;
-    let isChanged = false;
     if (this.column !== this.group.column.toString()) {
       count += 1;
-      isChanged = true;
     }
 
-    console.log("column: " + this.column + ", count: " + count);
-    this.populateOptions(count);
-    return isChanged;
+    this.orderOptionsCount = count;
   }
 
-  @action save(newGroup: GroupBody) {
+  @action save(group: IGroupFormValues) {
+    formToStore(group, this.group);
+    const groupBody = new GroupBody();
+    storeToBody(this.group, groupBody);
     if (this.groupId) {
-      this.appStore.bookmarkService.updateGroup(this.groupId, newGroup);
+      this.appStore.bookmarkService.updateGroup(this.groupId, groupBody);
     } else {
-      this.appStore.bookmarkService.newGroup(newGroup);
-    }
-  }
-
-  populateOptions(count: number) {
-    if (this.orderOptions.length === count) {
-      return;
-    }
-    this.orderOptions = [];
-    for (let i = 1; i <= count; i++) {
-      this.orderOptions.push({
-        label: i.toString(),
-        value: i.toString(),
-      });
+      this.appStore.bookmarkService.newGroup(groupBody);
     }
   }
 }
 
 export default GroupFormStore;
+export type { IGroupFormValues };

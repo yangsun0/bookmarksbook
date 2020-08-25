@@ -15,10 +15,6 @@ const Status = {
 
 type StatusType = $Keys<typeof Status>;
 
-function copyValues(source: Object, target: Object, props: string[]) {
-  props.forEach((prop) => (target[prop] = source[prop]));
-}
-
 class AppStore {
   bookmarkService: BookmarkService = new BookmarkService();
   dataStatus: StatusType = Status.none;
@@ -81,8 +77,7 @@ class AppStore {
 
   createGroup(data: Object): Group {
     const group = new Group();
-    group.id = data.id;
-    copyValues(data, group, Group.props);
+    entityToStore(data, group);
     group.store = this;
     return group;
   }

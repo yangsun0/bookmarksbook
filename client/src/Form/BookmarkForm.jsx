@@ -5,17 +5,10 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import type { ObjectSchema } from "yup/lib/object";
-import type { IBookmarkFormValues } from "../Store/BookmarkFormStore";
-import { useBookmarkFormStore } from "../Store/useStore";
+import { useBookmarkFormStore } from "../Store";
+import type { IBookmarkFormValues } from "../Store";
 import Dropdown from "./Control/Dropdown";
 import Textbox from "./Control/Textbox";
-
-const bookmarkSchema: ObjectSchema<IBookmarkFormValues> = yup.object({
-  name: yup.string().required().max(50),
-  url: yup.string().required().url(),
-  groupId: yup.string().required(),
-  order: yup.string().required(),
-});
 
 function GroupChangeListener() {
   const {
@@ -30,6 +23,7 @@ function GroupChangeListener() {
       setFieldValue("order", "1");
     }
   }, [groupId, order, setFieldValue, store]);
+
   return null;
 }
 
@@ -43,12 +37,17 @@ function BookmarkForm(props: Props) {
   const { onClose } = props;
   const { t } = useTranslation();
   const store = useBookmarkFormStore();
-
+  const bookmarkSchema: ObjectSchema<IBookmarkFormValues> = yup.object({
+    name: yup.string().required().max(50),
+    url: yup.string().required().url(),
+    groupId: yup.string().required(),
+    order: yup.string().required(),
+  });
   const initialBookmark = store.toBookmarkFormValues();
   const groupOptions = store.toGroupOptions();
 
-  const submit = (values: IBookmarkFormValues) => {
-    store.save(values);
+  const submit = (bookmark: IBookmarkFormValues) => {
+    store.save(bookmark);
     onClose();
   };
 
