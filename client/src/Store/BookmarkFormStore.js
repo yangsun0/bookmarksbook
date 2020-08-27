@@ -81,6 +81,10 @@ class BookmarkFormStore {
   }
 
   @action openModal(id?: string) {
+    if (this.status === Status.pending) {
+      return;
+    }
+
     this.status = Status.none;
     this.bookmarkId = id ? id : "";
     if (this.bookmarkId) {
@@ -178,8 +182,8 @@ class BookmarkFormStore {
 
     runInAction(() => {
       this.status = Status.done;
+      this.reset();
     });
-    this.reset();
   }
 
   @action async newBookmark() {
@@ -205,7 +209,7 @@ class BookmarkFormStore {
   async updateBookmark() {
     const bookmarkBody = new BookmarkBody();
     storeToBody(this.bookmark, bookmarkBody);
-    this.appStore.bookmarkService.update(this.bookmarkId, bookmarkBody);
+    await this.appStore.bookmarkService.update(this.bookmarkId, bookmarkBody);
   }
 }
 
