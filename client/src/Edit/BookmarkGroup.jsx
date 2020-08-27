@@ -2,8 +2,13 @@ import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useBookmarkFormStore, useGroupFormStore } from "../Store";
-import type { Bookmark, Group } from "../Store";
+import {
+  Bookmark,
+  Group,
+  useBookmarkFormStore,
+  useDeleteStore,
+  useGroupFormStore,
+} from "../Store";
 
 type Props = {
   group: Group,
@@ -17,12 +22,15 @@ function BookmarkView(props: BookmarkViewProps) {
   const { bookmark } = props;
   const { t } = useTranslation();
   const bookmarkFormStore = useBookmarkFormStore();
+  const deleteStore = useDeleteStore();
 
   const openBookmarkModal = (event: SyntheticEvent<HTMLButtonElement>) => {
     bookmarkFormStore.openModal(event.currentTarget.dataset.id);
   };
 
-  const openConfirmModal = () => {};
+  const openDeleteModal = (event: SyntheticEvent<HTMLButtonElement>) => {
+    deleteStore.openModal(Bookmark, event.currentTarget.dataset.id);
+  };
 
   return useObserver(() => (
     <ListGroup.Item>
@@ -44,7 +52,12 @@ function BookmarkView(props: BookmarkViewProps) {
           >
             {t("button.edit")}
           </Button>
-          <Button variant="link" size="sm" onClick={openConfirmModal}>
+          <Button
+            variant="link"
+            size="sm"
+            onClick={openDeleteModal}
+            data-id={bookmark.id}
+          >
             {t("button.delete")}
           </Button>
         </Col>
@@ -62,11 +75,15 @@ function BookmarkGroup(props: Props) {
   const { group } = props;
   const { t } = useTranslation();
   const groupFormStore = useGroupFormStore();
+  const deleteStore = useDeleteStore();
 
   const openGroupModal = (event: SyntheticEvent<HTMLButtonElement>) => {
     groupFormStore.openModal(event.currentTarget.dataset.id);
   };
-  const openConfirmModal = () => {};
+
+  const openDeleteModal = (event: SyntheticEvent<HTMLButtonElement>) => {
+    deleteStore.openModal(Group, event.currentTarget.dataset.id);
+  };
 
   return useObserver(() => (
     <Card className="mb-3" role="region" aria-label="bookmark group">
@@ -84,7 +101,12 @@ function BookmarkGroup(props: Props) {
             >
               {t("button.edit")}
             </Button>
-            <Button variant="link" size="sm" onClick={openConfirmModal}>
+            <Button
+              variant="link"
+              size="sm"
+              onClick={openDeleteModal}
+              data-id={group.id}
+            >
               {t("button.delete")}
             </Button>
           </Col>

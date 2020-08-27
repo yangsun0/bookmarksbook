@@ -2,37 +2,43 @@ import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Button, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import useStore from "../Store/useStore";
+import { useDeleteStore } from "../Store";
 
-function ConfirmModal() {
+function DeleteModal() {
   const { t } = useTranslation();
-  const store = useStore();
+  const store = useDeleteStore();
   const close = () => {
-    store.closeConfirmModal();
+    store.closeModal();
+  };
+
+  const deleteIt = () => {
+    store.delete();
   };
 
   return useObserver(() => (
     <Modal
-      show={store.isConfirmModalShown}
+      show={store.isModalShown}
       onHide={close}
       aria-labelledby="confirm-modal-title"
     >
       <Modal.Header closeButton>
         <Modal.Title id="confirm-modal-title">
-          {t("dialog.confirm")}
+          {t("dialog.deleteTitle", { target: store.targetKey })}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>{t("dialog.confirmMessage")}</p>
+        <p>{t("dialog.deleteMessage", { name: store.name })}</p>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={close}>
           {t("button.no")}
         </Button>
-        <Button variant="primary">{t("button.delete")}</Button>
+        <Button variant="primary" onClick={deleteIt}>
+          {t("button.delete")}
+        </Button>
       </Modal.Footer>
     </Modal>
   ));
 }
 
-export default ConfirmModal;
+export default DeleteModal;

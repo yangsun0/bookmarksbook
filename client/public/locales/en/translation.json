@@ -23,8 +23,8 @@
   "dialog": {
     "bookmark": "Bookmark",
     "group": "Group",
-    "confirm": "Confirm",
-    "confirmMessage": "Do you want to delete the bookmark?"
+    "deleteTitle": "Delete $t(dialog.{{target}})",
+    "deleteMessage": "Do you want to delete {{name}}?"
   },
   "form": {
     "name": "Name",

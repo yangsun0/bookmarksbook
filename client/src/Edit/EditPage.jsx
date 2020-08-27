@@ -1,7 +1,7 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import BookmarkModal from "../Modal/BookmarkModal";
-import ConfirmModal from "../Modal/ConfirmModal";
+import DeleteModal from "../Modal/DeleteModal";
 import GroupModal from "../Modal/GroupModal";
 import Body from "./Body";
 import Header from "./Header";
@@ -15,7 +15,7 @@ function EditPage() {
       </Container>
       <BookmarkModal />
       <GroupModal />
-      <ConfirmModal />
+      <DeleteModal />
     </>
   );
 }

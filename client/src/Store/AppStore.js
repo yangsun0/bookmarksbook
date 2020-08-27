@@ -6,6 +6,7 @@ import GroupBody from "../Service/Data/GroupBody";
 import Bookmark from "./Bookmark";
 import BookmarkFormStore from "./BookmarkFormStore";
 import { entityToStore } from "./copyUtility";
+import DeleteStore from "./DeleteStore";
 import Group from "./Group";
 import GroupFormStore from "./GroupFormStore";
 import Status from "./Status";
@@ -16,6 +17,7 @@ class AppStore {
   dataStatus: StatusType = Status.none;
   bookmarkFormStore: BookmarkFormStore = new BookmarkFormStore();
   groupFormStore: GroupFormStore = new GroupFormStore();
+  deleteStore: DeleteStore = new DeleteStore();
 
   @observable groups: Array<Group> = [];
   @observable bookmarks: Array<Bookmark> = [];
@@ -24,6 +26,7 @@ class AppStore {
   constructor() {
     this.bookmarkFormStore.appStore = this;
     this.groupFormStore.appStore = this;
+    this.deleteStore.appStore = this;
   }
 
   @computed get leftGroups(): Array<Group> {
