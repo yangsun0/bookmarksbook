@@ -8,21 +8,14 @@ import BookmarkFormStore from "./BookmarkFormStore";
 import { entityToStore } from "./copyUtility";
 import Group from "./Group";
 import GroupFormStore from "./GroupFormStore";
-
-const Status = {
-  none: "none",
-  done: "done",
-  error: "error",
-};
-
-type StatusType = $Keys<typeof Status>;
+import Status from "./Status";
+import type { StatusType } from "./Status";
 
 class AppStore {
   bookmarkService: BookmarkService = new BookmarkService();
   dataStatus: StatusType = Status.none;
   bookmarkFormStore: BookmarkFormStore = new BookmarkFormStore();
   groupFormStore: GroupFormStore = new GroupFormStore();
-  defaultGroup: Group = new Group();
 
   @observable groups: Array<Group> = [];
   @observable bookmarks: Array<Bookmark> = [];
@@ -30,7 +23,6 @@ class AppStore {
 
   constructor() {
     this.bookmarkFormStore.appStore = this;
-    this.defaultGroup.store = this;
     this.groupFormStore.appStore = this;
   }
 
@@ -46,12 +38,8 @@ class AppStore {
       .sort(Group.compareByOrder);
   }
 
-  @computed get firstGroup(): Group {
-    return this.groups[0];
-  }
-
   @action async fetchData() {
-    if (this.dataStatus === Status.done) {
+    if (this.dataStatus === Status.done || this.dataStatus === Status.pending) {
       return;
     }
 
@@ -86,14 +74,19 @@ class AppStore {
     return group;
   }
 
-  findGroup(id: string): Group {
-    let group = undefined;
-    if (id) {
-      group = this.groups.find((g) => g.id === id);
+  findBookmark(id: string): Bookmark {
+    const result = this.bookmarks.find((bookmark) => bookmark.id === id);
+    if (!result) {
+      throw Error("bookmarkId not found. id: " + this.bookmarkId);
     }
+
+    return result;
+  }
+
+  findGroup(id: string): Group {
+    const group = this.groups.find((group) => group.id === id);
     if (!group) {
-      console.log("default group");
-      group = this.defaultGroup;
+      throw Error("group id not found." + this.groupId);
     }
 
     return group;

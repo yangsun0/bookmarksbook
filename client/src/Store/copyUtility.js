@@ -15,7 +15,7 @@ function getPreservedProps(object: Object) {
 }
 
 function entityToStore(source: Object, target: Object) {
-  target["id"] = source["id"];
+  target["id"] = source["id"].toString();
   const preservedProps = getPreservedProps(target);
   if (preservedProps) {
     preservedProps.forEach((prop) => (target[prop] = source[prop]));

@@ -14,8 +14,8 @@ class BookmarkService {
 
   async new(data: Object): Promise<Object> {
     const path = this.pathResolver.getCollectionPathByInstance(data);
-    const result = await this.client.post(path, data);
-    return result;
+    const response = await this.client.post(path, data);
+    return response.data;
   }
 
   async update(id: string, data: Object) {

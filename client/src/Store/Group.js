@@ -11,14 +11,9 @@ class Group {
   @observable @preserve order: number = 1;
 
   @computed get bookmarks(): Array<Bookmark> {
-    let result = [];
-    if (this.id) {
-      result = this.store.bookmarks
-        .filter((bookmark) => bookmark.groupId === this.id)
-        .sort(Bookmark.compareByOrder);
-    }
-
-    return result;
+    return this.store.bookmarks
+      .filter((bookmark) => bookmark.groupId === this.id)
+      .sort(Bookmark.compareByOrder);
   }
 
   static compareByOrder(left: Group, right: Group) {
