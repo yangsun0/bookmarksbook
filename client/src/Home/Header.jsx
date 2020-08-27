@@ -3,14 +3,14 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { FiExternalLink } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import useStore from "../Store/useStore";
+import { useBookmarkFormStore } from "../Store";
 
 function Header() {
   const { t } = useTranslation();
-  const store = useStore();
+  const store = useBookmarkFormStore();
 
   const openBookmarkModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    store.bookmarkFormStore.openModal();
+    store.openModal();
   };
 
   return (

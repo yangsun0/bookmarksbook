@@ -150,7 +150,7 @@ class BookmarkFormStore {
     this.orderOptionsCount = count;
   }
 
-  @action createDefaultGroup(): Group {
+  @action createDefaultGroup() {
     this.defaultGroup = new Group();
     this.defaultGroup.id = "PENDING";
     this.defaultGroup.name = "Default";

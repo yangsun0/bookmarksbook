@@ -23,16 +23,17 @@ function BookmarkView(props: BookmarkProps) {
 
 function BookmarkGroup(props: Props) {
   const { group } = props;
-  const items = group.bookmarks.map((bookmark: Bookmark) => (
-    <BookmarkView bookmark={bookmark} key={bookmark.id} />
-  ));
 
   return useObserver(() => (
     <Card className="mb-3" role="region" aria-label="bookmark group">
       <Card.Header role="heading" aria-level="2">
         {group.name}
       </Card.Header>
-      <ListGroup>{items}</ListGroup>
+      <ListGroup>
+        {group.bookmarks.map((bookmark: Bookmark) => (
+          <BookmarkView bookmark={bookmark} key={bookmark.id} />
+        ))}
+      </ListGroup>
     </Card>
   ));
 }

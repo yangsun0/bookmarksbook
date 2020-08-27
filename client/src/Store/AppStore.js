@@ -77,7 +77,7 @@ class AppStore {
   findBookmark(id: string): Bookmark {
     const result = this.bookmarks.find((bookmark) => bookmark.id === id);
     if (!result) {
-      throw Error("bookmarkId not found. id: " + this.bookmarkId);
+      throw Error("bookmarkId not found. id: " + id);
     }
 
     return result;
@@ -86,7 +86,7 @@ class AppStore {
   findGroup(id: string): Group {
     const group = this.groups.find((group) => group.id === id);
     if (!group) {
-      throw Error("group id not found." + this.groupId);
+      throw Error("group id not found." + id);
     }
 
     return group;
