@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import useStore from "../Store/useStore";
+import { useStore } from "../Store";
 import "./App.scss";
 import Footer from "./Footer";
 import Main from "./Main";

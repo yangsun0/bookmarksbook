@@ -1,25 +1,11 @@
 import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Card, ListGroup } from "react-bootstrap";
-import type { Bookmark, Group } from "../Store";
+import type { Group } from "../Store";
 
 type Props = {
   group: Group,
 };
-
-type BookmarkProps = {
-  bookmark: Bookmark,
-};
-
-function BookmarkView(props: BookmarkProps) {
-  const { bookmark } = props;
-  return useObserver(() => (
-    <ListGroup.Item action href={bookmark.url}>
-      <img src={bookmark.iconUrl} alt="icon" className="bookmark-icon mr-2" />
-      <span className="align-middle">{bookmark.name}</span>
-    </ListGroup.Item>
-  ));
-}
 
 function BookmarkGroup(props: Props) {
   const { group } = props;
@@ -30,8 +16,15 @@ function BookmarkGroup(props: Props) {
         {group.name}
       </Card.Header>
       <ListGroup>
-        {group.bookmarks.map((bookmark: Bookmark) => (
-          <BookmarkView bookmark={bookmark} key={bookmark.id} />
+        {group.bookmarks.map((bookmark) => (
+          <ListGroup.Item action href={bookmark.url} key={bookmark.id}>
+            <img
+              src={bookmark.iconUrl}
+              alt="icon"
+              className="bookmark-icon mr-2"
+            />
+            <span className="align-middle">{bookmark.name}</span>
+          </ListGroup.Item>
         ))}
       </ListGroup>
     </Card>

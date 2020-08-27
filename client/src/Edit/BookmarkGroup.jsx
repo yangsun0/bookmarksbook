@@ -2,8 +2,8 @@ import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { useBookmarkFormStore, useGroupFormStore } from "../Store";
 import type { Bookmark, Group } from "../Store";
-import useStore from "../Store/useStore";
 
 type Props = {
   group: Group,
@@ -16,18 +16,16 @@ type BookmarkViewProps = {
 function BookmarkView(props: BookmarkViewProps) {
   const { bookmark } = props;
   const { t } = useTranslation();
-  const store = useStore();
+  const bookmarkFormStore = useBookmarkFormStore();
 
   const openBookmarkModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    store.bookmarkFormStore.openModal(event.currentTarget.dataset.id);
+    bookmarkFormStore.openModal(event.currentTarget.dataset.id);
   };
 
-  const openConfirmModal = () => {
-    store.openConfirmModal();
-  };
+  const openConfirmModal = () => {};
 
   return useObserver(() => (
-    <ListGroup.Item key={bookmark.id}>
+    <ListGroup.Item>
       <Row>
         <Col>
           <img
@@ -63,14 +61,12 @@ function BookmarkView(props: BookmarkViewProps) {
 function BookmarkGroup(props: Props) {
   const { group } = props;
   const { t } = useTranslation();
-  const store = useStore();
+  const groupFormStore = useGroupFormStore();
 
   const openGroupModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    store.groupFormStore.openModal(event.currentTarget.dataset.id);
+    groupFormStore.openModal(event.currentTarget.dataset.id);
   };
-  const openConfirmModal = () => {
-    store.openConfirmModal();
-  };
+  const openConfirmModal = () => {};
 
   return useObserver(() => (
     <Card className="mb-3" role="region" aria-label="bookmark group">
