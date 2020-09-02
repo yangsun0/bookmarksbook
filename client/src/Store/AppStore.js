@@ -5,7 +5,7 @@ import BookmarkBody from "../Service/Data/BookmarkBody";
 import GroupBody from "../Service/Data/GroupBody";
 import Bookmark from "./Bookmark";
 import BookmarkFormStore from "./BookmarkFormStore";
-import { entityToStore } from "./copyUtility";
+import { entityToStore } from "./dataTransfer";
 import DeleteStore from "./DeleteStore";
 import Group from "./Group";
 import GroupFormStore from "./GroupFormStore";
@@ -53,14 +53,6 @@ class AppStore {
       this.groups = groupsData.map((data) => this.createGroup(data));
       this.dataStatus = Status.done;
     });
-  }
-
-  @action openConfirmModal() {
-    this.isConfirmModalShown = true;
-  }
-
-  @action closeConfirmModal() {
-    this.isConfirmModalShown = false;
   }
 
   createBookmark(data: Object): Bookmark {

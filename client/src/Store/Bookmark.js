@@ -1,16 +1,16 @@
 import { computed, observable } from "mobx";
 import "mobx-react-lite/batchingForReactDom";
 import AppStore from "./AppStore";
-import { preserve } from "./copyUtility";
+import { transferable } from "./dataTransfer";
 import Group from "./Group";
 
 class Bookmark {
   id: string = "";
   store: AppStore;
-  @observable @preserve name: string = "";
-  @observable @preserve url: string = "";
-  @observable @preserve order: number = 1;
-  @observable @preserve groupId: string = "";
+  @observable @transferable name: string = "";
+  @observable @transferable url: string = "";
+  @observable @transferable order: number = 1;
+  @observable @transferable groupId: string = "";
 
   @computed get iconUrl(): string {
     return this.url + "/favicon.ico";

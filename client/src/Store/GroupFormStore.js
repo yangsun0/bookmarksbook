@@ -2,7 +2,7 @@ import { action, computed, observable, runInAction } from "mobx";
 import type { DropDownOption } from "../Form/Control/Dropdown";
 import GroupBody from "../Service/Data/GroupBody";
 import AppStore from "./AppStore";
-import { formToStore, storeToBody, storeToForm } from "./copyUtility";
+import { formToStore, storeToBody, storeToForm } from "./dataTransfer";
 import Group from "./Group";
 import Status from "./Status";
 import type { StatusType } from "./Status";
