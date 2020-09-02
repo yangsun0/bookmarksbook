@@ -1,17 +1,12 @@
 import BookmarkBody from "./Data/BookmarkBody";
 import GroupBody from "./Data/GroupBody";
 
-const paths = {
-  bookmarks: "/bookmarks",
-  groups: "/groups",
-};
-
 class PathResolver {
   classNameToPathMap: Map<string, string> = new Map();
 
   constructor() {
-    this.classNameToPathMap.set(BookmarkBody.name, paths.bookmarks);
-    this.classNameToPathMap.set(GroupBody.name, paths.groups);
+    this.register(BookmarkBody, "/bookmarks");
+    this.register(GroupBody, "/groups");
   }
 
   getCollectionPathByClass(classCotr: Function): string {
@@ -39,6 +34,10 @@ class PathResolver {
     path = path + "/" + id;
 
     return path;
+  }
+
+  register(classCotr: Function, path: string) {
+    this.classNameToPathMap.set(classCotr.name, path);
   }
 }
 
