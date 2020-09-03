@@ -1,27 +1,17 @@
-import BookmarkService from "../Service/BookmarkService";
-import sampleData from "../__tests__/data.json";
+import BookmarkService, { mockDelete } from "../Service/BookmarkService";
 import AppStore from "./AppStore";
 import Bookmark from "./Bookmark";
 import DeleteModalStore from "./DeleteModalStore";
 import Group from "./Group";
 
-const mockDelete = jest.fn();
-
-jest.mock("../Service/BookmarkService", () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      delete: mockDelete,
-    };
-  });
-});
-
+jest.mock("../Service/BookmarkService");
 const testContext = {};
 
 beforeEach(() => {
   BookmarkService.mockClear();
   mockDelete.mockClear();
   const appStore = new AppStore();
-  appStore.setData(sampleData.bookmarks, sampleData.groups);
+  appStore.fetchData();
   const store = new DeleteModalStore();
   store.appStore = appStore;
   testContext.store = store;

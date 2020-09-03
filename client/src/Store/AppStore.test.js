@@ -1,21 +1,13 @@
-import BookmarkService from "../Service/BookmarkService";
-import sampleData from "../__tests__/data.json";
+import BookmarkService, { mockGetAll } from "../Service/BookmarkService";
 import AppStore from "./AppStore";
 import Bookmark from "./Bookmark";
 import Group from "./Group";
 
-const mockGetAll = jest.fn();
-
-jest.mock("../Service/BookmarkService", () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      getAll: mockGetAll,
-    };
-  });
-});
+jest.mock("../Service/BookmarkService");
 
 beforeEach(() => {
   BookmarkService.mockClear();
+  mockGetAll.mockClear();
 });
 
 test("initial state", () => {
@@ -28,10 +20,10 @@ test("initial state", () => {
 
 test("fetch data", async () => {
   const appStore = new AppStore();
-  appStore.setData(sampleData.bookmarks, sampleData.groups);
+  await appStore.fetchData();
   expect(mockGetAll).toHaveBeenCalledTimes(2);
-  expect(appStore.bookmarks).toHaveLength(sampleData.bookmarks.length);
-  expect(appStore.groups).toHaveLength(sampleData.groups.length);
+  expect(appStore.bookmarks.length > 0).toBeTruthy();
+  expect(appStore.groups.length > 0).toBeTruthy();
 });
 
 test("find bookmark", async () => {

@@ -1,19 +1,11 @@
-import BookmarkService from "../Service/BookmarkService";
-import sampleData from "../__tests__/data.json";
+import BookmarkService, {
+  mockNew,
+  mockUpdate,
+} from "../Service/BookmarkService";
 import AppStore from "./AppStore";
 import GroupFormStore from "./GroupFormStore";
 
-const mockNew = jest.fn();
-const mockUpdate = jest.fn();
-
-jest.mock("../Service/BookmarkService", () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      new: mockNew,
-      update: mockUpdate,
-    };
-  });
-});
+jest.mock("../Service/BookmarkService");
 
 const testContext = {};
 
@@ -22,7 +14,7 @@ beforeEach(() => {
   mockNew.mockClear();
   mockUpdate.mockClear();
   const appStore = new AppStore();
-  appStore.setData(sampleData.groups, sampleData.groups);
+  appStore.fetchData();
   const groupFormStore = new GroupFormStore();
   groupFormStore.appStore = appStore;
   testContext.store = groupFormStore;
@@ -38,10 +30,6 @@ test("initial state", () => {
 });
 
 test("new group", async () => {
-  const id = "new_id";
-  mockNew.mockImplementation(() => {
-    return { id: id };
-  });
   const store = testContext.store;
   const groupCount = store.appStore.groups.length;
   store.init();
@@ -49,7 +37,7 @@ test("new group", async () => {
   await store.save(form);
   expect(mockNew).toHaveBeenCalledTimes(1);
   expect(store.appStore.groups).toHaveLength(groupCount + 1);
-  expect(store.appStore.groups[groupCount].id).toBe(id);
+  expect(store.appStore.groups[groupCount].id).toBeTruthy();
 });
 
 test("update group", async () => {
