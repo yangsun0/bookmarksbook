@@ -5,8 +5,8 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import type { ObjectSchema } from "yup/lib/object";
-import { useBookmarkFormStore } from "../Store";
 import type { IBookmarkFormValues } from "../Store";
+import { useBookmarkFormStore } from "../Store/useStore";
 import Dropdown from "./Control/Dropdown";
 import Textbox from "./Control/Textbox";
 

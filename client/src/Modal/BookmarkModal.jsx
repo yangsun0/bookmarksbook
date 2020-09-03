@@ -2,13 +2,13 @@ import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Modal } from "react-bootstrap";
 import BookmarkForm from "../Form/BookmarkForm";
-import { useBookmarkFormStore } from "../Store";
+import { useBookmarkModalStore } from "../Store/useStore";
 
 function BookmarkModal() {
-  const store = useBookmarkFormStore();
+  const store = useBookmarkModalStore();
 
-  const closeModal = () => {
-    store.closeModal();
+  const close = () => {
+    store.close();
   };
 
   return useObserver(() => (
@@ -16,11 +16,11 @@ function BookmarkModal() {
       centered
       size="lg"
       backdrop="static"
-      show={store.isModalShown}
-      onHide={closeModal}
+      show={store.isShown}
+      onHide={close}
       aria-labelledby="bookmark-modal-title"
     >
-      <BookmarkForm onClose={closeModal} />
+      <BookmarkForm onClose={close} />
     </Modal>
   ));
 }

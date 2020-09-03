@@ -2,24 +2,24 @@ import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Modal } from "react-bootstrap";
 import GroupForm from "../Form/GroupForm";
-import { useGroupFormStore } from "../Store";
+import { useGroupModalStore } from "../Store/useStore";
 
 function GroupModal() {
-  const store = useGroupFormStore();
+  const store = useGroupModalStore();
 
-  const closeModal = () => {
-    store.closeModal();
+  const close = () => {
+    store.close();
   };
 
   return useObserver(() => (
     <Modal
       centered
       size="lg"
-      show={store.isModalShown}
-      onHide={closeModal}
+      show={store.isShown}
+      onHide={close}
       aria-labelledby="group-modal-title"
     >
-      <GroupForm onClose={closeModal} />
+      <GroupForm onClose={close} />
     </Modal>
   ));
 }

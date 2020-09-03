@@ -11,8 +11,6 @@ import {
   storeToForm,
 } from "./dataTransfer";
 import Group from "./Group";
-import Status from "./Status";
-import type { StatusType } from "./Status";
 
 interface IBookmarkFormValues {
   name: string;
@@ -30,14 +28,12 @@ class BookmarkFormValues implements IBookmarkFormValues {
 
 class BookmarkFormStore {
   appStore: AppStore;
-  bookmarkId: string;
-  bookmark: Bookmark;
-  groupId: string;
+  bookmarkId: string = "";
+  bookmark: Bookmark = new Bookmark();
+  groupId: string = "";
   defaultGroup: Group = new Group();
-  status: StatusType = Status.none;
   shouldCreateDefaultGroup: boolean = false;
 
-  @observable isModalShown: boolean = false;
   @observable orderOptionsCount: number = 1;
 
   @computed get orderOptions(): Array<DropDownOption> {
@@ -80,12 +76,7 @@ class BookmarkFormStore {
     return order > this.orderOptionsCount;
   }
 
-  @action openModal(id?: string) {
-    if (this.status === Status.pending) {
-      return;
-    }
-
-    this.status = Status.none;
+  @action init(id?: string) {
     this.bookmarkId = id ? id : "";
     if (this.bookmarkId) {
       this.bookmark = this.appStore.findBookmark(this.bookmarkId);
@@ -95,7 +86,6 @@ class BookmarkFormStore {
 
     this.groupId = this.bookmark.groupId;
     this.calculateOrderOptionCount();
-    this.isModalShown = true;
   }
 
   @action createBookmark() {
@@ -115,21 +105,6 @@ class BookmarkFormStore {
     this.bookmark.store = this.appStore;
   }
 
-  @action closeModal() {
-    this.isModalShown = false;
-    if (this.status === Status.none) {
-      this.reset();
-    }
-  }
-
-  @action reset() {
-    this.bookmarkId = "";
-    this.groupId = "";
-    this.bookmark = new Bookmark();
-    this.defaultGroup = new Group();
-    this.shouldCreateDefaultGroup = false;
-  }
-
   @action changeGroup(groupId: string) {
     if (groupId === this.groupId) {
       return;
@@ -139,7 +114,7 @@ class BookmarkFormStore {
     this.calculateOrderOptionCount();
   }
 
-  calculateOrderOptionCount() {
+  @action calculateOrderOptionCount() {
     if (this.shouldCreateDefaultGroup) {
       this.orderOptionsCount = 1;
       return;
@@ -172,18 +147,12 @@ class BookmarkFormStore {
   }
 
   @action async save(bookmarkFormValues: IBookmarkFormValues) {
-    this.status = Status.pending;
     formToStore(bookmarkFormValues, this.bookmark);
     if (this.bookmarkId) {
       await this.updateBookmark();
     } else {
       await this.newBookmark();
     }
-
-    runInAction(() => {
-      this.status = Status.done;
-      this.reset();
-    });
   }
 
   @action async newBookmark() {

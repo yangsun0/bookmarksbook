@@ -1,25 +1,40 @@
 import React from "react";
 import AppStore from "./AppStore";
 import BookmarkFormStore from "./BookmarkFormStore";
-import DeleteStore from "./DeleteStore";
+import BookmarkModalStore from "./BookmarkModalStore";
+import DeleteStore from "./DeleteModalStore";
 import GroupFormStore from "./GroupFormStore";
+import GroupModalStore from "./GroupModalStore";
 import StoreContext from "./StoreContext";
 
 function useStore(): AppStore {
   return React.useContext(StoreContext);
 }
 
+function useBookmarkModalStore(): BookmarkModalStore {
+  return useStore().bookmarkModalStore;
+}
+
 function useBookmarkFormStore(): BookmarkFormStore {
-  return useStore().bookmarkFormStore;
+  return useStore().bookmarkModalStore.bookmarkFormStore;
 }
 
+function useGroupModalStore(): GroupModalStore {
+  return useStore().groupModalStore;
+}
 function useGroupFormStore(): GroupFormStore {
-  return useStore().groupFormStore;
+  return useStore().groupModalStore.groupFormStore;
 }
 
-function useDeleteStore(): DeleteStore {
+function useDeleteModalStore(): DeleteStore {
   return useStore().deleteStore;
 }
 
 export default useStore;
-export { useBookmarkFormStore, useGroupFormStore, useDeleteStore };
+export {
+  useBookmarkFormStore,
+  useGroupFormStore,
+  useDeleteModalStore,
+  useBookmarkModalStore,
+  useGroupModalStore,
+};

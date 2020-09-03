@@ -2,13 +2,13 @@ import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Button, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useDeleteStore } from "../Store";
+import { useDeleteModalStore } from "../Store//useStore";
 
 function DeleteModal() {
   const { t } = useTranslation();
-  const store = useDeleteStore();
+  const store = useDeleteModalStore();
   const close = () => {
-    store.closeModal();
+    store.close();
   };
 
   const deleteIt = () => {
@@ -17,7 +17,7 @@ function DeleteModal() {
 
   return useObserver(() => (
     <Modal
-      show={store.isModalShown}
+      show={store.isShown}
       onHide={close}
       aria-labelledby="confirm-modal-title"
     >

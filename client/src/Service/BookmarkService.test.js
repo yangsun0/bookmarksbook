@@ -22,7 +22,7 @@ test("new", async () => {
   axios.post.mockImplementation((path, data) => response);
   const bookmarkService = new BookmarkService();
   const result = await bookmarkService.new(new TestObj());
-  expect(axios.post).toHaveBeenCalled();
+  expect(axios.post).toHaveBeenCalledTimes(1);
   expect(result).toBe(response.data);
 });
 
@@ -30,14 +30,14 @@ test("update", async () => {
   axios.put.mockImplementation((path, data) => {});
   const bookmarkService = new BookmarkService();
   await bookmarkService.update(new TestObj(), "id");
-  expect(axios.put).toHaveBeenCalled();
+  expect(axios.put).toHaveBeenCalledTimes(1);
 });
 
 test("delete", async () => {
   axios.delete.mockImplementation((path) => {});
   const bookmarkService = new BookmarkService();
   await bookmarkService.delete(TestObj, "id");
-  expect(axios.delete).toHaveBeenCalled();
+  expect(axios.delete).toHaveBeenCalledTimes(1);
 });
 
 test("get all", async () => {
@@ -47,6 +47,6 @@ test("get all", async () => {
   axios.get.mockImplementation((path) => response);
   const bookmarkService = new BookmarkService();
   const result = await bookmarkService.getAll(TestObj);
-  expect(axios.get).toHaveBeenCalled();
+  expect(axios.get).toHaveBeenCalledTimes(1);
   expect(result).toBe(response.data);
 });

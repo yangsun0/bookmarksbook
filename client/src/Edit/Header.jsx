@@ -2,19 +2,19 @@ import React from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { useBookmarkFormStore, useGroupFormStore } from "../Store";
+import { useBookmarkModalStore, useGroupModalStore } from "../Store/useStore";
 
 function Header() {
   const { t } = useTranslation();
-  const bookmarkStore = useBookmarkFormStore();
-  const groupStore = useGroupFormStore();
+  const bookmarkModalStore = useBookmarkModalStore();
+  const groupModalStore = useGroupModalStore();
 
   const openBookmarkModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    bookmarkStore.openModal();
+    bookmarkModalStore.open();
   };
 
   const openGroupModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    groupStore.openModal();
+    groupModalStore.open();
   };
 
   return (

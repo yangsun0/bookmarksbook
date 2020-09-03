@@ -1,7 +1,7 @@
 import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import { useStore } from "../Store";
+import useStore from "../Store/useStore";
 import BookmarkGroup from "./BookmarkGroup";
 
 function Body() {

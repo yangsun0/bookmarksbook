@@ -2,14 +2,12 @@ import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { Bookmark, Group } from "../Store";
 import {
-  Bookmark,
-  Group,
-  useBookmarkFormStore,
-  useDeleteStore,
-  useGroupFormStore,
-} from "../Store";
-
+  useBookmarkModalStore,
+  useDeleteModalStore,
+  useGroupModalStore,
+} from "../Store/useStore";
 type Props = {
   group: Group,
 };
@@ -21,15 +19,15 @@ type BookmarkViewProps = {
 function BookmarkView(props: BookmarkViewProps) {
   const { bookmark } = props;
   const { t } = useTranslation();
-  const bookmarkFormStore = useBookmarkFormStore();
-  const deleteStore = useDeleteStore();
+  const bookmarkModalStore = useBookmarkModalStore();
+  const deleteModalStore = useDeleteModalStore();
 
   const openBookmarkModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    bookmarkFormStore.openModal(event.currentTarget.dataset.id);
+    bookmarkModalStore.open(event.currentTarget.dataset.id);
   };
 
   const openDeleteModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    deleteStore.openModal(Bookmark, event.currentTarget.dataset.id);
+    deleteModalStore.open(Bookmark, event.currentTarget.dataset.id);
   };
 
   return useObserver(() => (
@@ -74,15 +72,15 @@ function BookmarkView(props: BookmarkViewProps) {
 function BookmarkGroup(props: Props) {
   const { group } = props;
   const { t } = useTranslation();
-  const groupFormStore = useGroupFormStore();
-  const deleteStore = useDeleteStore();
+  const groupModalStore = useGroupModalStore();
+  const deleteModalStore = useDeleteModalStore();
 
   const openGroupModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    groupFormStore.openModal(event.currentTarget.dataset.id);
+    groupModalStore.open(event.currentTarget.dataset.id);
   };
 
   const openDeleteModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    deleteStore.openModal(Group, event.currentTarget.dataset.id);
+    deleteModalStore.open(Group, event.currentTarget.dataset.id);
   };
 
   return useObserver(() => (

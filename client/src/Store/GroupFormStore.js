@@ -4,8 +4,6 @@ import GroupBody from "../Service/Data/GroupBody";
 import AppStore from "./AppStore";
 import { formToStore, storeToBody, storeToForm } from "./dataTransfer";
 import Group from "./Group";
-import Status from "./Status";
-import type { StatusType } from "./Status";
 
 interface IGroupFormValues {
   name: string;
@@ -21,12 +19,10 @@ class GroupFormValues implements IGroupFormValues {
 
 class GroupFormStore {
   appStore: AppStore;
-  groupId: string;
-  group: Group;
-  column: string;
-  status: StatusType = Status.none;
+  groupId: string = "";
+  group: Group = new Group();
+  column: string = "1";
 
-  @observable isModalShown: boolean = false;
   @observable orderOptionsCount: number = 1;
 
   @computed get orderOptions(): Array<DropDownOption> {
@@ -52,12 +48,7 @@ class GroupFormStore {
     return order > this.orderOptionsCount;
   }
 
-  @action openModal(id?: string) {
-    if (this.status === Status.pending) {
-      return;
-    }
-
-    this.status = Status.none;
+  @action init(id?: string) {
     this.groupId = id ? id : "";
     if (this.groupId) {
       this.group = this.appStore.findGroup(this.groupId);
@@ -67,7 +58,6 @@ class GroupFormStore {
 
     this.column = this.group.column.toString();
     this.calculateOrderOptionCount();
-    this.isModalShown = true;
   }
 
   createGroup() {
@@ -75,19 +65,6 @@ class GroupFormStore {
     this.group.column = 1;
     this.group.order = this.appStore.groups.length + 1;
     this.group.store = this.appStore;
-  }
-
-  @action closeModal() {
-    this.isModalShown = false;
-    if (this.status === Status.none) {
-      this.reset();
-    }
-  }
-
-  @action reset() {
-    this.groupId = "";
-    this.group = new Group();
-    this.column = "";
   }
 
   @action changeColumn(column: string) {
@@ -99,7 +76,7 @@ class GroupFormStore {
     this.calculateOrderOptionCount();
   }
 
-  calculateOrderOptionCount() {
+  @action calculateOrderOptionCount() {
     let count =
       this.column === "1"
         ? this.appStore.leftGroups.length
@@ -112,7 +89,6 @@ class GroupFormStore {
   }
 
   @action async save(groupFormValues: IGroupFormValues) {
-    this.status = Status.pending;
     formToStore(groupFormValues, this.group);
     const groupBody = new GroupBody();
     storeToBody(this.group, groupBody);
@@ -121,11 +97,6 @@ class GroupFormStore {
     } else {
       await this.newGroup();
     }
-
-    runInAction(() => {
-      this.status = Status.done;
-      this.reset();
-    });
   }
 
   async newGroup() {

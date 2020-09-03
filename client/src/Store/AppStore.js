@@ -1,31 +1,31 @@
-import { action, computed, observable, runInAction } from "mobx";
+import { action, computed, observable } from "mobx";
 import "mobx-react-lite/batchingForReactDom";
 import BookmarkService from "../Service/BookmarkService";
 import BookmarkBody from "../Service/Data/BookmarkBody";
 import GroupBody from "../Service/Data/GroupBody";
 import Bookmark from "./Bookmark";
-import BookmarkFormStore from "./BookmarkFormStore";
+import BookmarkModalStore from "./BookmarkModalStore";
 import { entityToStore } from "./dataTransfer";
-import DeleteStore from "./DeleteStore";
+import DeleteStore from "./DeleteModalStore";
 import Group from "./Group";
-import GroupFormStore from "./GroupFormStore";
+import GroupModalStore from "./GroupModalStore";
 import Status from "./Status";
 import type { StatusType } from "./Status";
 
 class AppStore {
-  bookmarkService: BookmarkService = new BookmarkService();
-  dataStatus: StatusType = Status.none;
-  bookmarkFormStore: BookmarkFormStore = new BookmarkFormStore();
-  groupFormStore: GroupFormStore = new GroupFormStore();
+  bookmarkModalStore: BookmarkModalStore = new BookmarkModalStore();
+  groupModalStore: GroupModalStore = new GroupModalStore();
   deleteStore: DeleteStore = new DeleteStore();
 
-  @observable groups: Array<Group> = [];
+  bookmarkService: BookmarkService = new BookmarkService();
+  dataStatus: StatusType = Status.none;
+
   @observable bookmarks: Array<Bookmark> = [];
-  @observable isConfirmModalShown: boolean = false;
+  @observable groups: Array<Group> = [];
 
   constructor() {
-    this.bookmarkFormStore.appStore = this;
-    this.groupFormStore.appStore = this;
+    this.bookmarkModalStore.appStore = this;
+    this.groupModalStore.appStore = this;
     this.deleteStore.appStore = this;
   }
 
@@ -48,11 +48,13 @@ class AppStore {
 
     const bookmarksData = await this.bookmarkService.getAll(BookmarkBody);
     const groupsData = await this.bookmarkService.getAll(GroupBody);
-    runInAction(() => {
-      this.bookmarks = bookmarksData.map((data) => this.createBookmark(data));
-      this.groups = groupsData.map((data) => this.createGroup(data));
-      this.dataStatus = Status.done;
-    });
+    this.setData(bookmarksData, groupsData);
+  }
+
+  @action setData(bookmarksData: Array<Bookmark>, groupsData: Array<Group>) {
+    this.bookmarks = bookmarksData.map((data) => this.createBookmark(data));
+    this.groups = groupsData.map((data) => this.createGroup(data));
+    this.dataStatus = Status.done;
   }
 
   createBookmark(data: Object): Bookmark {
@@ -72,7 +74,7 @@ class AppStore {
   findBookmark(id: string): Bookmark {
     const result = this.bookmarks.find((bookmark) => bookmark.id === id);
     if (!result) {
-      throw Error("bookmarkId not found. id: " + id);
+      throw Error("bookmark id not found. id: " + id);
     }
 
     return result;
@@ -81,7 +83,7 @@ class AppStore {
   findGroup(id: string): Group {
     const group = this.groups.find((group) => group.id === id);
     if (!group) {
-      throw Error("group id not found." + id);
+      throw Error("group id not found. id: " + id);
     }
 
     return group;
