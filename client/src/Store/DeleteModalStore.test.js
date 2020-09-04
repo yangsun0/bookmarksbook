@@ -5,16 +5,15 @@ import DeleteModalStore from "./DeleteModalStore";
 import Group from "./Group";
 
 jest.mock("../Service/BookmarkService");
-const testContext = {};
+let store;
 
 beforeEach(() => {
   BookmarkService.mockClear();
   mockDelete.mockClear();
   const appStore = new AppStore();
   appStore.fetchData();
-  const store = new DeleteModalStore();
+  store = new DeleteModalStore();
   store.appStore = appStore;
-  testContext.store = store;
 });
 
 test("initial state", () => {
@@ -27,7 +26,6 @@ test("initial state", () => {
 });
 
 test("delete bookmark", async () => {
-  const store = testContext.store;
   const bookmarkCount = store.appStore.bookmarks.length;
   store.open(Bookmark, "1");
   await store.delete();
@@ -35,7 +33,6 @@ test("delete bookmark", async () => {
 });
 
 test("delete group", async () => {
-  const store = testContext.store;
   const count = store.appStore.groups.length;
   store.open(Group, "1");
   await store.delete();

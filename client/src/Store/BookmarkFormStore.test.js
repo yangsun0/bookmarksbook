@@ -7,7 +7,7 @@ import BookmarkFormStore from "./BookmarkFormStore";
 
 jest.mock("../Service/BookmarkService");
 
-const testContext = {};
+let store;
 
 beforeEach(() => {
   BookmarkService.mockClear();
@@ -15,9 +15,8 @@ beforeEach(() => {
   mockUpdate.mockClear();
   const appStore = new AppStore();
   appStore.fetchData();
-  const bookmarkFormStore = new BookmarkFormStore();
-  bookmarkFormStore.appStore = appStore;
-  testContext.store = bookmarkFormStore;
+  store = new BookmarkFormStore();
+  store.appStore = appStore;
 });
 
 test("initial state", () => {
@@ -30,7 +29,6 @@ test("initial state", () => {
 });
 
 test("new bookmark", async () => {
-  const store = testContext.store;
   const bookmarkCount = store.appStore.bookmarks.length;
   store.init();
   const form = store.toBookmarkFormValues();
@@ -41,7 +39,6 @@ test("new bookmark", async () => {
 });
 
 test("update bookmark", async () => {
-  const store = testContext.store;
   const bookmarkCount = store.appStore.bookmarks.length;
   store.init(store.appStore.bookmarks[0].id);
   const form = store.toBookmarkFormValues();
@@ -51,7 +48,6 @@ test("update bookmark", async () => {
 });
 
 test("new bookmark without group", async () => {
-  const store = testContext.store;
   store.appStore.setData([], []);
   store.init();
   const form = store.toBookmarkFormValues();

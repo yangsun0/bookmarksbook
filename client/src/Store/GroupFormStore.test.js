@@ -7,7 +7,7 @@ import GroupFormStore from "./GroupFormStore";
 
 jest.mock("../Service/BookmarkService");
 
-const testContext = {};
+let store;
 
 beforeEach(() => {
   BookmarkService.mockClear();
@@ -15,9 +15,8 @@ beforeEach(() => {
   mockUpdate.mockClear();
   const appStore = new AppStore();
   appStore.fetchData();
-  const groupFormStore = new GroupFormStore();
-  groupFormStore.appStore = appStore;
-  testContext.store = groupFormStore;
+  store = new GroupFormStore();
+  store.appStore = appStore;
 });
 
 test("initial state", () => {
@@ -30,7 +29,6 @@ test("initial state", () => {
 });
 
 test("new group", async () => {
-  const store = testContext.store;
   const groupCount = store.appStore.groups.length;
   store.init();
   const form = store.toGroupFormValues();
@@ -41,7 +39,6 @@ test("new group", async () => {
 });
 
 test("update group", async () => {
-  const store = testContext.store;
   const groupCount = store.appStore.groups.length;
   store.init(store.appStore.groups[0].id);
   const form = store.toGroupFormValues();
