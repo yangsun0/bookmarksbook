@@ -23,8 +23,8 @@
   "dialog": {
     "bookmark": "Bookmark",
     "group": "Group",
-    "confirm": "Confirm",
-    "confirmMessage": "Do you want to delete the bookmark?"
+    "deleteTitle": "Delete $t(dialog.{{target}})",
+    "deleteMessage": "Do you want to delete {{name}}?"
   },
   "form": {
     "name": "Name",
@@ -34,6 +34,8 @@
     "column": "Column",
     "nameTextbox": "Enter the bookmark name",
     "urlTextbox": "Enter the URL",
-    "groupTextbox": "Enter the bookmark group name"
+    "groupTextbox": "Enter the bookmark group name",
+    "left": "left",
+    "right": "right"
   }
 }

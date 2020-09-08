@@ -1,44 +1,28 @@
-import { computed, decorate, observable } from "mobx";
+import { computed, observable } from "mobx";
 import "mobx-react-lite/batchingForReactDom";
 import AppStore from "./AppStore";
+import { transferable } from "./dataTransfer";
 import Group from "./Group";
 
-type BookmarkBody = {
-  name: string,
-  url: string,
-  groupId: string,
-  order: number,
-};
-
-class Bookmark extends Object {
+class Bookmark {
   id: string = "";
-  name: string = "";
-  url: string = "";
-  order: number = 1;
-  groupId: string = "";
   store: AppStore;
+  @observable @transferable name: string = "";
+  @observable @transferable url: string = "";
+  @observable @transferable order: number = 1;
+  @observable @transferable groupId: string = "";
 
-  get iconUrl(): string {
+  @computed get iconUrl(): string {
     return this.url + "/favicon.ico";
   }
 
-  get group(): Group | null {
+  @computed get group(): Group | null {
     return this.store.groups.find((group) => group.id === this.groupId) ?? null;
   }
 
-  static get props(): string[] {
-    return ["name", "url", "groupId", "order"];
+  static compareByOrder(left: Bookmark, right: Bookmark) {
+    return left.order - right.order;
   }
 }
 
-decorate(Bookmark, {
-  id: observable,
-  name: observable,
-  url: observable,
-  order: observable,
-  iconUrl: computed,
-  group: computed,
-});
-
 export default Bookmark;
-export type { BookmarkBody };

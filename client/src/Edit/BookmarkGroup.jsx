@@ -2,9 +2,12 @@ import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Button, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import type { Bookmark, Group } from "../Store";
-import useStore from "../Store/useStore";
-
+import { Bookmark, Group } from "../Store";
+import {
+  useBookmarkModalStore,
+  useDeleteModalStore,
+  useGroupModalStore,
+} from "../Store/useStore";
 type Props = {
   group: Group,
 };
@@ -16,18 +19,19 @@ type BookmarkViewProps = {
 function BookmarkView(props: BookmarkViewProps) {
   const { bookmark } = props;
   const { t } = useTranslation();
-  const store = useStore();
+  const bookmarkModalStore = useBookmarkModalStore();
+  const deleteModalStore = useDeleteModalStore();
 
   const openBookmarkModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    store.openBookmarkModal(event.currentTarget.dataset.id);
+    bookmarkModalStore.open(event.currentTarget.dataset.id);
   };
 
-  const openConfirmModal = () => {
-    store.openConfirmModal();
+  const openDeleteModal = (event: SyntheticEvent<HTMLButtonElement>) => {
+    deleteModalStore.open(Bookmark, event.currentTarget.dataset.id);
   };
 
   return useObserver(() => (
-    <ListGroup.Item key={bookmark.id}>
+    <ListGroup.Item>
       <Row>
         <Col>
           <img
@@ -46,7 +50,12 @@ function BookmarkView(props: BookmarkViewProps) {
           >
             {t("button.edit")}
           </Button>
-          <Button variant="link" size="sm" onClick={openConfirmModal}>
+          <Button
+            variant="link"
+            size="sm"
+            onClick={openDeleteModal}
+            data-id={bookmark.id}
+          >
             {t("button.delete")}
           </Button>
         </Col>
@@ -63,13 +72,15 @@ function BookmarkView(props: BookmarkViewProps) {
 function BookmarkGroup(props: Props) {
   const { group } = props;
   const { t } = useTranslation();
-  const store = useStore();
+  const groupModalStore = useGroupModalStore();
+  const deleteModalStore = useDeleteModalStore();
 
   const openGroupModal = (event: SyntheticEvent<HTMLButtonElement>) => {
-    store.openGroupModal(event.currentTarget.dataset.id);
+    groupModalStore.open(event.currentTarget.dataset.id);
   };
-  const openConfirmModal = () => {
-    store.openConfirmModal();
+
+  const openDeleteModal = (event: SyntheticEvent<HTMLButtonElement>) => {
+    deleteModalStore.open(Group, event.currentTarget.dataset.id);
   };
 
   return useObserver(() => (
@@ -88,7 +99,12 @@ function BookmarkGroup(props: Props) {
             >
               {t("button.edit")}
             </Button>
-            <Button variant="link" size="sm" onClick={openConfirmModal}>
+            <Button
+              variant="link"
+              size="sm"
+              onClick={openDeleteModal}
+              data-id={group.id}
+            >
               {t("button.delete")}
             </Button>
           </Col>

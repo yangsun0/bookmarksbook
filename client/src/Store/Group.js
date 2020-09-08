@@ -1,37 +1,24 @@
-import { computed, decorate, observable } from "mobx";
+import { computed, observable } from "mobx";
 import AppStore from "./AppStore";
 import Bookmark from "./Bookmark";
-
-type GroupBody = {
-  name: string,
-  column: number,
-  order: number,
-};
+import { transferable } from "./dataTransfer";
 
 class Group {
   id: string = "";
-  name: string = "";
-  column: number = 1;
-  order: number = 1;
   store: AppStore;
+  @observable @transferable name: string = "";
+  @observable @transferable column: number = 1;
+  @observable @transferable order: number = 1;
 
-  get bookmarks(): Array<Bookmark> {
-    return this.store.bookmarks.filter(
-      (bookmark) => bookmark.groupId === this.id
-    );
+  @computed get bookmarks(): Array<Bookmark> {
+    return this.store.bookmarks
+      .filter((bookmark) => bookmark.groupId === this.id)
+      .sort(Bookmark.compareByOrder);
   }
 
-  static get props(): string[] {
-    return ["name", "column", "order"];
+  static compareByOrder(left: Group, right: Group) {
+    return left.order - right.order;
   }
 }
 
-decorate(Group, {
-  id: observable,
-  name: observable,
-  column: observable,
-  bookmarks: computed,
-});
-
 export default Group;
-export type { GroupBody };

@@ -1,146 +1,91 @@
-import { action, computed, observable, runInAction } from "mobx";
+import { action, computed, observable } from "mobx";
 import "mobx-react-lite/batchingForReactDom";
 import BookmarkService from "../Service/BookmarkService";
+import BookmarkBody from "../Service/Data/BookmarkBody";
+import GroupBody from "../Service/Data/GroupBody";
 import Bookmark from "./Bookmark";
-import type { BookmarkBody } from "./Bookmark";
+import BookmarkModalStore from "./BookmarkModalStore";
+import { entityToStore } from "./dataTransfer";
+import DeleteStore from "./DeleteModalStore";
 import Group from "./Group";
-import type { GroupBody } from "./Group";
-
-const statusValues = {
-  none: "none",
-  done: "done",
-  error: "error",
-};
-
-type Status = $Keys<typeof statusValues>;
-
-function copyValues(source: Object, target: Object, props: string[]) {
-  props.forEach((prop) => (target[prop] = source[prop]));
-}
+import GroupModalStore from "./GroupModalStore";
+import Status from "./Status";
+import type { StatusType } from "./Status";
 
 class AppStore {
-  bookmarkService: BookmarkService = new BookmarkService();
-  dataStatus: Status = statusValues.none;
+  bookmarkModalStore: BookmarkModalStore = new BookmarkModalStore();
+  groupModalStore: GroupModalStore = new GroupModalStore();
+  deleteStore: DeleteStore = new DeleteStore();
 
-  @observable groups: Array<Group> = [];
+  bookmarkService: BookmarkService = new BookmarkService();
+  dataStatus: StatusType = Status.none;
+
   @observable bookmarks: Array<Bookmark> = [];
-  @observable isBookmarkModalShown: boolean = false;
-  @observable currentBookmarkId: string = "";
-  @observable isGroupModalShown: boolean = false;
-  @observable currentGroupId: string = "";
-  @observable isConfirmModalShown: boolean = false;
+  @observable groups: Array<Group> = [];
+
+  constructor() {
+    this.bookmarkModalStore.appStore = this;
+    this.groupModalStore.appStore = this;
+    this.deleteStore.appStore = this;
+  }
 
   @computed get leftGroups(): Array<Group> {
-    return this.groups.filter((group) => group.column === 1);
+    return this.groups
+      .filter((group) => group.column === 1)
+      .sort(Group.compareByOrder);
   }
 
   @computed get rightGroups(): Array<Group> {
-    return this.groups.filter((group) => group.column === 2);
-  }
-
-  @computed get currentBookmark(): Bookmark {
-    let result = this.bookmarks.find((b) => b.id === this.currentBookmarkId);
-    if (!result) {
-      result = new Bookmark();
-      // todo
-      result.groupId = this.groups[0].id;
-      result.store = this;
-    }
-
-    return result;
-  }
-
-  @computed get currentGroup(): Group {
-    let result = this.groups.find((g) => g.id === this.currentGroupId);
-    if (!result) {
-      result = new Group();
-      result.store = this;
-    }
-
-    return result;
+    return this.groups
+      .filter((group) => group.column === 2)
+      .sort(Group.compareByOrder);
   }
 
   @action async fetchData() {
-    if (this.dataStatus === statusValues.done) {
+    if (this.dataStatus === Status.done || this.dataStatus === Status.pending) {
       return;
     }
 
-    const bookmarkEntities = await this.bookmarkService.getBookmarks();
-    const groupsEntities = await this.bookmarkService.getGroups();
-    runInAction(() => {
-      this.bookmarks = bookmarkEntities.map((entity) =>
-        this.createBookmark(entity)
-      );
-      this.groups = groupsEntities.map((entity) => this.createGroup(entity));
-      this.dataStatus = statusValues.done;
-    });
+    const bookmarksData = await this.bookmarkService.getAll(BookmarkBody);
+    const groupsData = await this.bookmarkService.getAll(GroupBody);
+    this.setData(bookmarksData, groupsData);
   }
 
-  @action openBookmarkModal(id?: string) {
-    this.currentBookmarkId = id ? id : "";
-    this.isBookmarkModalShown = true;
-  }
-
-  @action closeBookmarkModal() {
-    this.currentBookmarkId = "";
-    this.isBookmarkModalShown = false;
-  }
-
-  @action openGroupModal(id?: string) {
-    this.currentGroupId = id ? id : "";
-    this.isGroupModalShown = true;
-  }
-
-  @action closeGroupModal() {
-    this.currentGroupId = "";
-    this.isGroupModalShown = false;
-  }
-
-  @action openConfirmModal() {
-    this.isConfirmModalShown = true;
-  }
-
-  @action closeConfirmModal() {
-    this.isConfirmModalShown = false;
-  }
-
-  @action saveBookmark(newBookmark: BookmarkBody) {
-    const currentBookmark = this.currentBookmark;
-    copyValues(newBookmark, currentBookmark, Bookmark.props);
-    const data = {};
-    copyValues(currentBookmark, data, Bookmark.props);
-    if (this.currentBookmarkId) {
-      this.bookmarkService.updateBookmark(this.currentBookmarkId, data);
-    } else {
-      this.bookmarkService.newBookmark(newBookmark);
-    }
-  }
-
-  @action saveGroup(newGroup: GroupBody) {
-    const currentGroup = this.currentGroup;
-    copyValues(newGroup, currentGroup, Bookmark.props);
-    const data = {};
-    copyValues(currentGroup, data, Group.props);
-    if (this.currentGroupId) {
-      this.bookmarkService.updateGroup(this.currentGroupId, data);
-    } else {
-      this.bookmarkService.newGroup(newGroup);
-    }
+  @action setData(bookmarksData: Array<Bookmark>, groupsData: Array<Group>) {
+    this.bookmarks = bookmarksData.map((data) => this.createBookmark(data));
+    this.groups = groupsData.map((data) => this.createGroup(data));
+    this.dataStatus = Status.done;
   }
 
   createBookmark(data: Object): Bookmark {
     const bookmark = new Bookmark();
-    bookmark.id = data.id;
-    copyValues(data, bookmark, Bookmark.props);
+    entityToStore(data, bookmark);
     bookmark.store = this;
     return bookmark;
   }
 
   createGroup(data: Object): Group {
     const group = new Group();
-    group.id = data.id;
-    copyValues(data, group, Group.props);
+    entityToStore(data, group);
     group.store = this;
+    return group;
+  }
+
+  findBookmark(id: string): Bookmark {
+    const result = this.bookmarks.find((bookmark) => bookmark.id === id);
+    if (!result) {
+      throw Error("bookmark id not found. id: " + id);
+    }
+
+    return result;
+  }
+
+  findGroup(id: string): Group {
+    const group = this.groups.find((group) => group.id === id);
+    if (!group) {
+      throw Error("group id not found. id: " + id);
+    }
+
     return group;
   }
 }

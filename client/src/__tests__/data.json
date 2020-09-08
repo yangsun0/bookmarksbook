@@ -1,0 +1,59 @@
+{
+  "bookmarks": [
+    {
+      "name": "Google",
+      "url": "https://www.google.com",
+      "order": 1,
+      "groupId": "1",
+      "id": "1"
+    },
+    {
+      "id": "2",
+      "name": "Youtube",
+      "url": "https://www.youtube.com",
+      "groupId": "1",
+      "order": 2
+    },
+    {
+      "id": "3",
+      "name": "Facebook",
+      "url": "https://www.facebook.com",
+      "groupId": "2",
+      "order": 1
+    },
+    {
+      "id": "4",
+      "name": "Twitter",
+      "url": "https://www.twitter.com",
+      "groupId": "2",
+      "order": 2
+    },
+    {
+      "name": "West Elm",
+      "url": "https://www.westelm.com/",
+      "order": 1,
+      "groupId": "3",
+      "id": "vV2kuDe"
+    }
+  ],
+  "groups": [
+    {
+      "name": "Favorite",
+      "column": 1,
+      "order": 1,
+      "id": "1"
+    },
+    {
+      "name": "Social",
+      "column": 2,
+      "order": 1,
+      "id": "2"
+    },
+    {
+      "id": "3",
+      "name": "News",
+      "column": 2,
+      "order": 2
+    }
+  ]
+}

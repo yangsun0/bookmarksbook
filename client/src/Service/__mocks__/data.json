@@ -1,11 +1,11 @@
 {
   "bookmarks": [
     {
-      "id": "1",
-      "name": "Google 2",
+      "name": "Google",
       "url": "https://www.google.com",
+      "order": 1,
       "groupId": "1",
-      "order": 1
+      "id": "1"
     },
     {
       "id": "2",
@@ -37,10 +37,22 @@
       "id": "1"
     },
     {
-      "id": "2",
       "name": "Social",
       "column": 2,
-      "order": 1
+      "order": 1,
+      "id": "2"
+    },
+    {
+      "id": "3",
+      "name": "News",
+      "column": 2,
+      "order": 2
+    },
+    {
+      "id": "4",
+      "name": "Shopping",
+      "column": 1,
+      "order": 2
     }
   ]
 }

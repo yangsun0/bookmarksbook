@@ -5,9 +5,7 @@ import { Router } from "react-router";
 import { MemoryRouter } from "react-router-dom";
 import App from "./App";
 
-jest.mock("react-i18next", () => ({
-  useTranslation: () => ({ t: (key) => key }),
-}));
+jest.mock("react-i18next");
 
 test("renders App", () => {
   render(
