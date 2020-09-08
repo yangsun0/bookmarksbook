@@ -4,12 +4,7 @@ import BookmarkBody from "../Service/Data/BookmarkBody";
 import GroupBody from "../Service/Data/GroupBody";
 import AppStore from "./AppStore";
 import Bookmark from "./Bookmark";
-import {
-  entityToStore,
-  formToStore,
-  storeToBody,
-  storeToForm,
-} from "./dataTransfer";
+import { formToStore, storeToBody, storeToForm } from "./dataTransfer";
 import Group from "./Group";
 
 interface IBookmarkFormValues {
@@ -142,7 +137,7 @@ class BookmarkFormStore {
     storeToBody(this.defaultGroup, groupBody);
     const newGroup = await this.appStore.bookmarkService.new(groupBody);
     runInAction(() => {
-      entityToStore(newGroup, this.defaultGroup);
+      this.defaultGroup.id = newGroup.id;
     });
   }
 

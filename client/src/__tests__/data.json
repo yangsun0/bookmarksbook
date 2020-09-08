@@ -4,7 +4,7 @@
       "name": "Google",
       "url": "https://www.google.com",
       "order": 1,
-      "groupId": "3",
+      "groupId": "1",
       "id": "1"
     },
     {
@@ -27,6 +27,13 @@
       "url": "https://www.twitter.com",
       "groupId": "2",
       "order": 2
+    },
+    {
+      "name": "West Elm",
+      "url": "https://www.westelm.com/",
+      "order": 1,
+      "groupId": "3",
+      "id": "vV2kuDe"
     }
   ],
   "groups": [

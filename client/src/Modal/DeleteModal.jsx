@@ -2,7 +2,7 @@ import { useObserver } from "mobx-react-lite";
 import React from "react";
 import { Button, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useDeleteModalStore } from "../Store//useStore";
+import { useDeleteModalStore } from "../Store/useStore";
 
 function DeleteModal() {
   const { t } = useTranslation();

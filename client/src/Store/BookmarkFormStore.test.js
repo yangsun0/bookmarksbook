@@ -58,4 +58,5 @@ test("new bookmark without group", async () => {
   expect(store.appStore.bookmarks[0].id).toBeTruthy();
   expect(store.appStore.bookmarks[0].groupId).toBeTruthy();
   expect(store.appStore.groups[0].id).toBeTruthy();
+  expect(store.appStore.groups[0].name).toBeTruthy();
 });

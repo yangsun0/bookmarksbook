@@ -1,113 +1,163 @@
 import { fireEvent, render, screen, wait } from "@testing-library/react";
 import React from "react";
-import { StoreContext } from "../Store";
-import { setupStoreContext } from "../test/storeHelper";
-import BookmarkGroupForm from "./GroupForm";
+import BookmarkService from "../Service/BookmarkService";
+import sampleData from "../Service/__mocks__/data.json";
+import { AppStore, StoreContext } from "../Store";
+import GroupForm from "./GroupForm";
 
-jest.mock("react-i18next", () => ({
-  useTranslation: () => ({ t: (key) => key }),
-}));
+jest.mock("react-i18next");
+jest.mock("../Service/BookmarkService");
+const mockClose = jest.fn();
 
-let testContext = {};
+let appStore;
+let groupModalStore;
 
 beforeEach(() => {
-  const storeContext = setupStoreContext();
-  testContext.store = storeContext.store;
-  testContext.saveGroup = storeContext.saveGroup;
-  const onClose = jest.fn();
-  testContext.onClose = onClose;
+  BookmarkService.mockClear();
+  mockClose.mockClear();
+  appStore = new AppStore();
+  appStore.setData(sampleData.bookmarks, sampleData.groups);
+  groupModalStore = appStore.groupModalStore;
 });
 
 test("new group with correct input", async () => {
+  groupModalStore.open();
   render(
-    <StoreContext.Provider value={testContext.store}>
-      <BookmarkGroupForm onClose={testContext.onClose} />
+    <StoreContext.Provider value={appStore}>
+      <GroupForm onClose={mockClose} />
     </StoreContext.Provider>
   );
 
+  const groupCount = appStore.groups.length;
   const group = {
-    id: "",
     name: "group name",
     column: 2,
-    order: 2,
+    order: 3,
   };
+  const nameTextbox = screen.getByRole("textbox", { name: "form.name" });
+  expect(nameTextbox).toBeInTheDocument();
+  const leftRadio = screen.getByRole("radio", { name: "form.left" });
+  expect(leftRadio).toBeInTheDocument();
+  const rightRadio = screen.getByRole("radio", { name: "form.right" });
+  expect(rightRadio).toBeInTheDocument();
+  const orderCombobox = screen.getByRole("combobox", { name: "form.order" });
+  expect(orderCombobox).toBeInTheDocument();
+  const saveButton = screen.getByRole("button", { name: "button.save" });
+  expect(saveButton).toBeInTheDocument();
 
-  expect(screen.getByRole("alert", { name: "form.name" })).toBeEmpty();
-
   await wait(() => {
-    fireEvent.change(screen.getByRole("textbox", { name: "form.name" }), {
-      target: { value: group.name },
-    });
+    fireEvent.change(nameTextbox, { target: { value: group.name } });
   });
   await wait(() => {
-    fireEvent.click(screen.getByRole("radio", { name: "right" }));
+    fireEvent.click(rightRadio);
   });
   await wait(() => {
-    fireEvent.change(screen.getByRole("combobox", { name: "form.order" }), {
-      target: { value: group.order },
-    });
+    fireEvent.change(orderCombobox, { target: { value: group.order } });
   });
   await wait(() => {
-    fireEvent.click(screen.getByRole("button", { name: "button.save" }));
+    fireEvent.click(saveButton);
   });
 
-  expect(testContext.onClose).toHaveBeenCalledTimes(1);
+  expect(appStore.groups).toHaveLength(groupCount + 1);
+  const newGroup = appStore.groups[groupCount];
+  expect(newGroup.name).toBe(group.name);
+  expect(newGroup.column).toBe(group.column);
+  expect(newGroup.order).toBe(group.order);
+  expect(mockClose).toHaveBeenCalledTimes(1);
 });
 
 test("new group with incorrect input", async () => {
+  groupModalStore.open();
   render(
-    <StoreContext.Provider value={testContext.store}>
-      <BookmarkGroupForm onClose={testContext.onClose} />
+    <StoreContext.Provider value={appStore}>
+      <GroupForm onClose={mockClose} />
     </StoreContext.Provider>
   );
 
   const nameTextbox = screen.getByRole("textbox", { name: "form.name" });
+  expect(nameTextbox).toBeInTheDocument();
   const nameError = screen.getByRole("alert", { name: "form.name" });
+  expect(nameError).toBeInTheDocument();
   const saveButton = screen.getByRole("button", { name: "button.save" });
+  expect(saveButton).toBeInTheDocument();
 
+  expect(nameError).toBeEmpty();
+  await wait(() => {
+    fireEvent.click(saveButton);
+  });
+  expect(nameError).not.toBeEmpty();
+  expect(mockClose).not.toHaveBeenCalled();
+
+  await wait(() => {
+    fireEvent.change(nameTextbox, { target: { value: "a".repeat(51) } });
+  });
+  expect(nameError).not.toBeEmpty();
+
+  await wait(() => {
+    fireEvent.change(nameTextbox, { target: { value: "a".repeat(50) } });
+  });
   expect(nameError).toBeEmpty();
 
   await wait(() => {
     fireEvent.click(saveButton);
   });
-  expect(testContext.onClose).toHaveBeenCalledTimes(0);
-  expect(nameError).not.toBeEmpty();
-
-  await wait(() => {
-    fireEvent.change(nameTextbox, {
-      target: { value: "a".repeat(51) },
-    });
-  });
-  expect(nameError).not.toBeEmpty();
-
-  await wait(() => {
-    fireEvent.change(nameTextbox, {
-      target: { value: "a".repeat(50) },
-    });
-  });
-  expect(nameError).toBeEmpty();
-
-  await wait(() => {
-    fireEvent.click(saveButton);
-  });
-  expect(testContext.onClose).toHaveBeenCalledTimes(1);
+  expect(mockClose).toHaveBeenCalledTimes(1);
 });
 
-test("edit group", () => {
-  const group = testContext.store.groups[0];
-  testContext.store.currentGroupId = group.id;
+test("edit group", async () => {
+  const group = appStore.groups[0];
+  groupModalStore.open(group.id);
   render(
-    <StoreContext.Provider value={testContext.store}>
-      <BookmarkGroupForm onClose={testContext.onClose} />
+    <StoreContext.Provider value={appStore}>
+      <GroupForm onClose={mockClose} />
     </StoreContext.Provider>
   );
-  expect(screen.getByRole("textbox", { name: "form.name" }).value).toBe(
-    group.name
-  );
+
+  const newGroup = {
+    name: group.name + " new",
+    column: group.column === 1 ? 2 : 1,
+    order: group.order + 1,
+  };
+
+  const nameTextbox = screen.getByRole("textbox", { name: "form.name" });
+  expect(nameTextbox).toBeInTheDocument();
+  const nameError = screen.getByRole("alert", { name: "form.name" });
+  expect(nameError).toBeInTheDocument();
+  const saveButton = screen.getByRole("button", { name: "button.save" });
+  expect(saveButton).toBeInTheDocument();
+  const leftRadio = screen.getByRole("radio", { name: "form.left" });
+  expect(leftRadio).toBeInTheDocument();
+  const rightRadio = screen.getByRole("radio", { name: "form.right" });
+  expect(rightRadio).toBeInTheDocument();
+  const orderCombobox = screen.getByRole("combobox", { name: "form.order" });
+  expect(orderCombobox).toBeInTheDocument();
+
+  expect(nameTextbox.value).toBe(group.name);
+  let columnRadio = group.column === 1 ? leftRadio : rightRadio;
+  expect(columnRadio.checked).toBeTruthy();
   expect(
-    screen
-      .getAllByRole("radio")
-      .find((e) => e.value === group.column.toString()).checked
+    screen.getByRole("option", { name: group.order.toString() }).selected
   ).toBeTruthy();
-  expect(screen.getByRole("option", { name: "1" }).selected).toBeTruthy();
+
+  await wait(() => {
+    fireEvent.change(nameTextbox, { target: { value: newGroup.name } });
+  });
+
+  columnRadio = newGroup.column === 1 ? leftRadio : rightRadio;
+  await wait(() => {
+    fireEvent.click(columnRadio);
+  });
+
+  await wait(() => {
+    fireEvent.change(orderCombobox, { target: { value: newGroup.order } });
+  });
+
+  await wait(() => {
+    fireEvent.click(saveButton);
+  });
+
+  expect(group.name).toBe(newGroup.name);
+  expect(group.column).toBe(newGroup.column);
+  expect(group.order).toBe(newGroup.order);
+  expect(mockClose).toHaveBeenCalledTimes(1);
 });

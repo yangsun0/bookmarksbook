@@ -4,7 +4,7 @@
       "name": "Google",
       "url": "https://www.google.com",
       "order": 1,
-      "groupId": "3",
+      "groupId": "1",
       "id": "1"
     },
     {
@@ -46,6 +46,12 @@
       "id": "3",
       "name": "News",
       "column": 2,
+      "order": 2
+    },
+    {
+      "id": "4",
+      "name": "Shopping",
+      "column": 1,
       "order": 2
     }
   ]

@@ -1,22 +1,20 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import React from "react";
 import { MemoryRouter } from "react-router-dom";
+import sampleData from "../Service/__mocks__/data.json";
 import { StoreContext } from "../Store";
-import { setupStoreContext } from "../test/storeHelper";
+import AppStore from "../Store/AppStore";
 import HomePage from "./HomePage";
 
-jest.mock("react-i18next", () => ({
-  useTranslation: () => ({ t: (key) => key }),
-}));
+jest.mock("react-i18next");
 
-let testContext = {};
+let store;
 beforeEach(() => {
-  const storeContext = setupStoreContext();
-  testContext.store = storeContext.store;
-  testContext.fetchMock = storeContext.fetchMock;
+  store = new AppStore();
+  store.setData(sampleData.bookmarks, sampleData.groups);
   render(
     <MemoryRouter>
-      <StoreContext.Provider value={testContext.store}>
+      <StoreContext.Provider value={store}>
         <HomePage />
       </StoreContext.Provider>
     </MemoryRouter>
@@ -28,16 +26,15 @@ test("renders home page", () => {
   expect(
     screen.getByRole("region", { name: "bookmark groups" })
   ).toBeInTheDocument();
-  expect(testContext.fetchMock).toHaveBeenCalledTimes(1);
-  testContext.store.groups.forEach((group) => {
+  sampleData.groups.forEach((group) => {
     expect(
       screen.getByRole("heading", { name: group.name })
     ).toBeInTheDocument();
-    group.bookmarks.forEach((bookmark) => {
-      expect(
-        screen.getByRole("link", { name: "icon " + bookmark.name })
-      ).toBeInTheDocument();
-    });
+  });
+  sampleData.bookmarks.forEach((bookmark) => {
+    expect(
+      screen.getByRole("link", { name: "icon " + bookmark.name })
+    ).toBeInTheDocument();
   });
 });
 
