@@ -1,15 +1,44 @@
-import axios from "axios";
 import type { Axios } from "axios";
+import axios from "axios";
+import Config from "../Config";
 import PathResolver from "./PathResolver";
 
 class BookmarkService {
   client: Axios;
   pathResolver: PathResolver = new PathResolver();
+  isSignedIn: boolean = false;
 
   constructor() {
     this.client = axios.create({
-      baseURL: "http://localhost:3000",
+      baseURL: Config.baseUrl,
     });
+  }
+
+  async signIn(idToken: string) {
+    const path = "/signin";
+    const data = {
+      token: idToken,
+    };
+    const response = await this.client.post(path, data);
+    const responseData = response.data;
+    const accessToken = responseData["access_token"];
+    if (accessToken) {
+      const token = "Bearer " + accessToken;
+      this.client = axios.create({
+        baseURL: Config.baseUrl,
+        headers: {
+          Authorization: token,
+        },
+      });
+      this.isSignedIn = true;
+    }
+  }
+
+  signOut() {
+    this.client = axios.create({
+      baseURL: Config.baseUrl,
+    });
+    this.isSignedIn = false;
   }
 
   async new(data: Object): Promise<Object> {

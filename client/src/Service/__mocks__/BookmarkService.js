@@ -2,6 +2,8 @@ import BookmarkBody from "../Data/BookmarkBody";
 import GroupBody from "../Data/GroupBody";
 import sampleData from "./data.json";
 
+export const signInMock = jest.fn();
+export const signOutMock = jest.fn();
 export const mockGetAll = jest.fn().mockImplementation((cls) => {
   if (cls === BookmarkBody) {
     return sampleData.bookmarks;
@@ -21,6 +23,8 @@ export const mockDelete = jest.fn();
 
 const mock = jest.fn().mockImplementation(() => {
   return {
+    signIn: signInMock,
+    signOut: signOutMock,
     getAll: mockGetAll,
     new: mockNew,
     update: mockUpdate,

@@ -11,6 +11,7 @@ import { AppStore, StoreContext } from "./Store";
 mobx.configure({ enforceActions: "observed" });
 const root = document.getElementById("root");
 const appStore = new AppStore();
+appStore.signInStore.authenticate();
 
 if (root != null) {
   ReactDOM.render(

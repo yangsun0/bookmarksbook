@@ -2,16 +2,21 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import EditPage from "../Edit";
 import HomePage from "../Home";
+import Loading from "./Loading";
 
 function Main() {
   return (
     <main className="main">
       <Switch>
         <Route path="/edit">
-          <EditPage />
+          <Loading>
+            <EditPage />
+          </Loading>
         </Route>
         <Route path="/">
-          <HomePage />
+          <Loading>
+            <HomePage />
+          </Loading>
         </Route>
       </Switch>
     </main>

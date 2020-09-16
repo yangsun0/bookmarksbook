@@ -9,17 +9,20 @@ import { entityToStore } from "./dataTransfer";
 import DeleteStore from "./DeleteModalStore";
 import Group from "./Group";
 import GroupModalStore from "./GroupModalStore";
-import Status from "./Status";
+import SignInStore from "./SignInStore";
 import type { StatusType } from "./Status";
+import Status from "./Status";
 
 class AppStore {
   bookmarkModalStore: BookmarkModalStore = new BookmarkModalStore();
   groupModalStore: GroupModalStore = new GroupModalStore();
   deleteStore: DeleteStore = new DeleteStore();
+  signInStore: SignInStore = new SignInStore();
 
   bookmarkService: BookmarkService = new BookmarkService();
   dataStatus: StatusType = Status.none;
 
+  @observable isDataFetched = false;
   @observable bookmarks: Array<Bookmark> = [];
   @observable groups: Array<Group> = [];
 
@@ -27,6 +30,7 @@ class AppStore {
     this.bookmarkModalStore.appStore = this;
     this.groupModalStore.appStore = this;
     this.deleteStore.appStore = this;
+    this.signInStore.appStore = this;
   }
 
   @computed get leftGroups(): Array<Group> {
@@ -42,7 +46,7 @@ class AppStore {
   }
 
   @action async fetchData() {
-    if (this.dataStatus === Status.done || this.dataStatus === Status.pending) {
+    if (this.dataStatus === Status.pending) {
       return;
     }
 
@@ -55,6 +59,7 @@ class AppStore {
     this.bookmarks = bookmarksData.map((data) => this.createBookmark(data));
     this.groups = groupsData.map((data) => this.createGroup(data));
     this.dataStatus = Status.done;
+    this.isDataFetched = true;
   }
 
   createBookmark(data: Object): Bookmark {
