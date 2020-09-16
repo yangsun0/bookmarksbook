@@ -1,12 +1,14 @@
 {
   "app": {
-    "brand": "Bookmark",
-    "copyright": "@ 2020 Copyright: Bookmark - LcodeJ"
+    "brand": "MyBookmarkz",
+    "copyright": "@ 2020 Copyright: MyBookmarkz - LcodeJ",
+    "loading": "Loading..."
   },
   "menu": {
     "default": "Default",
     "new": "New Profile",
-    "signIn": "Sign-In"
+    "signIn": "Sign in",
+    "signOut": "Sign out"
   },
   "button": {
     "newTab": "Open in new tab",
@@ -24,7 +26,9 @@
     "bookmark": "Bookmark",
     "group": "Group",
     "deleteTitle": "Delete $t(dialog.{{target}})",
-    "deleteMessage": "Do you want to delete {{name}}?"
+    "deleteMessage": "Do you want to delete {{name}}?",
+    "signin": "Sign In",
+    "agree": "Click Sign In to agree to MyBookmarkz's <1>Terms of Service</1><2/>and acknowledge that MyBookmarkz's <4>Privacy Policy</4><5/>applies to you."
   },
   "form": {
     "name": "Name",

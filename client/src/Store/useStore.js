@@ -5,6 +5,7 @@ import BookmarkModalStore from "./BookmarkModalStore";
 import DeleteStore from "./DeleteModalStore";
 import GroupFormStore from "./GroupFormStore";
 import GroupModalStore from "./GroupModalStore";
+import SigninStore from "./SignInStore";
 import StoreContext from "./StoreContext";
 
 function useStore(): AppStore {
@@ -30,6 +31,10 @@ function useDeleteModalStore(): DeleteStore {
   return useStore().deleteStore;
 }
 
+function useSignInStore(): SigninStore {
+  return useStore().signInStore;
+}
+
 export default useStore;
 export {
   useBookmarkFormStore,
@@ -37,4 +42,5 @@ export {
   useDeleteModalStore,
   useBookmarkModalStore,
   useGroupModalStore,
+  useSignInStore,
 };

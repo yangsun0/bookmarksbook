@@ -1,10 +1,5 @@
 {
   "tittle": {
     "bookmark": "Bookmark"
-  },
-  "menu": {
-    "default": "Default",
-    "new": "New Profile",
-    "signIn": "Sign-In"
   }
 }

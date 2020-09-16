@@ -12,7 +12,11 @@
   // disable typescript validation to enable flow
   "javascript.validate.enable": false,
   "cSpell.words": [
+    "Bookmarkz",
+    "Bookmarkz's",
     "browserslist",
-    "languagedetector"
+    "languagedetector",
+    "longtitle",
+    "onfailure"
   ]
 }
