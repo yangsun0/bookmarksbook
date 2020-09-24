@@ -2,14 +2,13 @@
   "name": "bookmark-server",
   "version": "1.0.0",
   "description": "",
-  "main": "build/index.js",
+  "main": "build",
   "scripts": {
-    "build": "flow-remove-types src/ -d build/ -a",
     "gulp": "gulp",
     "eslint": "eslint",
-    "start": "nodemon build/index.js",
     "flow": "flow",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "gulp build",
     "prepublish": "npm run build"
   },
   "dependencies": {
@@ -28,7 +27,6 @@
     "gulp": "^4.0.2",
     "gulp-eslint": "^6.0.0",
     "gulp-flow-remove-types": "^1.0.0",
-    "gulp-nodemon": "^2.5.0",
     "prettier": "^2.1.2"
   }
 }

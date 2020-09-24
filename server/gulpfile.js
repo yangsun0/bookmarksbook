@@ -22,13 +22,15 @@ function compile() {
     .pipe(dest("build"));
 }
 
-function build() {
-  const tasks = series(lint, clean, compile);
-  watch(jsFiles, tasks);
+const build = series(lint, clean, compile);
+
+function devServer() {
+  build();
+  watch(jsFiles, build);
 }
 
 exports.lint = lint;
 exports.clean = clean;
 exports.compile = compile;
 exports.build = build;
-exports.default = build;
+exports.default = devServer;
