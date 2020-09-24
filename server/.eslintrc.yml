@@ -9,9 +9,4 @@ parser: babel-eslint
 plugins:
   - flowtype
 rules:
-  quotes:
-    - error
-    - double
-  linebreak-style:
-    - off
   flowtype/no-types-missing-file-annotation: off

@@ -1,4 +1,5 @@
 {
+  "files.eol": "\n",
   // default formater: prettier
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   // auto format when save
