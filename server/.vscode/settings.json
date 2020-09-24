@@ -2,10 +2,10 @@
   // default formater: prettier
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   // auto format when save
-  // "editor.formatOnSave": true,
+  "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     // auto fix lint issue when save
-    // "source.fixAll.eslint": true,
+    "source.fixAll.eslint": true,
     // auto orgniaze imports when save
     "source.organizeImports": true
   },
