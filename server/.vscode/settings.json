@@ -1,0 +1,16 @@
+{
+  "files.eol": "\n",
+  // default formater: prettier
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // auto format when save
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    // auto fix lint issue when save
+    "source.fixAll.eslint": true,
+    // auto orgniaze imports when save
+    "source.organizeImports": true
+  },
+  // disable typescript validation to enable flow
+  "javascript.validate.enable": false,
+  "cSpell.words": ["airbnb", "flowtype", "linebreak"]
+}

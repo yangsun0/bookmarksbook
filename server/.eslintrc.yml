@@ -1,0 +1,12 @@
+env:
+  commonjs: true
+  node: true
+extends:
+  - airbnb-base
+  - plugin:flowtype/recommended
+  - prettier
+parser: babel-eslint
+plugins:
+  - flowtype
+rules:
+  flowtype/no-types-missing-file-annotation: off
