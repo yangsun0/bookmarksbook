@@ -1,0 +1,22 @@
+{
+  // https://eslint.org/docs/user-guide/configuring
+  "env": {
+    "node": true,
+    "commonjs": true
+  },
+  // https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/parser
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  // https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    // https://eslint.org/docs/2.0.0/rules/
+    "eslint:recommended",
+    // https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin/src/configs
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+  ]
+}

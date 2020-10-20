@@ -10,7 +10,5 @@
     // auto orgniaze imports when save
     "source.organizeImports": true
   },
-  // disable typescript validation to enable flow
-  "javascript.validate.enable": false,
   "cSpell.words": ["airbnb", "flowtype", "linebreak"]
 }
