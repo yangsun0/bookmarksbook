@@ -10,5 +10,5 @@
     // auto orgniaze imports when save
     "source.organizeImports": true
   },
-  "cSpell.words": ["airbnb", "flowtype", "linebreak"]
+  "cSpell.words": []
 }

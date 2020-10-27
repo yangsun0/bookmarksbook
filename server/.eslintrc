@@ -18,5 +18,6 @@
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking"
-  ]
+  ],
+  "ignorePatterns": ["jest.config.js", "*.test.ts"]
 }
