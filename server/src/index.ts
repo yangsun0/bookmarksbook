@@ -1,5 +1,5 @@
 import App from "./app";
 
 const app = new App();
-app.init({ port: 3000 });
+app.init({ port: 8080 });
 app.run();
