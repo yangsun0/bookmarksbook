@@ -2,16 +2,13 @@
 
 # dependencies
 /node_modules
-/flow-typed
-/.pnp
-.pnp.js
-
 
 # testing
 /coverage
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
