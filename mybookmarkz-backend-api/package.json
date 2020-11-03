@@ -1,7 +1,7 @@
 {
-  "name": "bookmark-api",
+  "name": "mybookmarkz-backend-api",
   "version": "1.0.0",
-  "description": "bookmark api",
+  "description": "MyBookmarkz backend API",
   "main": "dist\\index.js",
   "license": "Apache-2.0",
   "scripts": {
