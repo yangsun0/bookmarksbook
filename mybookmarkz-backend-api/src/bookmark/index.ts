@@ -9,7 +9,11 @@ const bookmarks = [
 ];
 
 router.get("/", (req: express.Request, res: express.Response) => {
-  res.send(bookmarks);
+  const response = {
+    userId: req.user.id,
+    bookmarks: bookmarks,
+  };
+  res.send(response);
 });
 
 export default router;
