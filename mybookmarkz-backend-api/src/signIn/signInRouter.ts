@@ -1,11 +1,11 @@
 import express = require("express");
-import SignInRequestHandler from "./signInRequestHandler";
+import SignIn from "./signIn";
 
-const requestHandler = new SignInRequestHandler();
+const signIn = new SignIn();
 const signInRouter = express.Router();
 
 signInRouter.post("/", async (req, res) => {
-  await requestHandler.signIn(req, res);
+  await signIn.authenticate(req, res);
 });
 
 export default signInRouter;

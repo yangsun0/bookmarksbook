@@ -1,5 +1,6 @@
 import express = require("express");
 import Auth from "../auth";
+import CookieStore from "../cookieStore";
 
 const auth = new Auth();
 
@@ -8,23 +9,14 @@ function authorize(
   res: express.Response,
   next: express.NextFunction
 ): void {
-  let isSuccess = false;
   try {
-    const cookies = req.cookies as Record<string, string>;
-    const token = cookies[Auth.cookieName];
-    if (token) {
-      req.user = auth.authorize(token);
-      isSuccess = true;
-    }
+    const cookeStore = new CookieStore(req, res);
+    req.user = auth.authorize(cookeStore.accessToken);
+    next();
   } catch (error) {
     if (error instanceof Error) {
       console.log(error.message);
     }
-  }
-
-  if (isSuccess) {
-    next();
-  } else {
     res.status(401).end();
   }
 }

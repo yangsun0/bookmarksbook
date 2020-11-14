@@ -20,7 +20,6 @@ class Auth {
     const accessToken = jwt.sign(payload, "private_key", {
       expiresIn: "1h",
     });
-    // this.authenticate(accessToken);
     return accessToken;
   }
 
