@@ -1,15 +1,7 @@
-import * as yup from "yup";
 import Auth from "../auth";
 import CookieStore from "../cookieStore";
+import { getSignInBody } from "./singInBody";
 import express = require("express");
-
-interface SignInBody {
-  idToken: string;
-}
-
-const signInBodySchema = yup.object().shape({
-  idToken: yup.string().required(),
-});
 
 class SignIn {
   private readonly auth = new Auth();
@@ -19,11 +11,9 @@ class SignIn {
     res: express.Response
   ): Promise<void> {
     try {
-      const body = req.body as SignInBody;
-      await signInBodySchema.validate(body);
-      const access_token = await this.auth.signIn(body.idToken);
+      const body = await getSignInBody(req.body);
       const cookieStore = new CookieStore(req, res);
-      cookieStore.accessToken = access_token;
+      cookieStore.accessToken = await this.auth.authenticate(body.idToken);
       res.end();
     } catch (error) {
       if (error instanceof Error) {

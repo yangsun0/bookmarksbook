@@ -4,9 +4,9 @@ import TokenPayload from "./TokenPayload";
 import User from "./user";
 
 class Auth {
-  public async signIn(idToken: string): Promise<string> {
+  public async authenticate(idToken: string): Promise<string> {
     const googleSignIn = new GoogleAuth();
-    const userId = await googleSignIn.signIn(idToken);
+    const userId = await googleSignIn.authenticate(idToken);
     const payload: TokenPayload = {
       sub: userId,
     };
