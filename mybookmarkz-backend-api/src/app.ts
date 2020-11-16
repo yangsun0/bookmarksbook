@@ -13,7 +13,7 @@ class App {
     this.config = new Config();
   }
 
-  run(): void {
+  public create(): express.Application {
     const expressApp = express();
     // http log
     expressApp.use(morgan(this.config.httpLogFormat));
@@ -27,6 +27,12 @@ class App {
     expressApp.use(authorization);
     // bookmarks router
     expressApp.use("/bookmarks", bookmarks);
+
+    return expressApp;
+  }
+
+  public run(): void {
+    const expressApp = this.create();
     expressApp.listen(this.config.port, () => {
       console.log("server listen to port:", this.config.port);
     });

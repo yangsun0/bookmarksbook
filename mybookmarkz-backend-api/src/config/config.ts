@@ -14,7 +14,7 @@ class Config {
   }
 
   public get httpLogFormat(): string {
-    if (this.NodeEnv === "dev") {
+    if (this.NodeEnv === "dev" || this.NodeEnv === "test") {
       return "dev";
     } else {
       return "combined";

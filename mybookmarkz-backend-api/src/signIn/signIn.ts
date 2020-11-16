@@ -11,7 +11,7 @@ class SignIn {
     res: express.Response
   ): Promise<void> {
     try {
-      const body = await getSignInBody(req.body);
+      const body = await getSignInBody(req);
       const cookieStore = new CookieStore(req, res);
       cookieStore.accessToken = await this.auth.authenticate(body.idToken);
       res.end();
