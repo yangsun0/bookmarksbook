@@ -1,15 +1,13 @@
 import request = require("supertest");
 import supertest from "supertest";
 import App from "./app";
-import GoogleAuth from "./auth/googleAuth";
 
+jest.mock("jsonwebtoken");
 jest.mock("./auth/googleAuth");
-const mockGoogleAuth = GoogleAuth as jest.Mock<GoogleAuth>;
 
 let req: supertest.SuperTest<supertest.Test>;
 
 beforeEach(() => {
-  mockGoogleAuth.mockClear();
   const app = new App();
   const expressApp = app.create();
   req = request(expressApp);
@@ -46,5 +44,6 @@ test("unauthorized request failed.", async () => {
 });
 
 test("authorized request succeeded.", async () => {
-  await get("/bookmarks").expect(200);
+  const res = await get("/bookmarks").expect(200);
+  expect(res.body["bookmarks"]).toBeTruthy();
 });

@@ -10,7 +10,7 @@
     "lint": "eslint --ext .ts src/**",
     "test": "set NODE_ENV=test&&jest --setupFiles dotenv/config",
     "test-watch": "set NODE_ENV=test&&jest --setupFiles dotenv/config --watch",
-    "serve": "node dist/index.js -r dotenv/config",
+    "serve": "node -r dotenv/config dist/index.js",
     "serve-watch": "nodemon -r dotenv/config"
   },
   "dependencies": {
