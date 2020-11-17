@@ -13,16 +13,16 @@ class Config {
     return this.getEnv("GOOGLE_API_CLIENT_ID");
   }
 
+  public get NodeEnv(): string {
+    return this.getEnv("NODE_ENV");
+  }
+
   public get httpLogFormat(): string {
     if (this.NodeEnv === "dev" || this.NodeEnv === "test") {
       return "dev";
     } else {
       return "combined";
     }
-  }
-
-  public get NodeEnv(): string {
-    return this.getEnv("NODE_ENV");
   }
 
   private getEnv(key: string): string {
