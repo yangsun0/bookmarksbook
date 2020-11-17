@@ -3,7 +3,7 @@ import supertest from "supertest";
 import App from "./app";
 
 jest.mock("jsonwebtoken");
-jest.mock("./auth/googleAuth");
+jest.mock("google-auth-library");
 
 let req: supertest.SuperTest<supertest.Test>;
 
@@ -25,18 +25,18 @@ function get(url: string): supertest.Test {
   return req
     .get(url)
     .set("Accept", "application/json")
-    .set("Cookie", "access_token=valid_token");
+    .set("Cookie", "access_token=valid_access_token");
 }
 
 test("sign in failed.", async () => {
   const url = "/signin";
   await post(url, {}).expect(401);
-  await post(url, { idToken: "invalid_token" }).expect(401);
+  await post(url, { idToken: "invalid_id_token" }).expect(401);
 });
 
 test("sign in succeeded.", async () => {
   const url = "/signin";
-  const res = await post(url, { idToken: "valid_token" }).expect(200);
+  const res = await post(url, { idToken: "valid_id_token" }).expect(200);
 });
 
 test("unauthorized request failed.", async () => {
