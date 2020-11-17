@@ -25,6 +25,7 @@ class CookieStore {
       httpOnly: true,
       // todo after enable https
       // secure: true,
+      // sameSite: "strict",
     });
   }
 }
