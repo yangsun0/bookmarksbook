@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>Sign in page</title>
+    <meta name="google-signin-client_id" content="" />
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script>
+      function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        const authResponse = googleUser.getAuthResponse();
+        const target = document.getElementById("idTokenDiv");
+        target.innerText = authResponse.id_token;
+      }
+    </script>
+    <style>
+      #idTokenDiv {
+        width: 800px;
+        height: 300px;
+        background-color: lightgray;
+        padding: 5px;
+        margin: 10px;
+      }
+      #note {
+        background-color: red;
+        color: white;
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div id="note"></div>
+      <div class="g-signin2" data-onsuccess="onSignIn"></div>
+      <textarea id="idTokenDiv" readonly></textarea>
+    </div>
+    <script>
+      const meta = document.getElementsByTagName("meta")[0];
+      if (!meta.getAttribute("content")) {
+        const noteElem = document.getElementById("note");
+        console;
+        noteElem.innerText =
+          "google-signin-client_id is missing. Please update the meta tag.";
+      }
+    </script>
+  </body>
+</html>
