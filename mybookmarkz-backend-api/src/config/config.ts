@@ -25,6 +25,14 @@ class Config {
     }
   }
 
+  public get AuthPrivateKeyPath(): string {
+    return this.getEnv("AUTH_PRIVATE_KEY_FILE");
+  }
+
+  public get AuthPublicKeyPath(): string {
+    return this.getEnv("AUTH_PUBLIC_KEY_FILE");
+  }
+
   private getEnv(key: string): string {
     const value = process.env[key];
     if (value === undefined) {

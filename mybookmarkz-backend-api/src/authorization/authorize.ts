@@ -4,14 +4,14 @@ import CookieStore from "../cookieStore";
 
 const auth = new Auth();
 
-function authorize(
+async function authorize(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
-): void {
+): Promise<void> {
   try {
     const cookeStore = new CookieStore(req, res);
-    req.user = auth.authorize(cookeStore.accessToken);
+    req.user = await auth.authorize(cookeStore.accessToken);
     next();
   } catch (error) {
     if (error instanceof Error) {
