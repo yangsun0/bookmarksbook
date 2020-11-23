@@ -10,6 +10,9 @@
 /build
 /dist
 
+# key
+*.key
+
 # misc
 .env
 .DS_Store
