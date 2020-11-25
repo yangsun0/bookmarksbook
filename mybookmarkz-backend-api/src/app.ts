@@ -1,28 +1,40 @@
 import express = require("express");
-import bookmarkRouter from "./bookmark";
-import logger from "./logging";
-
-type Config = {
-  port: number;
-};
+import morgan = require("morgan");
+import authorization from "./authorization";
+import bookmarks from "./bookmark";
+import Config from "./config";
+import signIn from "./signIn";
+import cookieParser = require("cookie-parser");
 
 class App {
-  public port: number;
+  private readonly config: Config;
 
   constructor() {
-    this.port = 3000;
+    this.config = new Config();
   }
 
-  init(config: Config): void {
-    this.port = config.port;
+  public create(): express.Application {
+    const expressApp = express();
+    // http log
+    expressApp.use(morgan(this.config.httpLogFormat));
+    // json parser for request body
+    expressApp.use(express.json());
+    // parser for request cookies
+    expressApp.use(cookieParser());
+    // sign in router, no authentication for this path
+    expressApp.use("/signin", signIn);
+    // authenticate all the other paths
+    expressApp.use(authorization);
+    // bookmarks router
+    expressApp.use("/bookmarks", bookmarks);
+
+    return expressApp;
   }
 
-  run(): void {
-    const app = express();
-    app.use(logger);
-    app.use("/bookmarks", bookmarkRouter);
-    app.listen(this.port, () => {
-      console.log("server listen to port:", this.port);
+  public run(): void {
+    const expressApp = this.create();
+    expressApp.listen(this.config.port, () => {
+      console.log("server listen to port:", this.config.port);
     });
   }
 }
