@@ -9,6 +9,10 @@ class Config {
     return this.getEnvInteger("PORT");
   }
 
+  public get rateLimitMax(): number {
+    return this.getEnvInteger("RATE_LIMIT_MAX_PER_MINUTE");
+  }
+
   public get googleApiClientId(): string {
     return this.getEnv("GOOGLE_API_CLIENT_ID");
   }

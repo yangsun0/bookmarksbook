@@ -8,6 +8,7 @@ jest.mock("google-auth-library");
 let req: supertest.SuperTest<supertest.Test>;
 
 beforeEach(() => {
+  process.env.NODE_ENV = "test";
   const app = new App();
   const expressApp = app.create();
   req = request(expressApp);
@@ -29,21 +30,30 @@ function get(url: string): supertest.Test {
 }
 
 test("sign in failed.", async () => {
-  const url = "/signin";
+  const url = "/api/signin";
   await post(url, {}).expect(401);
   await post(url, { idToken: "invalid_id_token" }).expect(401);
 });
 
 test("sign in succeeded.", async () => {
-  const url = "/signin";
+  const url = "/api/signin";
   const res = await post(url, { idToken: "valid_id_token" }).expect(200);
 });
 
 test("unauthorized request failed.", async () => {
-  await req.get("/bookmarks").expect(401);
+  await req.get("/api/bookmarks").expect(401);
 });
 
 test("authorized request succeeded.", async () => {
-  const res = await get("/bookmarks").expect(200);
+  const res = await get("/api/bookmarks").expect(200);
   expect(res.body["bookmarks"]).toBeTruthy();
+});
+
+test("request exceeds rate limit", async () => {
+  process.env.RATE_LIMIT_MAX_PER_MINUTE = "1";
+  const app = new App();
+  const expressApp = app.create();
+  req = request(expressApp);
+  await get("/api/bookmarks").expect(200);
+  await get("/api/bookmarks").expect(429);
 });
