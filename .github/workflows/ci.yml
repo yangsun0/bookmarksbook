@@ -39,12 +39,15 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
+    - name: Install yarn
+      run: npm install -g yarn
+      working-directory: ./backend-api
     - name: Install dependency
-      run: npm ci
+      run: yarn install
       working-directory: ./backend-api
     - name: Build
-      run: npm run build --if-present
+      run: yarn run build --if-present
       working-directory: ./backend-api
     - name: Test
-      run: npm test -- --passWithNoTests
+      run: yarn test
       working-directory: ./backend-api
