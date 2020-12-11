@@ -2,26 +2,27 @@ import cookieParser = require("cookie-parser");
 import express = require("express");
 import morgan = require("morgan");
 import rateLimit = require("express-rate-limit");
+import auth from "./auth";
 import authorization from "./authorization";
 import bookmarks from "./bookmark";
-import Config from "./config";
-import signIn from "./signIn";
+import getConfig from "./config";
+import SignIn from "./signIn";
 
 class App {
-  private readonly config: Config;
-
-  constructor() {
-    this.config = new Config();
-  }
-
-  public create(): express.Application {
+  public async create(): Promise<express.Application> {
+    await auth().init();
+    const config = getConfig();
     const expressApp = express();
     const limiter = rateLimit({
       windowMs: 60 * 1000,
-      max: this.config.rateLimitMax,
+      max: config.rateLimitMax,
     });
-    // http log
-    expressApp.use(morgan(this.config.httpLogFormat));
+
+    if (config.nodeEnv !== "test") {
+      // http log
+      expressApp.use(morgan(config.httpLogFormat));
+    }
+
     // rate limit
     expressApp.use(limiter);
     // json parser for request body
@@ -29,7 +30,8 @@ class App {
     // parser for request cookies
     expressApp.use(cookieParser());
     // sign in router, no authentication for this path
-    expressApp.use("/api/signin", signIn);
+    const signIn = new SignIn();
+    expressApp.use("/api/signin", signIn.createRouter());
     // authenticate all the other paths
     expressApp.use(authorization);
     // bookmarks router
@@ -38,10 +40,11 @@ class App {
     return expressApp;
   }
 
-  public run(): void {
-    const expressApp = this.create();
-    expressApp.listen(this.config.port, () => {
-      console.log("server listen to port:", this.config.port);
+  public async run(): Promise<void> {
+    const expressApp = await this.create();
+    const config = getConfig();
+    expressApp.listen(config.port, () => {
+      console.log("server listen to port:", config.port);
     });
   }
 }

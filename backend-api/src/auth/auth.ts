@@ -1,7 +1,7 @@
 import fs = require("fs");
 import util = require("util");
 import * as jwt from "jsonwebtoken";
-import Config from "../config";
+import getConfig from "../config";
 import GoogleAuth from "./googleAuth";
 import TokenPayload from "./TokenPayload";
 import User from "./user";
@@ -9,20 +9,24 @@ import User from "./user";
 const readFileAsync = util.promisify(fs.readFile);
 
 class Auth {
-  private readonly config: Config;
   private readonly googleAuth: GoogleAuth;
   private readonly algorithm = "RS256";
   private privateKey: Buffer | undefined;
   private publicKey: Buffer | undefined;
 
   constructor() {
-    this.config = new Config();
     this.googleAuth = new GoogleAuth();
+  }
+
+  public async init(): Promise<void> {
+    const config = getConfig();
+    this.privateKey = await readFileAsync(config.authPrivateKeyPath);
+    this.publicKey = await readFileAsync(config.authPublicKeyPath);
   }
 
   public async authenticate(idToken: string): Promise<string> {
     if (!this.privateKey) {
-      this.privateKey = await readFileAsync(this.config.AuthPrivateKeyPath);
+      throw new Error("not initialized");
     }
 
     const userId = await this.googleAuth.authenticate(idToken);
@@ -38,7 +42,7 @@ class Auth {
 
   public async authorize(accessToken: string): Promise<User> {
     if (!this.publicKey) {
-      this.publicKey = await readFileAsync(this.config.AuthPublicKeyPath);
+      throw new Error("not initialized");
     }
 
     const payload = await this.verifyAsync(accessToken, this.publicKey, {

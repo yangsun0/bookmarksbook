@@ -8,10 +8,11 @@
     "build": "tsc",
     "build-watch": "tsc -w",
     "lint": "eslint --ext .ts src/**",
-    "test": "jest --setupFiles dotenv/config",
-    "test-watch": "set NODE_ENV=test&&jest --setupFiles dotenv/config --watch",
+    "test": "jest",
+    "test-watch": "jest --watch",
     "serve": "node -r dotenv/config dist/index.js",
-    "serve-watch": "nodemon -r dotenv/config"
+    "serve-watch": "nodemon -r dotenv/config",
+    "tool-signin": "node tools/signin/index.js"
   },
   "dependencies": {
     "cookie-parser": "^1.4.5",

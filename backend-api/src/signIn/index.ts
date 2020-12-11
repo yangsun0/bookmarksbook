@@ -1,3 +1,3 @@
-import signInRouter from "./signInRouter";
+import SignIn from "./signIn";
 
-export default signInRouter;
+export default SignIn;

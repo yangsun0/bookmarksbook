@@ -1,7 +1,7 @@
 # The Continuous integration (CI) workflow automates the building and testing.
 # Workflow syntax: https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
 
-name: Continuous integration (CI)
+name: CI
 
 on:
   push:
@@ -29,3 +29,25 @@ jobs:
     - name: Test
       run: npm test -- --passWithNoTests
       working-directory: ./client
+  build_backend-api:
+    name: Build backend API
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: Install yarn
+      run: npm install -g yarn
+      working-directory: ./backend-api
+    - name: Install dependency
+      run: yarn install
+      working-directory: ./backend-api
+    - name: Build
+      run: yarn build
+      working-directory: ./backend-api
+    - name: Test
+      run: yarn test
+      working-directory: ./backend-api
