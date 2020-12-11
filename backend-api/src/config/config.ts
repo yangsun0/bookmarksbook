@@ -5,36 +5,25 @@ import {
 } from "./configError";
 
 class Config {
-  public get port(): number {
-    return this.getEnvInteger("PORT");
-  }
+  public readonly port: number;
+  public readonly rateLimitMax: number;
+  public readonly googleApiClientId: string;
+  public readonly nodeEnv: string;
+  public readonly httpLogFormat: string;
+  public readonly authPrivateKeyPath: string;
+  public readonly authPublicKeyPath: string;
 
-  public get rateLimitMax(): number {
-    return this.getEnvInteger("RATE_LIMIT_MAX_PER_MINUTE");
-  }
-
-  public get googleApiClientId(): string {
-    return this.getEnv("GOOGLE_API_CLIENT_ID");
-  }
-
-  public get NodeEnv(): string {
-    return this.getEnv("NODE_ENV");
-  }
-
-  public get httpLogFormat(): string {
-    if (this.NodeEnv === "dev" || this.NodeEnv === "test") {
-      return "dev";
-    } else {
-      return "combined";
+  constructor() {
+    this.port = this.getEnvInteger("PORT");
+    this.rateLimitMax = this.getEnvInteger("RATE_LIMIT_MAX_PER_MINUTE");
+    this.googleApiClientId = this.getEnv("GOOGLE_API_CLIENT_ID");
+    this.nodeEnv = this.getEnv("NODE_ENV");
+    this.authPrivateKeyPath = this.getEnv("AUTH_PRIVATE_KEY_FILE");
+    this.authPublicKeyPath = this.getEnv("AUTH_PUBLIC_KEY_FILE");
+    this.httpLogFormat = "combined";
+    if (this.nodeEnv === "dev") {
+      this.httpLogFormat = "dev";
     }
-  }
-
-  public get AuthPrivateKeyPath(): string {
-    return this.getEnv("AUTH_PRIVATE_KEY_FILE");
-  }
-
-  public get AuthPublicKeyPath(): string {
-    return this.getEnv("AUTH_PUBLIC_KEY_FILE");
   }
 
   private getEnv(key: string): string {

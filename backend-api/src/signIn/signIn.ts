@@ -1,11 +1,9 @@
-import Auth from "../auth";
+import auth from "../auth";
 import CookieStore from "../cookieStore";
 import { getSignInBody } from "./singInBody";
 import express = require("express");
 
 class SignIn {
-  private readonly auth = new Auth();
-
   public async authenticate(
     req: express.Request,
     res: express.Response
@@ -13,7 +11,7 @@ class SignIn {
     try {
       const body = await getSignInBody(req);
       const cookieStore = new CookieStore(req, res);
-      cookieStore.accessToken = await this.auth.authenticate(body.idToken);
+      cookieStore.accessToken = await auth().authenticate(body.idToken);
       res.end();
     } catch (error) {
       if (error instanceof Error) {
@@ -21,6 +19,14 @@ class SignIn {
       }
       res.status(401).end();
     }
+  }
+
+  public createRouter(): express.Router {
+    const signInRouter = express.Router();
+    signInRouter.post("/", async (req, res) => {
+      await this.authenticate(req, res);
+    });
+    return signInRouter;
   }
 }
 
