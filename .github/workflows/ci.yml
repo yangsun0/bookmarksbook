@@ -46,7 +46,7 @@ jobs:
       run: yarn install
       working-directory: ./backend-api
     - name: Build
-      run: yarn run build --if-present
+      run: yarn build
       working-directory: ./backend-api
     - name: Test
       run: yarn test
